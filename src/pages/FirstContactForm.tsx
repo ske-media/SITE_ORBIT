@@ -489,6 +489,11 @@ function FirstContactForm() {
     if (!currentQuestion.required) return true;
     if (!answers[currentQuestion.id]) return false;
 
+    // Validation du numéro de téléphone
+    if (currentQuestion.type === 'phone') {
+      return answers[currentQuestion.id].length >= 8;
+    }
+
     // Validation supplémentaire pour l'email
     if (currentQuestion.type === 'email') {
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;

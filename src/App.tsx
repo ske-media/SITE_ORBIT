@@ -17,6 +17,14 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Check if current route is a form page
+  const isFormPage = [
+    '/contact',
+    '/contact-complex',
+    '/order',
+    '/devenir-partenaire/formulaire'
+  ].includes(location.pathname);
+
   // Track page views
   React.useEffect(() => {
     if (window.gtag) {
@@ -44,7 +52,8 @@ function App() {
   return (
     <AnalyticsProvider>
     <div className="bg-black text-white min-h-screen relative">
-      {/* Navigation */}
+      {/* Navigation - Hidden on form pages */}
+      {!isFormPage && (
       <nav className="fixed w-full bg-black/90 backdrop-blur-sm z-50 border-b border-[#B026FF]/20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
@@ -86,6 +95,7 @@ function App() {
           </div>
         </div>
       </nav>
+      )}
 
       <Routes>
         <Route path="/" element={<Home />} />
