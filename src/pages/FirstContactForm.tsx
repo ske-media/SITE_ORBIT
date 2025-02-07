@@ -506,7 +506,7 @@ function FirstContactForm() {
 
   if (showThankYou) {
     return (
-      <div className="min-h-screen pt-16 flex flex-col items-center justify-center p-4 text-center">
+      <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
         <h2 className="text-3xl font-bold mb-8 gradient-text">
           Merci pour toutes ces informations !
         </h2>
@@ -532,9 +532,9 @@ function FirstContactForm() {
   }
 
   return (
-    <div className="min-h-screen pt-16 flex flex-col">
+    <div className="min-h-screen flex flex-col">
       {/* Progress bar */}
-      <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-[#B026FF]/20">
         <div 
           className="h-full bg-[#B026FF] transition-all duration-300"
           style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}

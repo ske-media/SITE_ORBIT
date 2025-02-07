@@ -16,14 +16,7 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  // Check if current route is a form page
-  const isFormPage = [
-    '/contact',
-    '/contact-complex',
-    '/order',
-    '/devenir-partenaire/formulaire'
-  ].includes(location.pathname);
+  const isFormPage = location.pathname.includes('/contact') || location.pathname.includes('/order');
 
   // Track page views
   React.useEffect(() => {
@@ -52,9 +45,8 @@ function App() {
   return (
     <AnalyticsProvider>
     <div className="bg-black text-white min-h-screen relative">
-      {/* Navigation - Hidden on form pages */}
-      {!isFormPage && (
-      <nav className="fixed w-full bg-black/90 backdrop-blur-sm z-50 border-b border-[#B026FF]/20">
+      {/* Navigation */}
+      <nav className={`fixed top-0 left-0 right-0 bg-black/90 backdrop-blur-sm z-50 border-b border-[#B026FF]/20 ${isFormPage ? 'shadow-lg' : ''}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between h-16">
             <div className="flex items-center gap-2">
@@ -63,11 +55,23 @@ function App() {
               </Link>
             </div>
             <div className="hidden md:flex items-center space-x-8">
-              <a href="#why-choose-us" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Pourquoi Nous</a>
-              <a href="#process" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Processus</a>
-              <a href="#portfolio" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Avant/Après</a>
-              <a href="#pricing" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Tarifs</a>
-              <a href="#team" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">L'Équipe</a>
+              {!isFormPage && (
+                <div className="flex items-center space-x-8">
+                  <a href="#why-choose-us" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Pourquoi Nous</a>
+                  <a href="#process" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Processus</a>
+                  <a href="#portfolio" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Avant/Après</a>
+                  <a href="#pricing" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Tarifs</a>
+                  <a href="#team" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">L'Équipe</a>
+                </div>
+              )}
+              {isFormPage && (
+                <Link 
+                  to="/" 
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
+                  Retour à l'accueil
+                </Link>
+              )}
               <button 
                 className="cta-button"
                 onClick={handleStartClick}
@@ -86,17 +90,30 @@ function App() {
         </div>
         {/* Mobile menu */}
         <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
-          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-sm">
-            <a href="#why-choose-us" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Pourquoi Nous</a>
-            <a href="#process" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Processus</a>
-            <a href="#portfolio" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Avant/Après</a>
-            <a href="#pricing" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Tarifs</a>
-            <a href="#team" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">L'Équipe</a>
+          <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-sm border-t border-[#B026FF]/20">
+            {!isFormPage && (
+              <div className="space-y-1">
+                <a href="#why-choose-us" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Pourquoi Nous</a>
+                <a href="#process" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Processus</a>
+                <a href="#portfolio" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Avant/Après</a>
+                <a href="#pricing" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Tarifs</a>
+                <a href="#team" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">L'Équipe</a>
+              </div>
+            )}
+            {isFormPage && (
+              <Link 
+                to="/" 
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
+                Retour à l'accueil
+              </Link>
+            )}
           </div>
         </div>
       </nav>
-      )}
 
+      {/* Main content with proper spacing */}
+      <main className="pt-16 min-h-screen">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<FirstContactForm />} />
@@ -108,6 +125,7 @@ function App() {
         <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
         <Route path="/intranet" element={<Intranet />} />
       </Routes>
+      </main>
     </div>
     </AnalyticsProvider>
   );
