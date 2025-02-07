@@ -5,6 +5,9 @@ import { supabase } from '../lib/supabase';
 import { trackContentView } from '../lib/analytics';
 import type { BlogPost, BlogCategory } from '../types/blog';
 
+// Constante pour contrôler l'affichage de la section
+const SHOW_RECENT_POSTS = false;
+
 function Blog() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<BlogCategory[]>([]);
@@ -84,94 +87,106 @@ function Blog() {
         </div>
 
         {/* Filtres et Recherche */}
-        <div className="flex flex-col md:flex-row gap-4 mb-12">
-          <div className="relative flex-1">
-            <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <input
-              type="text"
-              placeholder="Rechercher un article..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-400"
-            />
-          </div>
-          <div className="relative">
-            <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
-            <select
-              value={selectedCategory}
-              onChange={(e) => setSelectedCategory(e.target.value)}
-              className="pl-12 pr-8 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white appearance-none cursor-pointer min-w-[200px]"
-            >
-              <option value="">Toutes les catégories</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Liste des articles */}
-        {isLoading ? (
-          <div className="flex justify-center items-center py-12">
-            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B026FF]"></div>
-          </div>
-        ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {posts.map((post) => (
-              <article
-                key={post.id}
-                className="bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
+        {SHOW_RECENT_POSTS && (
+          <div className="flex flex-col md:flex-row gap-4 mb-12">
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <input
+                type="text"
+                placeholder="Rechercher un article..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-12 pr-4 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-400"
+              />
+            </div>
+            <div className="relative">
+              <Filter className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
+              <select
+                value={selectedCategory}
+                onChange={(e) => setSelectedCategory(e.target.value)}
+                className="pl-12 pr-8 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white appearance-none cursor-pointer min-w-[200px]"
               >
-                <Link to={`/blog/${post.slug}`}>
-                  <div className="relative aspect-video overflow-hidden">
-                    <img
-                      src={post.featured_image}
-                      alt={post.title}
-                      className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-                    />
-                    {post.category_id && (
-                      <div className="absolute top-4 left-4 bg-[#B026FF] text-white px-3 py-1 rounded-full text-sm">
-                        {(post as any).blog_categories.name}
-                      </div>
-                    )}
-                  </div>
-                  <div className="p-6">
-                    <h2 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">
-                      {post.title}
-                    </h2>
-                    <p className="text-gray-400 mb-4 line-clamp-2">
-                      {post.excerpt}
-                    </p>
-                    <div className="flex items-center justify-between text-sm text-gray-400">
-                      <div className="flex items-center gap-4">
-                        <span className="flex items-center gap-1">
-                          <Clock className="h-4 w-4" />
-                          {post.reading_time} min
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <User className="h-4 w-4" />
-                          {(post as any).blog_authors.name}
-                        </span>
-                      </div>
-                      {post.tags && post.tags.length > 0 && (
-                        <span className="flex items-center gap-1">
-                          <Tag className="h-4 w-4" />
-                          {post.tags[0]}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                </Link>
-              </article>
-            ))}
+                <option value="">Toutes les catégories</option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </div>
           </div>
         )}
 
-        {posts.length === 0 && !isLoading && (
+        {/* Liste des articles - conditionnellement affichée */}
+        {SHOW_RECENT_POSTS && (
+          <>
+            {isLoading ? (
+              <div className="flex justify-center items-center py-12">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B026FF]"></div>
+              </div>
+            ) : (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {posts.map((post) => (
+                  <article
+                    key={post.id}
+                    className="bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
+                  >
+                    <Link to={`/blog/${post.slug}`}>
+                      <div className="relative aspect-video overflow-hidden">
+                        <img
+                          src={post.featured_image}
+                          alt={post.title}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                        />
+                        {post.category_id && (
+                          <div className="absolute top-4 left-4 bg-[#B026FF] text-white px-3 py-1 rounded-full text-sm">
+                            {(post as any).blog_categories.name}
+                          </div>
+                        )}
+                      </div>
+                      <div className="p-6">
+                        <h2 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">
+                          {post.title}
+                        </h2>
+                        <p className="text-gray-400 mb-4 line-clamp-2">
+                          {post.excerpt}
+                        </p>
+                        <div className="flex items-center justify-between text-sm text-gray-400">
+                          <div className="flex items-center gap-4">
+                            <span className="flex items-center gap-1">
+                              <Clock className="h-4 w-4" />
+                              {post.reading_time} min
+                            </span>
+                            <span className="flex items-center gap-1">
+                              <User className="h-4 w-4" />
+                              {(post as any).blog_authors.name}
+                            </span>
+                          </div>
+                          {post.tags && post.tags.length > 0 && (
+                            <span className="flex items-center gap-1">
+                              <Tag className="h-4 w-4" />
+                              {post.tags[0]}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+
+        {SHOW_RECENT_POSTS && posts.length === 0 && !isLoading && (
           <div className="text-center py-12">
             <p className="text-gray-400">Aucun article trouvé</p>
+          </div>
+        )}
+
+        {!SHOW_RECENT_POSTS && (
+          <div className="text-center py-12">
+            <p className="text-gray-400">La section articles sera bientôt disponible</p>
           </div>
         )}
       </div>
