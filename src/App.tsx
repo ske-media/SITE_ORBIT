@@ -8,8 +8,6 @@ import Home from './pages/Home';
 import LegalNotice from './pages/LegalNotice';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Partnership from './pages/Partnership';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
 import PartnershipForm from './pages/PartnershipForm';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
 import Intranet from './pages/Intranet';
@@ -98,8 +96,6 @@ function App() {
         <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
         <Route path="/devenir-partenaire" element={<Partnership />} />
         <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
-        <Route path="/blog" element={<Blog />} />
-        <Route path="/blog/:slug" element={<BlogPost />} />
         <Route path="/intranet" element={<Intranet />} />
       </Routes>
     </div>

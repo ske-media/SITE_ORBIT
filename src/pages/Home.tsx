@@ -65,7 +65,7 @@ function Home() {
               playsInline
               className="absolute inset-0 w-full h-full object-cover"
             >
-              <source src="/videos/hero-background.mp4" type="video/mp4" />
+              <source src="https://res.cloudinary.com/damvotg5h/video/upload/v1738938684/k489z6pa98ea1xpb9ops.mp4" type="video/mp4" />
             </video>
             <div className="absolute inset-0 bg-black/40"></div>
           </div>
@@ -780,7 +780,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Latest Blog Posts */}
+      {/* Latest Blog Posts 
       <section className="py-20 bg-gradient-to-b from-transparent to-[#B026FF]/5">
         <div className="max-w-7xl mx-auto px-4">
           <div className="max-w-4xl mx-auto text-center mb-12">
@@ -855,7 +855,7 @@ function Home() {
             </Link>
           </div>
         </div>
-      </section>
+      </section>*/}
 
       {/* Footer */}
       <footer className="relative overflow-hidden border-t border-[#B026FF]/20 bg-gradient-to-b from-black to-[#B026FF]/10">
