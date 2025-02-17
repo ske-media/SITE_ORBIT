@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { ArrowLeft, ArrowRight, Send, Check, Loader } from 'lucide-react';
@@ -142,10 +143,10 @@ function FirstContactFormComplexSite() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSubmittedEmail, setLastSubmittedEmail] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0]);
+  const navigate = useNavigate();
 
   const FORM_ENDPOINT = 'https://api.staticforms.xyz/submit';
 
@@ -204,8 +205,7 @@ function FirstContactFormComplexSite() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Préparer les données dans le format attendu par StaticForms
-      const formData = {
+      const submitData = {
         accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
         subject: '[COMPLET] Nouveau contact projet complexe - Orbit',
         message: Object.entries(answers)
@@ -221,10 +221,10 @@ function FirstContactFormComplexSite() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
-      setShowThankYou(true);
+      navigate('/success/contact-complex');
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
       alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
@@ -276,31 +276,6 @@ function FirstContactFormComplexSite() {
     return true;
   };
 
-  if (showThankYou) {
-    return (
-      <div className="min-h-screen pt-16 flex flex-col items-center justify-center p-4 text-center">
-        <h2 className="text-3xl font-bold mb-8 gradient-text">
-          Merci pour toutes ces informations !
-        </h2>
-        <div className="max-w-2xl space-y-6 text-gray-300">
-          <p>
-            Nous vous recontacterons rapidement pour un échange approfondi d'environ 45 minutes, 
-            afin de discuter en détail de votre projet et de mieux comprendre vos besoins 
-            spécifiques avant de commencer la création de votre solution sur-mesure.
-          </p>
-          <p>
-            Nous prendrons le temps d'analyser vos objectifs, vos contraintes et vos attentes 
-            pour vous proposer une solution parfaitement adaptée à votre situation.
-          </p>
-          <p className="text-[#B026FF]">
-            L'univers du digital est vaste, mais notre expertise vous guidera vers la 
-            meilleure solution pour votre entreprise. Préparez-vous à voir votre projet 
-            prendre son envol ! 🚀✨
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">

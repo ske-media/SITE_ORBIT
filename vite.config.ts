@@ -29,9 +29,13 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks(id) {
+          if (id.includes('node_modules/react')) {
+            return 'vendor-react';
+          }
+          if (id.includes('node_modules/lucide-react')) {
+            return 'vendor-icons';
+          }
           if (id.includes('node_modules')) {
-            if (id.includes('react')) return 'vendor-react';
-            if (id.includes('lucide')) return 'vendor-icons';
             return 'vendor';
           }
         },
@@ -51,21 +55,28 @@ export default defineConfig({
     minify: 'esbuild',
     terserOptions: {
       format: {
-        comments: false
+        comments: false,
+        ecma: 2020
       },
       compress: {
         drop_console: true,
         drop_debugger: true,
-        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn'],
-        passes: 2
+        pure_funcs: ['console.log', 'console.info', 'console.debug', 'console.warn', 'console.error'],
+        passes: 3,
+        ecma: 2020
       }
     },
     reportCompressedSize: false,
-    assetsInlineLimit: 4096,
+    assetsInlineLimit: 8192,
     chunkSizeWarningLimit: 2000,
     emptyOutDir: true,
     commonjsOptions: {
       transformMixedEsModules: true
-    }
+    },
+    dynamicImportVarsOptions: {
+      warnOnError: false
+    },
+    cssMinify: true,
+    manifest: true
   }
 });

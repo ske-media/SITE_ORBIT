@@ -6,15 +6,20 @@ html, body {
   overflow-x: hidden;
   position: relative;
   width: 100%;
-  background: black;
+  background-color: black;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
   font-family: 'Montserrat', sans-serif;
+  font-display: swap;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 @keyframes glow {

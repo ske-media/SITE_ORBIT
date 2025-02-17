@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Send, Loader } from 'lucide-react';
 
 function PartnershipForm() {
@@ -13,12 +13,12 @@ function PartnershipForm() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const formData = {
+    const submitData = {
       accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
       subject: 'Nouvelle demande de partenariat - Orbit',
       message: Object.entries(formData)
@@ -35,10 +35,10 @@ function PartnershipForm() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
-      setShowThankYou(true);
+      navigate('/success/partnership');
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
       alert('Une erreur est survenue. Veuillez réessayer.');
@@ -54,36 +54,6 @@ function PartnershipForm() {
     }));
   };
 
-  if (showThankYou) {
-    return (
-      <div className="min-h-screen pt-24 pb-16">
-        <div className="max-w-4xl mx-auto px-4 text-center">
-          <h2 className="text-3xl font-bold mb-8 gradient-text">
-            Merci pour votre demande de partenariat !
-          </h2>
-          <div className="space-y-6 text-gray-300">
-            <p>
-              Nous avons bien reçu votre candidature et nous vous recontacterons dans les 24 heures
-              pour discuter des détails de notre collaboration.
-            </p>
-            <p>
-              En attendant, vous pouvez consulter notre documentation partenaire pour en savoir plus
-              sur notre programme d'affiliation.
-            </p>
-            <div className="mt-8">
-              <Link
-                to="/"
-                className="inline-flex items-center gap-2 text-[#B026FF] hover:text-white transition"
-              >
-                <ArrowLeft className="h-5 w-5" />
-                Retour à l'accueil
-              </Link>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen pt-24 pb-16">

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { ArrowLeft, ArrowRight, Send, Check, Loader } from 'lucide-react';
@@ -319,10 +320,10 @@ function FirstContactForm() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSubmittedEmail, setLastSubmittedEmail] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0]);
+  const navigate = useNavigate();
 
   const FORM_ENDPOINT = 'https://api.staticforms.xyz/submit';
 
@@ -432,7 +433,7 @@ function FirstContactForm() {
         console.log('Complete form submission response:', result);
         if (result.success) {
           console.log('Complete form submitted successfully');
-          setShowThankYou(true);
+          navigate('/success/contact');
           trackFormInteraction('contact_form', 'complete');
           trackConversion('contact_form_submission');
         } else {
@@ -489,11 +490,6 @@ function FirstContactForm() {
     if (!currentQuestion.required) return true;
     if (!answers[currentQuestion.id]) return false;
 
-    // Validation du numéro de téléphone
-    if (currentQuestion.type === 'phone') {
-      return answers[currentQuestion.id].length >= 8;
-    }
-
     // Validation supplémentaire pour l'email
     if (currentQuestion.type === 'email') {
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -504,37 +500,11 @@ function FirstContactForm() {
     return true;
   };
 
-  if (showThankYou) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center p-4 text-center">
-        <h2 className="text-3xl font-bold mb-8 gradient-text">
-          Merci pour toutes ces informations !
-        </h2>
-        <div className="max-w-2xl space-y-6 text-gray-300">
-          <p>
-            Nous vous recontacterons rapidement pour un échange d'environ 30 minutes, afin de 
-            discuter de votre projet et de mieux comprendre vos envies et besoins avant de 
-            commencer la création de votre site web.
-          </p>
-          <p>
-            Rappelez-vous : il n'y a aucun risque pour vous. Vous ne payez que si vous êtes 
-            entièrement satisfait.e et souhaitez acquérir votre site.
-          </p>
-          <p className="text-[#B026FF]">
-            Nous savons que l'univers du digital peut parfois sembler aussi vaste qu'une 
-            galaxie inconnue, mais notre mission est de vous guider, étape par étape, pour 
-            que tout soit simple et fluide. Préparez-vous à voir votre projet décoller avec 
-            sérénité ! 🚀✨
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen pt-16 flex flex-col">
       {/* Progress bar */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-[#B026FF]/20">
+      <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
         <div 
           className="h-full bg-[#B026FF] transition-all duration-300"
           style={{ width: `${((currentQuestionIndex + 1) / questions.length) * 100}%` }}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Send, Check, Loader } from 'lucide-react';
 
 type Question = {
@@ -97,8 +98,8 @@ function OrderForm() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
-  const [showThankYou, setShowThankYou] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const currentQuestion = questions[currentQuestionIndex];
 
@@ -127,8 +128,7 @@ function OrderForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Préparer les données dans le format attendu par StaticForms
-      const formData = {
+      const submitData = {
         accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
         subject: 'Nouvelle commande - Orbit',
         message: Object.entries(answers)
@@ -144,10 +144,10 @@ function OrderForm() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       });
 
-      setShowThankYou(true);
+      navigate('/success/order');
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
       alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
@@ -179,32 +179,6 @@ function OrderForm() {
     return answers[currentQuestion.id] || !currentQuestion.required;
   };
 
-  if (showThankYou) {
-    return (
-      <div className="min-h-screen pt-16 flex flex-col items-center justify-center p-4 text-center">
-        <h2 className="text-3xl font-bold mb-8 gradient-text">
-          Merci pour toutes ces informations !
-        </h2>
-        <div className="max-w-2xl space-y-6 text-gray-300">
-          <p>
-            Nous vous recontacterons rapidement pour un échange d'environ 30 minutes, afin de 
-            discuter de votre projet et de mieux comprendre vos envies et besoins avant de 
-            commencer la création de votre site web.
-          </p>
-          <p>
-            Rappelez-vous : il n'y a aucun risque pour vous. Vous ne payez que si vous êtes 
-            entièrement satisfait.e et souhaitez acquérir votre site.
-          </p>
-          <p className="text-[#B026FF]">
-            Nous savons que l'univers du digital peut parfois sembler aussi vaste qu'une 
-            galaxie inconnue, mais notre mission est de vous guider, étape par étape, pour 
-            que tout soit simple et fluide. Préparez-vous à voir votre projet décoller avec 
-            sérénité ! 🚀✨
-          </p>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
