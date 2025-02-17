@@ -404,8 +404,7 @@ function FirstContactForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      // Préparer les données dans le format attendu par StaticForms
-      const formData = {
+      const submitData = {
         accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
         subject: '[COMPLET] Nouveau contact - Orbit',
         message: Object.entries(answers)
@@ -416,14 +415,14 @@ function FirstContactForm() {
         honeypot: ''
       };
 
-      console.log('Submitting complete form to staticforms:', formData);
+      console.log('Submitting complete form to staticforms:', submitData);
 
       await fetch(FORM_ENDPOINT, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(submitData)
       }).then(response => {
         if (!response.ok) {
           throw new Error('Network response was not ok');
