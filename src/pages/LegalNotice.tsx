@@ -21,7 +21,7 @@ function LegalNotice() {
             </p>
             <p>
               Siège social : 420 Route de Saint-Julien, 74520 Valleiry, France<br />
-              Téléphone : +33 6 95 51 37 65<br />
+              Téléphone : 022 886 00 69<br />
               Email : info@agence-orbit.ch
             </p>
           </section>

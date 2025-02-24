@@ -178,7 +178,6 @@ function Brochure() {
                         "Pack Essentiel +",
                         "Support prioritaire",
                         "Modifications mineures",
-                        "Rapports mensuels",
                         "Maintenance"
                       ]
                     }
