@@ -18,24 +18,21 @@ function PartnershipForm() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    const submitData = {
-      accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
-      subject: 'Nouvelle demande de partenariat - Orbit',
-      message: Object.entries(formData)
-        .map(([key, value]) => `${key}: ${value}`)
-        .join('\n'),
-      email: formData.email,
-      replyTo: formData.email,
-      honeypot: ''
-    };
 
     try {
-      await fetch('https://api.staticforms.xyz/submit', {
+      // Préparer les données pour Netlify Forms
+      const netlifyFormData = new FormData();
+      netlifyFormData.append('form-name', 'partnership');
+      
+      // Ajouter toutes les données du formulaire
+      Object.entries(formData).forEach(([key, value]) => {
+        netlifyFormData.append(key, value.toString());
+      });
+
+      await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(submitData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(netlifyFormData as any).toString()
       });
 
       navigate('/success/partnership');
@@ -57,6 +54,17 @@ function PartnershipForm() {
 
   return (
     <div className="min-h-screen pt-24 pb-16">
+      {/* Netlify Forms hidden form */}
+      <form name="partnership" data-netlify="true" hidden>
+        <input type="text" name="name" />
+        <input type="email" name="email" />
+        <input type="text" name="company" />
+        <input type="tel" name="phone" />
+        <input type="url" name="website" />
+        <input type="text" name="experience" />
+        <textarea name="message"></textarea>
+      </form>
+
       <div className="max-w-4xl mx-auto px-4">
         <Link to="/devenir-partenaire" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition">
           <ArrowLeft className="h-5 w-5" />

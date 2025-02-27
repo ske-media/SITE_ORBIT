@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { ArrowLeft, ArrowRight, Send, Check, Loader } from 'lucide-react';
-import { trackFormInteraction, trackConversion } from '../lib/analytics';
+import { trackFormInteraction, trackConversion } from '../lib/analytics'; 
 
 const countryTranslations = {
   fr: {
@@ -404,45 +404,24 @@ function FirstContactForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const submitData = {
-        accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
-        subject: '[COMPLET] Nouveau contact - Orbit',
-        message: Object.entries(answers)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('\n'),
-        email: answers.email,
-        replyTo: answers.email,
-        honeypot: ''
-      };
-
-      console.log('Submitting complete form to staticforms:', submitData);
-
-      await fetch(FORM_ENDPOINT, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(submitData)
-      }).then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      }).then(result => {
-        console.log('Complete form submission response:', result);
-        if (result.success) {
-          console.log('Complete form submitted successfully');
-          navigate('/success/contact');
-          trackFormInteraction('contact_form', 'complete');
-          trackConversion('contact_form_submission');
-        } else {
-          console.error('Complete form submission failed:', result);
-          throw new Error('Form submission failed');
-        }
-      }).catch(error => {
-        console.error('Error submitting complete form:', error);
-        throw error;
+      // Préparer les données pour Netlify Forms
+      const formData = new FormData();
+      formData.append('form-name', 'contact');
+      
+      // Ajouter toutes les réponses
+      Object.entries(answers).forEach(([key, value]) => {
+        formData.append(key, value.toString());
       });
+
+      await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
+      });
+
+      navigate('/success/contact');
+      trackFormInteraction('contact_form', 'complete');
+      trackConversion('contact_form_submission');
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
       alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
@@ -502,6 +481,17 @@ function FirstContactForm() {
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
+      {/* Netlify Forms hidden form */}
+      <form name="contact" data-netlify="true" hidden>
+        <input type="text" name="first_name" />
+        <input type="email" name="email" />
+        <input type="text" name="company_name" />
+        <input type="text" name="current_website" />
+        <textarea name="business_description"></textarea>
+        <input type="text" name="multilingual" />
+        <input type="text" name="phone" />
+      </form>
+
       {/* Progress bar */}
       <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
         <div 

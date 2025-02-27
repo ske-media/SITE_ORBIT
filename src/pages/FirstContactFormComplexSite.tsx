@@ -205,23 +205,19 @@ function FirstContactFormComplexSite() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const submitData = {
-        accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
-        subject: '[COMPLET] Nouveau contact projet complexe - Orbit',
-        message: Object.entries(answers)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('\n'),
-        email: answers.email,
-        replyTo: answers.email,
-        honeypot: ''
-      };
+      // Préparer les données pour Netlify Forms
+      const formData = new FormData();
+      formData.append('form-name', 'contact-complex');
+      
+      // Ajouter toutes les réponses
+      Object.entries(answers).forEach(([key, value]) => {
+        formData.append(key, value.toString());
+      });
 
-      await fetch(FORM_ENDPOINT, {
+      await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(submitData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
       });
 
       navigate('/success/contact-complex');
@@ -279,6 +275,21 @@ function FirstContactFormComplexSite() {
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
+      {/* Netlify Forms hidden form */}
+      <form name="contact-complex" data-netlify="true" hidden>
+        <input type="text" name="first_name" />
+        <input type="email" name="email" />
+        <input type="text" name="company_name" />
+        <input type="text" name="current_website" />
+        <textarea name="business_description"></textarea>
+        <input type="text" name="project_type" />
+        <input type="text" name="specific_features" />
+        <textarea name="project_goals"></textarea>
+        <input type="text" name="timeline" />
+        <input type="text" name="budget_range" />
+        <input type="text" name="phone" />
+      </form>
+
       {/* Progress bar */}
       <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
         <div 

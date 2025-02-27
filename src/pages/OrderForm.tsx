@@ -128,23 +128,19 @@ function OrderForm() {
   const handleSubmit = async () => {
     setIsSubmitting(true);
     try {
-      const submitData = {
-        accessKey: '13c4808a-4972-42e9-ae15-c09f728d0933',
-        subject: 'Nouvelle commande - Orbit',
-        message: Object.entries(answers)
-          .map(([key, value]) => `${key}: ${value}`)
-          .join('\n'),
-        email: answers.email,
-        replyTo: answers.email,
-        honeypot: ''
-      };
+      // Préparer les données pour Netlify Forms
+      const formData = new FormData();
+      formData.append('form-name', 'order');
+      
+      // Ajouter toutes les réponses
+      Object.entries(answers).forEach(([key, value]) => {
+        formData.append(key, value.toString());
+      });
 
-      await fetch('https://api.staticforms.xyz/submit', {
+      await fetch('/', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(submitData)
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(formData as any).toString()
       });
 
       navigate('/success/order');
@@ -182,6 +178,18 @@ function OrderForm() {
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
+      {/* Netlify Forms hidden form */}
+      <form name="order" data-netlify="true" hidden>
+        <input type="text" name="hosting" />
+        <input type="text" name="domain" />
+        <input type="text" name="essential_elements" />
+        <textarea name="site_examples"></textarea>
+        <input type="text" name="graphic_elements" />
+        <input type="text" name="graphic_evolution" />
+        <input type="text" name="contact_preference" />
+        <input type="text" name="phone" />
+      </form>
+
       {/* Progress bar */}
       <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
         <div 
