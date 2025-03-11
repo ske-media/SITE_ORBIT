@@ -461,6 +461,11 @@ html {
   z-index: 1000;
 }
 
+/* reCAPTCHA positioning */
+.grecaptcha-badge {
+  bottom: 180px !important;
+}
+
 /* Back to Top Button */
 .back-to-top {
   position: fixed;

@@ -99,6 +99,8 @@ function OrderForm() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formSuccess, setFormSuccess] = useState(false);
   const navigate = useNavigate();
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -127,10 +129,14 @@ function OrderForm() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setFormError('');
+    setFormSuccess(false);
+    
     try {
       // Préparer les données pour Netlify Forms
       const formData = new FormData();
       formData.append('form-name', 'order');
+      formData.append('bot-field', ''); // Honeypot field for spam detection
       
       // Ajouter toutes les réponses
       Object.entries(answers).forEach(([key, value]) => {
@@ -139,14 +145,16 @@ function OrderForm() {
 
       await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as any).toString()
+        body: formData
       });
 
-      navigate('/success/order');
+      setFormSuccess(true);
+      setTimeout(() => {
+        navigate('/success/order');
+      }, 1000);
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
-      alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
+      setFormError('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -178,17 +186,10 @@ function OrderForm() {
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
-      {/* Netlify Forms hidden form */}
-      <form name="order" data-netlify="true" hidden>
-        <input type="text" name="hosting" />
-        <input type="text" name="domain" />
-        <input type="text" name="essential_elements" />
-        <textarea name="site_examples"></textarea>
-        <input type="text" name="graphic_elements" />
-        <input type="text" name="graphic_evolution" />
-        <input type="text" name="contact_preference" />
-        <input type="text" name="phone" />
-      </form>
+      {/* Hidden field for honeypot - anti-spam protection */}
+      <p className="hidden">
+        <input name="bot-field" />
+      </p>
 
       {/* Progress bar */}
       <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
@@ -343,6 +344,19 @@ function OrderForm() {
             )}
           </div>
 
+          {/* Form status messages */}
+          {formError && (
+            <div className="bg-red-500/10 text-red-400 p-3 rounded-lg mb-4">
+              {formError}
+            </div>
+          )}
+          
+          {formSuccess && (
+            <div className="bg-green-500/10 text-green-400 p-3 rounded-lg mb-4">
+              Formulaire envoyé avec succès! Redirection en cours...
+            </div>
+          )}
+
           {/* Navigation */}
           <div className="flex justify-between items-center">
             <button
@@ -360,9 +374,9 @@ function OrderForm() {
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className={`flex items-center gap-2 px-8 py-3 rounded-full transition relative ${
-                  canProceed()
+                  canProceed() && !isSubmitting
                     ? 'bg-[#B026FF] hover:bg-[#B026FF]/80'
                     : 'bg-gray-600 cursor-not-allowed'
                 }`}

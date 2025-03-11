@@ -323,6 +323,8 @@ function FirstContactForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastSubmittedEmail, setLastSubmittedEmail] = useState('');
   const [currentQuestion, setCurrentQuestion] = useState<Question>(questions[0]);
+  const [formError, setFormError] = useState('');
+  const [formSuccess, setFormSuccess] = useState(false);
   const navigate = useNavigate();
 
   const FORM_ENDPOINT = 'https://api.staticforms.xyz/submit';
@@ -403,10 +405,14 @@ function FirstContactForm() {
 
   const handleSubmit = async () => {
     setIsSubmitting(true);
+    setFormError('');
+    setFormSuccess(false);
+    
     try {
       // Préparer les données pour Netlify Forms
       const formData = new FormData();
       formData.append('form-name', 'contact');
+      formData.append('bot-field', ''); // Honeypot field for spam detection
       
       // Ajouter toutes les réponses
       Object.entries(answers).forEach(([key, value]) => {
@@ -415,16 +421,18 @@ function FirstContactForm() {
 
       await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(formData as any).toString()
+        body: formData
       });
 
-      navigate('/success/contact');
-      trackFormInteraction('contact_form', 'complete');
-      trackConversion('contact_form_submission');
+      setFormSuccess(true);
+      setTimeout(() => {
+        navigate('/success/contact');
+        trackFormInteraction('contact_form', 'complete');
+        trackConversion('contact_form_submission');
+      }, 1000);
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
-      alert('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
+      setFormError('Une erreur est survenue lors de l\'envoi du formulaire. Veuillez réessayer.');
       trackFormInteraction('contact_form', 'error');
     } finally {
       setIsSubmitting(false);
@@ -481,18 +489,11 @@ function FirstContactForm() {
 
   return (
     <div className="min-h-screen pt-16 flex flex-col">
-      {/* Netlify Forms hidden form */}
-      <form name="contact" data-netlify="true" hidden>
-        <input type="text" name="first_name" />
-        <input type="email" name="email" />
-        <input type="text" name="company_name" />
-        <input type="text" name="current_website" />
-        <textarea name="business_description"></textarea>
-        <input type="text" name="multilingual" />
-        <input type="text" name="phone" />
-      </form>
+      {/* Hidden field for honeypot - anti-spam protection */}
+      <p className="hidden">
+        <input name="bot-field" />
+      </p>
 
-      {/* Progress bar */}
       <div className="fixed top-16 left-0 w-full h-1 bg-[#B026FF]/20">
         <div 
           className="h-full bg-[#B026FF] transition-all duration-300"
@@ -623,6 +624,19 @@ function FirstContactForm() {
             )}
           </div>
 
+          {/* Form status messages */}
+          {formError && (
+            <div className="bg-red-500/10 text-red-400 p-3 rounded-lg mb-4">
+              {formError}
+            </div>
+          )}
+          
+          {formSuccess && (
+            <div className="bg-green-500/10 text-green-400 p-3 rounded-lg mb-4">
+              Formulaire envoyé avec succès! Redirection en cours...
+            </div>
+          )}
+
           {/* Navigation */}
           <div className="flex justify-between items-center">
             <button
@@ -640,9 +654,9 @@ function FirstContactForm() {
             {isLastQuestion ? (
               <button
                 onClick={handleSubmit}
-                disabled={!canProceed()}
+                disabled={!canProceed() || isSubmitting}
                 className={`flex items-center gap-2 px-8 py-3 rounded-full transition relative ${
-                  canProceed()
+                  canProceed() && !isSubmitting
                     ? 'bg-[#B026FF] hover:bg-[#B026FF]/80'
                     : 'bg-gray-600 cursor-not-allowed'
                 }`}

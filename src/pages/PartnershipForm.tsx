@@ -13,16 +13,21 @@ function PartnershipForm() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [formSuccess, setFormSuccess] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormError('');
+    setFormSuccess(false);
 
     try {
       // Préparer les données pour Netlify Forms
       const netlifyFormData = new FormData();
       netlifyFormData.append('form-name', 'partnership');
+      netlifyFormData.append('bot-field', ''); // Honeypot field for spam detection
       
       // Ajouter toutes les données du formulaire
       Object.entries(formData).forEach(([key, value]) => {
@@ -31,14 +36,16 @@ function PartnershipForm() {
 
       await fetch('/', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(netlifyFormData as any).toString()
+        body: netlifyFormData
       });
 
-      navigate('/success/partnership');
+      setFormSuccess(true);
+      setTimeout(() => {
+        navigate('/success/partnership');
+      }, 1000);
     } catch (error) {
       console.error('Erreur lors de l\'envoi du formulaire:', error);
-      alert('Une erreur est survenue. Veuillez réessayer.');
+      setFormError('Une erreur est survenue. Veuillez réessayer.');
     } finally {
       setIsSubmitting(false);
     }
@@ -54,16 +61,10 @@ function PartnershipForm() {
 
   return (
     <div className="min-h-screen pt-24 pb-16">
-      {/* Netlify Forms hidden form */}
-      <form name="partnership" data-netlify="true" hidden>
-        <input type="text" name="name" />
-        <input type="email" name="email" />
-        <input type="text" name="company" />
-        <input type="tel" name="phone" />
-        <input type="url" name="website" />
-        <input type="text" name="experience" />
-        <textarea name="message"></textarea>
-      </form>
+      {/* Hidden field for honeypot - anti-spam protection */}
+      <p className="hidden">
+        <input name="bot-field" />
+      </p>
 
       <div className="max-w-4xl mx-auto px-4">
         <Link to="/devenir-partenaire" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition">
@@ -165,6 +166,19 @@ function PartnershipForm() {
               placeholder="Parlez-nous de vos objectifs en tant que partenaire..."
             />
           </label>
+
+          {/* Form status messages */}
+          {formError && (
+            <div className="bg-red-500/10 text-red-400 p-3 rounded-lg">
+              {formError}
+            </div>
+          )}
+          
+          {formSuccess && (
+            <div className="bg-green-500/10 text-green-400 p-3 rounded-lg">
+              Formulaire envoyé avec succès! Redirection en cours...
+            </div>
+          )}
 
           <button
             type="submit"
