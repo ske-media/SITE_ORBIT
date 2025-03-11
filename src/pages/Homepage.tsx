@@ -14,38 +14,49 @@ function Homepage() {
       
       <div className="min-h-screen pt-24 pb-16">
         {/* 1. Hero Section – Impact immédiat */}
-        <section className="relative min-h-[calc(100vh-6rem)] flex items-center overflow-hidden -mt-24">
-          {/* Vidéo d'arrière-plan */}
-          <div className="absolute inset-0 z-0">
-            <video 
-              autoPlay 
-              muted 
-              loop 
-              playsInline
-              className="w-full h-full object-cover"
-            >
-              <source src="https://res.cloudinary.com/agence-orbit/video/upload/v1741712025/planet-earth-orbit_xe79ic.mp4" type="video/mp4" />
-            </video>
-            <div className="absolute inset-0 bg-black/70"></div>
-          </div>
-          
-          <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
-            <h1 className="text-5xl md:text-6xl font-bold mb-6 hero-title">
-              Un site web, une image, <span className="text-[#B026FF]">une transformation.</span>
-            </h1>
-            <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto">
-              Votre présence en ligne mérite le meilleur, et nous le créons pour vous.
-            </p>
-            <div className="flex flex-col md:flex-row gap-4 justify-center mb-12">
-              <Link to="/contact" className="cta-button px-8 py-4 text-lg font-medium">
-                Créer mon site web
-              </Link>
-              <Link to="/creation-site-web#portfolio" className="px-8 py-4 bg-white/5 rounded-full hover:bg-white/10 transition">
-                Voir nos réalisations
-              </Link>
-            </div>
-          </div>
-        </section>
+       <section className="relative min-h-[calc(100vh-6rem)] flex items-center overflow-hidden -mt-24">
+  {/* Vidéo d'arrière-plan */}
+  <div className="absolute inset-0 z-0">
+    <video 
+      autoPlay 
+      muted 
+      loop 
+      playsInline
+      className="w-full h-full object-cover"
+    >
+      <source src="https://res.cloudinary.com/agence-orbit/video/upload/v1741712025/planet-earth-orbit_xe79ic.mp4" type="video/mp4" />
+    </video>
+    <div className="absolute inset-0 bg-black/40"></div> {/* Assombri légèrement la vidéo */}
+  </div>
+  
+  <div className="max-w-7xl mx-auto px-4 text-center relative z-10">
+    {/* ✅ Amélioration du style du titre */}
+    <h1 className="text-4xl md:text-6xl font-bold mb-6 hero-title gradient-text">
+      Un site web, une image, <span className="text-[#B026FF]">une transformation.</span>
+    </h1>
+
+    {/* ✅ Meilleur espacement et lisibilité */}
+    <p className="text-xl text-gray-300 mb-12 max-w-3xl mx-auto leading-relaxed">
+      Votre présence en ligne mérite le meilleur, et nous le créons pour vous.
+    </p>
+
+    {/* ✅ Boutons CTA améliorés */}
+    <div className="flex flex-col md:flex-row gap-4 justify-center">
+      <Link 
+        to="/contact" 
+        className="px-8 py-4 bg-[#B026FF] text-white rounded-full text-lg font-medium hover:bg-[#B026FF]/80 transition"
+      >
+        Créer mon site web
+      </Link>
+      <Link 
+        to="/creation-site-web#portfolio" 
+        className="px-8 py-4 bg-white/5 rounded-full text-lg font-medium hover:bg-white/10 transition"
+      >
+        Voir nos réalisations
+      </Link>
+    </div>
+  </div>
+</section>
 
         {/* 2. Preuve sociale & crédibilité */}
         <section className="py-12 bg-white/5 backdrop-blur-sm">
