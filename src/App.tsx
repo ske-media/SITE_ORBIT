@@ -11,6 +11,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy';
 import Partnership from './pages/Partnership';
 import Blog from './pages/Blog';
 import BlogPost from './pages/BlogPost';
+import StrapiBlog from './pages/StrapiBlog';
+import StrapiArticlePage from './pages/StrapiArticle';
 import PartnershipForm from './pages/PartnershipForm';
 import FormSuccess from './pages/FormSuccess';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
@@ -147,6 +149,8 @@ function App() {
             <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/strapi-blog" element={<StrapiBlog />} />
+            <Route path="/strapi-blog/:slug" element={<StrapiArticlePage />} />
             <Route path="/intranet" element={<Intranet />} />
             <Route path="/success/:formType" element={<FormSuccess />} />
           </Routes>
