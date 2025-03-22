@@ -1,110 +1,220 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Twitter, Mail, MapPin, Phone, Send } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Twitter, Mail, MapPin, Phone, Send, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
+import Button from './ui/Button';
 
 function Footer() {
+  const currentYear = new Date().getFullYear();
+  
+  const footerLinks = [
+    { label: 'Contact', to: '/contact' },
+    { label: 'Devenir Partenaire', to: '/devenir-partenaire' },
+    { label: 'Mentions légales', to: '/mentions-legales' },
+    { label: 'Politique de confidentialité', to: '/politique-de-confidentialite' },
+  ];
+  
+  const socialLinks = [
+    { icon: <Facebook className="h-5 w-5" />, url: 'https://facebook.com', label: 'Facebook' },
+    { icon: <Instagram className="h-5 w-5" />, url: 'https://instagram.com', label: 'Instagram' },
+    { icon: <Linkedin className="h-5 w-5" />, url: 'https://linkedin.com', label: 'LinkedIn' },
+    { icon: <Twitter className="h-5 w-5" />, url: 'https://twitter.com', label: 'Twitter' },
+  ];
+  
+  const contactInfo = [
+    { icon: <MapPin className="h-5 w-5 text-neon-purple" />, content: 'Genève', label: 'Adresse' },
+    { icon: <Phone className="h-5 w-5 text-neon-purple" />, content: '022 886 00 69', url: 'tel:+41228860069', label: 'Téléphone' },
+    { icon: <Mail className="h-5 w-5 text-neon-purple" />, content: 'info@agence-orbit.ch', url: 'mailto:info@agence-orbit.ch', label: 'Email' },
+  ];
+
   return (
-    <footer className="py-16 bg-black/70 backdrop-blur-sm border-t border-[#B026FF]/20 relative">
-      <div className="footer-background absolute inset-0 opacity-20 z-0">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/0 to-black/90"></div>
-      </div>
+    <footer className="relative overflow-hidden border-t border-neon-purple/20">
+      {/* Grid background and animations */}
+      <div className="absolute inset-0 grid-background opacity-10"></div>
+      <div className="scanning-line"></div>
+      <div className="absolute inset-0 bg-noise opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
       
-      <div className="max-w-7xl mx-auto px-4 relative z-10">
-        <div className="grid md:grid-cols-4 gap-12">
-          {/* Colonne 1 - Logo et infos */}
+      {/* Gradient effects */}
+      <div className="absolute top-0 left-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-[100px] -z-10 opacity-60"></div>
+      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-neon-purple/10 rounded-full blur-[100px] -z-10 opacity-40"></div>
+      
+      <div className="futuristic-container py-16">
+        <div className="grid md:grid-cols-4 gap-x-12 gap-y-10">
+          {/* Column 1: Logo & Info */}
           <div className="space-y-6">
-            <img src="https://i.imgur.com/aM3st2Q.png" alt="Orbit Logo" className="h-20" />
-            <p className="text-gray-400 text-sm">
-              Agence digitale spécialisée dans la création de sites web, la gestion des réseaux sociaux et le développement d'applications sur mesure.
-            </p>
-            <div className="flex space-x-4">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="bg-white/5 p-2 rounded-full hover:bg-[#B026FF]/20 transition">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="bg-white/5 p-2 rounded-full hover:bg-[#B026FF]/20 transition">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="bg-white/5 p-2 rounded-full hover:bg-[#B026FF]/20 transition">
-                <Linkedin className="h-5 w-5" />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="bg-white/5 p-2 rounded-full hover:bg-[#B026FF]/20 transition">
-                <Twitter className="h-5 w-5" />
-              </a>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="relative"
+            >
+              <img src="https://i.imgur.com/aM3st2Q.png" alt="Orbit Logo" className="h-20" />
+              <div className="absolute -inset-1 bg-neon-purple/20 blur-xl rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300 -z-10"></div>
+            </motion.div>
+            
+            <motion.p 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="text-surface-300 text-sm leading-relaxed"
+            >
+              Agence digitale spécialisée dans la création de sites web futuristes, 
+              la gestion des réseaux sociaux et le développement d'applications innovantes sur mesure.
+            </motion.p>
+            
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="flex space-x-3"
+            >
+              {socialLinks.map((link, index) => (
+                <a 
+                  key={index} 
+                  href={link.url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="p-2 bg-dark-300/50 rounded-full hover:bg-neon-purple/20 transition-colors text-surface-300 hover:text-white hover:shadow-neon"
+                >
+                  {link.icon}
+                </a>
+              ))}
+            </motion.div>
           </div>
 
-          {/* Colonne 2 - Liens rapides */}
+          {/* Column 2: Links */}
           <div>
-            <h3 className="text-lg font-bold mb-6">Liens rapides</h3>
-            <ul className="space-y-3">
-              <li>
-                <Link to="/contact" className="text-gray-400 hover:text-white transition">Contact</Link>
-              </li>
-              <li>
-                <Link to="/devenir-partenaire" className="text-gray-400 hover:text-white transition">Devenir Partenaire</Link>
-              </li>
-              <li>
-                <Link to="/mentions-legales" className="text-gray-400 hover:text-white transition">Mentions légales</Link>
-              </li>
-              <li>
-                <Link to="/politique-de-confidentialite" className="text-gray-400 hover:text-white transition">Politique de confidentialité</Link>
-              </li>
-            </ul>
+            <motion.h3 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-lg font-semibold mb-6"
+            >
+              Liens rapides
+            </motion.h3>
+            
+            <motion.ul 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="space-y-3"
+            >
+              {footerLinks.map((link, index) => (
+                <li key={index}>
+                  <Link 
+                    to={link.to} 
+                    className="text-surface-300 hover:text-white transition-colors inline-flex items-center gap-1.5 group hover:text-neon-purple"
+                  >
+                    <span>{link.label}</span>
+                    <ExternalLink className="w-3.5 h-3.5 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
+                  </Link>
+                </li>
+              ))}
+            </motion.ul>
           </div>
 
-          {/* Colonne 3 - Contact */}
+          {/* Column 3: Contact */}
           <div>
-            <h3 className="text-lg font-bold mb-6">Contact</h3>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-3">
-                <MapPin className="h-5 w-5 text-[#B026FF]" />
-                <span className="text-gray-400">Genève</span>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-[#B026FF]" />
-                <a href="tel:+41228860069" className="text-gray-400 hover:text-white transition">022 886 00 69</a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-[#B026FF]" />
-                <a href="mailto:info@agence-orbit.ch" className="text-gray-400 hover:text-white transition">info@agence-orbit.ch</a>
-              </li>
-            </ul>
+            <motion.h3 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-lg font-semibold mb-6"
+            >
+              Contact
+            </motion.h3>
+            
+            <motion.ul 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="space-y-4"
+            >
+              {contactInfo.map((item, index) => (
+                <li key={index} className="flex items-start gap-3 group">
+                  <span className="mt-0.5 group-hover:text-neon-purple transition-colors">{item.icon}</span>
+                  {item.url ? (
+                    <a 
+                      href={item.url} 
+                      className="text-surface-300 hover:text-neon-purple transition-colors"
+                      aria-label={item.label}
+                    >
+                      {item.content}
+                    </a>
+                  ) : (
+                    <span className="text-surface-300 group-hover:text-white transition-colors">{item.content}</span>
+                  )}
+                </li>
+              ))}
+            </motion.ul>
           </div>
 
-          {/* Colonne 4 - Formulaire rapide */}
+          {/* Column 4: Quick Contact */}
           <div>
-            <h3 className="text-lg font-bold mb-6">Besoin d'un conseil ?</h3>
-            <form className="space-y-4">
+            <motion.h3 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              className="text-lg font-semibold mb-6"
+            >
+              Besoin d'un conseil ?
+            </motion.h3>
+            
+            <motion.form 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+              className="space-y-4"
+            >
               <div>
                 <input 
                   type="email" 
                   placeholder="Votre email" 
-                  className="w-full p-3 bg-white/5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-500"
+                  className="w-full p-3 bg-dark-300/50 rounded-lg border border-neon-purple/30 focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-transparent text-white placeholder:text-surface-400"
                 />
               </div>
               <div>
                 <textarea 
                   placeholder="Votre message" 
                   rows={3}
-                  className="w-full p-3 bg-white/5 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-500 resize-none"
+                  className="w-full p-3 bg-dark-300/50 rounded-lg border border-neon-purple/30 focus:outline-none focus:ring-2 focus:ring-neon-purple focus:border-transparent text-white placeholder:text-surface-400 resize-none"
                 ></textarea>
               </div>
-              <button 
-                type="submit" 
-                className="flex items-center gap-2 bg-[#B026FF] px-4 py-2 rounded-lg hover:bg-[#B026FF]/80 transition w-full justify-center"
+              <Button
+                type="submit"
+                variant="primary"
+                fullWidth
+                icon={<Send className="h-4 w-4" />}
+                iconPosition="right"
+                glowing
               >
                 Envoyer
-                <Send className="h-4 w-4" />
-              </button>
-            </form>
+              </Button>
+            </motion.form>
           </div>
         </div>
 
-        <div className="mt-16 pt-8 border-t border-[#B026FF]/20 text-center">
-          <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Agence Orbit - Tous droits réservés.
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="mt-16 pt-8 border-t border-neon-purple/20 text-center"
+        >
+          <p className="text-surface-400 text-sm">
+            © {currentYear} Agence Orbit - Tous droits réservés. <span className="text-neon-purple/80">Propulsez votre avenir digital.</span>
           </p>
-        </div>
+        </motion.div>
       </div>
     </footer>
   );

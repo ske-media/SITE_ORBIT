@@ -1,55 +1,80 @@
-import React, { useState } from 'react';
-import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
-import { ChevronDown, X, Menu } from 'lucide-react'; // Ajout des icônes
+import React, { useEffect, useState, Suspense } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import FirstContactForm from './pages/FirstContactForm';
-import FirstContactFormComplexSite from './pages/FirstContactFormComplexSite';
-import OrderForm from './pages/OrderForm';
-import Home from './pages/Home';
-import LegalNotice from './pages/LegalNotice';
-import PrivacyPolicy from './pages/PrivacyPolicy';
-import Partnership from './pages/Partnership';
-import StrapiBlog from './pages/StrapiBlog';
-import StrapiArticlePage from './pages/StrapiArticle';
-import PartnershipForm from './pages/PartnershipForm';
-import FormSuccess from './pages/FormSuccess';
+import { AnimatePresence } from 'framer-motion';
+import Header from './components/Header';
+import Footer from './components/Footer';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
-import Homepage from './pages/Homepage';
-import WebsiteCreation from './pages/WebsiteCreation';
-import SocialMedia from './pages/SocialMedia';
-import AppCreation from './pages/AppCreation';
-import NotFound from './pages/NotFound';
+import { ArrowUp } from 'lucide-react';
+import { smoothScrollTo } from './lib/utils';
+
+// Code-splitting for routes
+const Homepage = React.lazy(() => import('./pages/Homepage'));
+const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
+const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
+const AppCreation = React.lazy(() => import('./pages/AppCreation'));
+const FirstContactForm = React.lazy(() => import('./pages/FirstContactForm'));
+const FirstContactFormComplexSite = React.lazy(() => import('./pages/FirstContactFormComplexSite'));
+const OrderForm = React.lazy(() => import('./pages/OrderForm'));
+const LegalNotice = React.lazy(() => import('./pages/LegalNotice'));
+const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
+const Partnership = React.lazy(() => import('./pages/Partnership'));
+const PartnershipForm = React.lazy(() => import('./pages/PartnershipForm'));
+const StrapiBlog = React.lazy(() => import('./pages/StrapiBlog'));
+const StrapiArticlePage = React.lazy(() => import('./pages/StrapiArticle'));
+const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
+const NotFound = React.lazy(() => import('./pages/NotFound'));
+
+// Loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a]">
+    <div className="flex flex-col items-center">
+      <img 
+        src="https://i.imgur.com/aM3st2Q.png" 
+        alt="Orbit Logo" 
+        className="h-16 md:h-20 animate-pulse mb-6"
+      />
+      <div className="loader"></div>
+    </div>
+  </div>
+);
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
   const location = useLocation();
-
-  // Vérifie si l'utilisateur est sur la homepage
-  const isHomepage = location.pathname === '/';
-
-  // Suivi des pages vues
-  React.useEffect(() => {
+  const [showBackToTop, setShowBackToTop] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
+  
+  // Scroll to top when route changes
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
+  
+  // Track page views
+  useEffect(() => {
     if (window.gtag) {
       window.gtag('event', 'page_view', {
         page_path: location.pathname + location.search,
       });
     }
   }, [location]);
+  
+  // Handle scroll events
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrolled = window.scrollY;
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = (scrolled / maxScroll) * 100;
+      
+      setScrollProgress(progress);
+      setShowBackToTop(scrolled > 500);
+    };
 
-  // Suivi des clics sur les CTA
-  const trackCTAClick = (action: string) => {
-    if (window.gtag) {
-      window.gtag('event', 'cta_click', {
-        action_category: 'engagement',
-        action_label: action,
-      });
-    }
-  };
-
-  const handleStartClick = () => {
-    trackCTAClick('start_project');
-    navigate('/contact');
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  const scrollToTop = () => {
+    smoothScrollTo(0, 800);
   };
 
   return (
@@ -58,99 +83,55 @@ function App() {
         <Helmet>
           <link rel="canonical" href={`https://agence-orbit.ch${location.pathname}`} />
         </Helmet>
-        <div className="bg-black text-white min-h-screen relative">
-
-          {/* Navigation - Transparente sur la homepage, semi-transparente ailleurs */}
-          <nav className={`w-full z-50 transition-all duration-300 ${
-            isHomepage 
-              ? 'absolute top-0 left-0 bg-transparent' 
-              : 'fixed bg-black/80 backdrop-blur-md shadow-lg'
-          }`}>
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div className="flex justify-between h-16">
-                
-                {/* Logo */}
-                <div className="flex items-center gap-2">
-                  <Link to="/">
-                    <img src="https://i.imgur.com/aM3st2Q.png" alt="Orbit Logo" className="h-32" />
-                  </Link>
-                </div>
-
-                {/* Menu Desktop */}
-                <div className="hidden md:flex items-center space-x-8">
-                  <Link to="/" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Accueil</Link>
-                  <Link to="/creation-site-web" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Création de Site Web</Link>
-                  <Link to="/reseaux-sociaux" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Réseaux Sociaux</Link>
-                  <Link to="/creation-application" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Création d'Application</Link>
-                  <Link to="/blog" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">Blog</Link>
-                  <button 
-                    className="cta-button"
-                    onClick={handleStartClick}
-                    onMouseEnter={() => window.gtag?.('event', 'cta_hover', { element: 'nav_start' })}
-                  >
-                    <span className="uppercase tracking-wider text-sm font-medium text-white">Décoller</span>
-                  </button>
-                </div>
-
-                {/* Bouton Menu Mobile */}
-                <button 
-                  className="md:hidden flex items-center focus:outline-none z-50 relative"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
-                >
-                  {isMenuOpen ? (
-                    <>
-                      {/* Icône croix (fermeture) */}
-                      <X className="h-8 w-8 text-white transition-transform" />
-                    </>
-                  ) : (
-                    <>
-                      {/* Icône burger (ouverture) */}
-                      <Menu className="h-8 w-8 text-white transition-transform" />
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            {/* Menu Mobile - Plein écran */}
-            <div className={`fixed inset-0 w-full h-full bg-black text-white z-50 flex flex-col items-center justify-center transition-all duration-300 ease-in-out ${
-              isMenuOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95 pointer-events-none'
-            }`}>
-              
-              {/* Bouton de fermeture en haut à droite */}
-              <button className="absolute top-6 right-6" onClick={() => setIsMenuOpen(false)}>
-                <X className="h-8 w-8 text-white" />
-              </button>
-
-              {/* Liens de navigation */}
-              <nav className="space-y-6 text-center text-2xl">
-                <Link to="/" className="block hover:text-[#B026FF] transition" onClick={() => setIsMenuOpen(false)}>Accueil</Link>
-                <Link to="/creation-site-web" className="block hover:text-[#B026FF] transition" onClick={() => setIsMenuOpen(false)}>Création de Site Web</Link>
-                <Link to="/reseaux-sociaux" className="block hover:text-[#B026FF] transition" onClick={() => setIsMenuOpen(false)}>Réseaux Sociaux</Link>
-                <Link to="/creation-application" className="block hover:text-[#B026FF] transition" onClick={() => setIsMenuOpen(false)}>Création d'Application</Link>
-                <Link to="/blog" className="block hover:text-[#B026FF] transition" onClick={() => setIsMenuOpen(false)}>Blog</Link>
-              </nav>
-            </div>
-          </nav>
-
-          <Routes>
-            <Route path="/" element={<Homepage />} />
-            <Route path="/creation-site-web" element={<WebsiteCreation />} />
-            <Route path="/reseaux-sociaux" element={<SocialMedia />} />
-            <Route path="/creation-application" element={<AppCreation />} />
-            <Route path="/contact" element={<FirstContactForm />} />
-            <Route path="/contact-complex" element={<FirstContactFormComplexSite />} />
-            <Route path="/order" element={<OrderForm />} />
-            <Route path="/mentions-legales" element={<LegalNotice />} />
-            <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
-            <Route path="/devenir-partenaire" element={<Partnership />} />
-            <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
-            <Route path="/blog" element={<StrapiBlog />} />
-            <Route path="/blog/:slug" element={<StrapiArticlePage />} />
-            <Route path="/success/:formType" element={<FormSuccess />} />
-            {/* Catch-all route for 404 page */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+        
+        {/* Progress Bar */}
+        <div 
+          className="scroll-progress" 
+          style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties}
+        />
+        
+        {/* Global Background Elements */}
+        <div className="fixed inset-0 bg-[#1a1a1a] -z-50"></div>
+        <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
+        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
+        
+        {/* Back to Top Button */}
+        <button
+          onClick={scrollToTop}
+          className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
+          aria-label="Retour en haut"
+        >
+          <ArrowUp className="h-5 w-5" />
+        </button>
+        
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          
+          <main className="flex-grow relative">
+            <Suspense fallback={<PageLoader />}>
+              <AnimatePresence mode="wait">
+                <Routes location={location} key={location.pathname}>
+                  <Route path="/" element={<Homepage />} />
+                  <Route path="/creation-site-web" element={<WebsiteCreation />} />
+                  <Route path="/reseaux-sociaux" element={<SocialMedia />} />
+                  <Route path="/creation-application" element={<AppCreation />} />
+                  <Route path="/contact" element={<FirstContactForm />} />
+                  <Route path="/contact-complex" element={<FirstContactFormComplexSite />} />
+                  <Route path="/order" element={<OrderForm />} />
+                  <Route path="/mentions-legales" element={<LegalNotice />} />
+                  <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+                  <Route path="/devenir-partenaire" element={<Partnership />} />
+                  <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
+                  <Route path="/blog" element={<StrapiBlog />} />
+                  <Route path="/blog/:slug" element={<StrapiArticlePage />} />
+                  <Route path="/success/:formType" element={<FormSuccess />} />
+                  <Route path="*" element={<NotFound />} />
+                </Routes>
+              </AnimatePresence>
+            </Suspense>
+          </main>
+          
+          <Footer />
         </div>
       </AnalyticsProvider>
     </HelmetProvider>
