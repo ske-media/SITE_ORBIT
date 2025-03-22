@@ -96,15 +96,16 @@ function StrapiBlog() {
                 >
                   <Link to={`/blog/${article.slug}`}>
                     <div className="relative aspect-video overflow-hidden">
-                      {article.image ? (
-                        <img
-                          src={article.image}
-                          alt={article.title || 'Image de l’article'}
-                          className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-                        />
-                      ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40"></div>
-                      )}
+                      {article.image && article.image.length > 0 ? (
+  <img
+    src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
+    alt={article.title || "Image de l’article"}
+    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+  />
+) : (
+  <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40"></div>
+)}
+
                     </div>
                     <div className="p-6">
                       <h2 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">

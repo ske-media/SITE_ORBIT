@@ -101,13 +101,14 @@ function StrapiArticlePage() {
               </div>
             </div>
 
-            {article.image && (
-              <img
-                src={article.image}
-                alt={article.title}
-                className="w-full aspect-video object-cover rounded-2xl mb-8"
-              />
-            )}
+            {article.image && article.image.length > 0 && (
+  <img
+    src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
+    alt={article.title}
+    className="w-full aspect-video object-cover rounded-2xl mb-8"
+  />
+)}
+
           </header>
 
           {/* Content */}
