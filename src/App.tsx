@@ -9,18 +9,16 @@ import Home from './pages/Home';
 import LegalNotice from './pages/LegalNotice';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Partnership from './pages/Partnership';
-import Blog from './pages/Blog';
-import BlogPost from './pages/BlogPost';
 import StrapiBlog from './pages/StrapiBlog';
 import StrapiArticlePage from './pages/StrapiArticle';
 import PartnershipForm from './pages/PartnershipForm';
 import FormSuccess from './pages/FormSuccess';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
-import Intranet from './pages/Intranet';
 import Homepage from './pages/Homepage';
 import WebsiteCreation from './pages/WebsiteCreation';
 import SocialMedia from './pages/SocialMedia';
 import AppCreation from './pages/AppCreation';
+import NotFound from './pages/NotFound';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -147,12 +145,11 @@ function App() {
             <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
             <Route path="/devenir-partenaire" element={<Partnership />} />
             <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/blog/:slug" element={<BlogPost />} />
-            <Route path="/strapi-blog" element={<StrapiBlog />} />
-            <Route path="/strapi-blog/:slug" element={<StrapiArticlePage />} />
-            <Route path="/intranet" element={<Intranet />} />
+            <Route path="/blog" element={<StrapiBlog />} />
+            <Route path="/blog/:slug" element={<StrapiArticlePage />} />
             <Route path="/success/:formType" element={<FormSuccess />} />
+            {/* Catch-all route for 404 page */}
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </AnalyticsProvider>

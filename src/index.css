@@ -469,7 +469,7 @@ html {
 
 /* reCAPTCHA positioning */
 .grecaptcha-badge {
-  bottom: 180px !important;
+  visibility: hidden !important;
 }
 
 /* Back to Top Button */
