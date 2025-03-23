@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform, useInView, AnimatePresence } from 'framer-motion';
-import { ArrowRight, Check, Rocket, Globe, Instagram, Smartphone, Shield, Zap, Users, Star, ExternalLink, ChevronDown, BarChart, Activity, Cpu } from 'lucide-react';
+import { ArrowRight, Check, Rocket, Globe, Instagram, Smartphone, Shield, Zap, Users, Star, ExternalLink, ChevronDown, BarChart, Activity, Cpu, Target } from 'lucide-react';
 import Button from '../components/ui/Button';
 import gsap from 'gsap';
 import ParticleBackground from '../components/ParticleBackground';
@@ -10,6 +10,7 @@ import AnimatedCounter from '../components/AnimatedCounter';
 import AnimatedInfographic from '../components/AnimatedInfographic';
 import ProcessFlow from '../components/ProcessFlow';
 import TechCircuit from '../components/TechCircuit';
+import VisibilityRadar from '../components/VisibilityRadar';
 
 function Homepage() {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ function Homepage() {
   const teamRef = useRef<HTMLDivElement>(null);
   const clientsRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
+  const radarRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   
@@ -30,6 +32,7 @@ function Homepage() {
   const teamInView = useInView(teamRef, { once: true, amount: 0.2 });
   const clientsInView = useInView(clientsRef, { once: true, amount: 0.3 });
   const processInView = useInView(processRef, { once: true, amount: 0.2 });
+  const radarInView = useInView(radarRef, { once: true, amount: 0.2 });
   
   // Parallax effect
   const { scrollYProgress } = useScroll({
@@ -72,8 +75,8 @@ function Homepage() {
 
   // Handle scroll to next section
   const scrollToNext = () => {
-    if (statsRef.current) {
-      const offset = statsRef.current.offsetTop - 80;
+    if (radarRef.current) {
+      const offset = radarRef.current.offsetTop - 80;
       window.scrollTo({
         top: offset,
         behavior: 'smooth'
@@ -239,6 +242,34 @@ function Homepage() {
             <ChevronDown className="w-8 h-8" />
           </motion.div>
         </motion.div>
+      </section>
+
+      {/* Visibility Radar Section */}
+      <section ref={radarRef} className="py-20 relative">
+        <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/10 to-transparent"></div>
+        <div className="scanning-line-reverse"></div>
+        
+        <div className="futuristic-container relative">
+          <AnimatePresence>
+            {radarInView && (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="mb-16"
+              >
+                <div className="text-center mb-12">
+                  <motion.div className="inline-block mb-4">
+                    <Target className="h-8 w-8 text-neon-purple inline-block mr-2" />
+                    <span className="text-sm uppercase tracking-widest text-neon-purple">Positionnement digital</span>
+                  </motion.div>
+                </div>
+                
+                <VisibilityRadar />
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
       </section>
       
       {/* Stats Section */}
