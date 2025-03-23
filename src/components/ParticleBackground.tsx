@@ -9,20 +9,44 @@ interface ParticleBackgroundProps {
 
 const ParticleBackground: React.FC<ParticleBackgroundProps> = ({ className }) => {
   const [isReady, setIsReady] = useState(false);
+  const [isSupported, setIsSupported] = useState(true);
 
   // Initialize with a delay to prevent performance issues during initial page load
   useEffect(() => {
-    const timer = setTimeout(() => setIsReady(true), 1000);
-    return () => clearTimeout(timer);
+    try {
+      // Check if running in browser environment with required APIs
+      if (typeof window !== 'undefined' && window.document && window.requestAnimationFrame) {
+        const timer = setTimeout(() => setIsReady(true), 1000);
+        return () => clearTimeout(timer);
+      } else {
+        // Not in browser or missing required APIs
+        setIsSupported(false);
+      }
+    } catch (e) {
+      console.error("Error initializing particles:", e);
+      setIsSupported(false);
+    }
   }, []);
 
   const particlesInit = useCallback(async (engine: Engine) => {
-    await loadSlim(engine);
+    try {
+      await loadSlim(engine);
+    } catch (e) {
+      console.error("Error loading particles:", e);
+      setIsSupported(false);
+    }
   }, []);
 
   const particlesLoaded = useCallback(async (container: Container | undefined) => {
     // Container loaded, animation will start
   }, []);
+
+  // Fallback component when particles are not supported
+  if (!isSupported) {
+    return (
+      <div className={`${className || ''} bg-gradient-to-b from-dark-900 via-dark-800/50 to-dark-900 opacity-50`} />
+    );
+  }
 
   if (!isReady) return null;
 

@@ -8,7 +8,25 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 
-// Code-splitting for routes
+// Simplified Loader component for initial page load
+const InitialLoader = () => (
+  <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50">
+    <div className="loader"></div>
+  </div>
+);
+
+// Code-splitting for routes with proper loading fallback
+const PageLoader = () => (
+  <div className="min-h-screen flex items-center justify-center bg-dark-900">
+    <div className="flex flex-col items-center">
+      <div className="h-16 w-16 mb-6 flex items-center justify-center">
+        <div className="loader"></div>
+      </div>
+    </div>
+  </div>
+);
+
+// Lazy load components
 const Homepage = React.lazy(() => import('./pages/Homepage'));
 const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
 const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
@@ -25,24 +43,21 @@ const StrapiArticlePage = React.lazy(() => import('./pages/StrapiArticle'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
-// Loading fallback
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-[#1a1a1a]">
-    <div className="flex flex-col items-center">
-      <img 
-        src="https://i.imgur.com/aM3st2Q.png" 
-        alt="Orbit Logo" 
-        className="h-16 md:h-20 animate-pulse mb-6"
-      />
-      <div className="loader"></div>
-    </div>
-  </div>
-);
-
 function App() {
   const location = useLocation();
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [appLoaded, setAppLoaded] = useState(false);
+  
+  // Initial app load effect
+  useEffect(() => {
+    // Simulate a short loading period
+    const timer = setTimeout(() => {
+      setAppLoaded(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, []);
   
   // Scroll to top when route changes
   useEffect(() => {
@@ -77,6 +92,10 @@ function App() {
     smoothScrollTo(0, 800);
   };
 
+  if (!appLoaded) {
+    return <InitialLoader />;
+  }
+
   return (
     <HelmetProvider>
       <AnalyticsProvider>
@@ -91,7 +110,7 @@ function App() {
         />
         
         {/* Global Background Elements */}
-        <div className="fixed inset-0 bg-[#1a1a1a] -z-50"></div>
+        <div className="fixed inset-0 bg-dark-900 -z-50"></div>
         <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
         <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
         

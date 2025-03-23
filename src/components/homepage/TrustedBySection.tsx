@@ -24,12 +24,12 @@ const TrustedBySection: React.FC<TrustedBySectionProps> = ({ forwardedRef }) => 
  // Testimonials data
 const testimonials = [
   {
-    quote: "J’aurai aimé connaître une agence aussi pro et réactive bien plus tôt pour éviter le stress que cela peut engendrer. Vous pouvez leur faire confiance les yeux fermés !",
+    quote: "J'aurai aimé connaître une agence aussi pro et réactive bien plus tôt pour éviter le stress que cela peut engendrer. Vous pouvez leur faire confiance les yeux fermés !",
     name: "Flora L.",
     position: "Cliente satisfaite"
   },
   {
-    quote: "Super expérience avec Orbit ! L’équipe a été ultra pro, réactive et à l’écoute de mes besoins. Le site livré est moderne, rapide et parfaitement optimisé. Un service au top, je recommande sans hésiter !",
+    quote: "Super expérience avec Orbit ! L'équipe a été ultra pro, réactive et à l'écoute de mes besoins. Le site livré est moderne, rapide et parfaitement optimisé. Un service au top, je recommande sans hésiter !",
     name: "Loryana C.",
     position: "Cliente satisfaite"
   },
@@ -61,6 +61,7 @@ const testimonials = [
       </div>
       
       <div className="futuristic-container relative z-10">
+        
         {/* Section title */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -150,82 +151,6 @@ const testimonials = [
           ))}
         </div>
       </div>
-      
-      <style>
-        {`
-          .stars-small {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(1px 1px at 20px 30px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1px 1px at 40px 70px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1px 1px at 50px 160px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1px 1px at 90px 40px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1px 1px at 130px 80px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1px 1px at 160px 120px, white, rgba(0, 0, 0, 0));
-            background-repeat: repeat;
-            background-size: 200px 200px;
-          }
-          
-          .stars-medium {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(1.5px 1.5px at 150px 150px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1.5px 1.5px at 200px 220px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(1.5px 1.5px at 180px 250px, white, rgba(0, 0, 0, 0));
-            background-repeat: repeat;
-            background-size: 300px 300px;
-          }
-          
-          .stars-large {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: radial-gradient(2px 2px at 300px 300px, white, rgba(0, 0, 0, 0)),
-                              radial-gradient(2px 2px at 400px 400px, white, rgba(0, 0, 0, 0));
-            background-repeat: repeat;
-            background-size: 500px 500px;
-          }
-          
-          .slider-container {
-            overflow: hidden;
-            padding: 20px 0;
-            margin: 0 auto;
-          }
-          
-          .slider {
-            display: flex;
-            align-items: center;
-            animation: scroll 30s linear infinite;
-            width: fit-content;
-          }
-          
-          .slide {
-            flex: 0 0 auto;
-            width: 140px;
-            margin: 0 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-          }
-          
-          @keyframes scroll {
-            0% {
-              transform: translateX(0);
-            }
-            100% {
-              transform: translateX(calc(-140px * ${clientLogos.length} - ${clientLogos.length * 20}px));
-            }
-          }
-        `}
-      </style>
     </section>
   );
 };

@@ -6,9 +6,10 @@ import { smoothScrollTo } from '../lib/utils';
 import HeroSection from '../components/homepage/HeroSection';
 import TrustedBySection from '../components/homepage/TrustedBySection';
 import StatsSection from '../components/homepage/StatsSection';
+import PricingPlanetSection from '../components/homepage/PricingPlanetSection';
+import OrbitDifferenceSection from '../components/homepage/OrbitDifferenceSection';
 import FutureTunnelSection from '../components/homepage/FutureTunnelSection';
 import ProcessSection from '../components/homepage/ProcessSection';
-import ClientsSection from '../components/homepage/ClientsSection';
 import ServicesSection from '../components/homepage/ServicesSection';
 import WhyChooseUsSection from '../components/homepage/WhyChooseUsSection';
 import PortfolioSection from '../components/homepage/PortfolioSection';
@@ -16,7 +17,7 @@ import CTASection from '../components/homepage/CTASection';
 import TeamSection from '../components/homepage/TeamSection';
 
 function Homepage() {
-  // Refs for sections that need scrolling or animations
+  // Refs for sections
   const trustedByRef = useRef<HTMLDivElement>(null);
   const statsRef = useRef<HTMLDivElement>(null);
   const servicesRef = useRef<HTMLDivElement>(null);
@@ -24,8 +25,9 @@ function Homepage() {
   const teamRef = useRef<HTMLDivElement>(null);
   const clientsRef = useRef<HTMLDivElement>(null);
   const processRef = useRef<HTMLDivElement>(null);
+  const pricingPlanetRef = useRef<HTMLDivElement>(null);
+  const orbitDifferenceRef = useRef<HTMLDivElement>(null);
 
-  // Handle scroll to next section
   const scrollToNext = () => {
     if (trustedByRef.current) {
       const offset = trustedByRef.current.offsetTop - 80;
@@ -43,20 +45,23 @@ function Homepage() {
       {/* Hero Section */}
       <HeroSection onScrollNext={scrollToNext} />
       
-      {/* Trusted By Section */}
+      {/* Avis & Logo */}
       <TrustedBySection forwardedRef={trustedByRef} />
 
-      {/* Stats Section */}
+      {/* Chiffre clés */}
       <StatsSection forwardedRef={statsRef} />
+
+      {/* Prix + Avantage Planète */}
+      <PricingPlanetSection forwardedRef={pricingPlanetRef} />
+      
+      {/* Pourquoi Orbit */}
+      <OrbitDifferenceSection forwardedRef={orbitDifferenceRef} />
 
       {/* Future Tunnel Section */}
       <FutureTunnelSection />
 
       {/* Process Section */}
       <ProcessSection forwardedRef={processRef} />
-      
-      {/* Social Proof */}
-      <ClientsSection forwardedRef={clientsRef} />
       
       {/* Services Section */}
       <ServicesSection forwardedRef={servicesRef} />

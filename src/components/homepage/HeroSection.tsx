@@ -14,6 +14,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
   const heroRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   // Parallax effect
   const { scrollYProgress } = useScroll({
@@ -32,6 +33,12 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
       } else {
         videoRef.current.addEventListener('loadeddata', () => {
           setVideoLoaded(true);
+        });
+
+        videoRef.current.addEventListener('error', () => {
+          console.error("Video failed to load");
+          setVideoError(true);
+          setVideoLoaded(true); // Consider it "loaded" so the UI shows
         });
 
         // Fallback in case video takes too long
@@ -63,17 +70,31 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
             <div className="loader"></div>
           </div>
         )}
-        <video 
-          ref={videoRef}
-          autoPlay 
-          muted 
-          loop 
-          playsInline
-          className="w-full h-full object-cover"
-          poster="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
-        >
-          <source src="https://res.cloudinary.com/agence-orbit/video/upload/v1741712025/planet-earth-orbit_xe79ic.mp4" type="video/mp4" />
-        </video>
+        
+        {!videoError ? (
+          <video 
+            ref={videoRef}
+            autoPlay 
+            muted 
+            loop 
+            playsInline
+            className="w-full h-full object-cover"
+            poster="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
+          >
+            <source src="/videos/hero-background.mp4" type="video/mp4" />
+            <source src="https://res.cloudinary.com/agence-orbit/video/upload/v1741712025/planet-earth-orbit_xe79ic.mp4" type="video/mp4" />
+          </video>
+        ) : (
+          <div 
+            className="w-full h-full bg-dark-900"
+            style={{
+              backgroundImage: "url('https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')",
+              backgroundSize: "cover",
+              backgroundPosition: "center"
+            }}
+          ></div>
+        )}
+        
         <div className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm"></div>
       </div>
       
