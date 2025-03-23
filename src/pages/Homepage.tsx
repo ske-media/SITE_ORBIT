@@ -57,9 +57,6 @@ function Homepage() {
       {/* Pourquoi Orbit */}
       <OrbitDifferenceSection forwardedRef={orbitDifferenceRef} />
 
-      {/* Future Tunnel Section */}
-      <FutureTunnelSection />
-
       {/* Process Section */}
       <ProcessSection forwardedRef={processRef} />
       
