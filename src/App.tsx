@@ -40,6 +40,7 @@ const Partnership = React.lazy(() => import('./pages/Partnership'));
 const PartnershipForm = React.lazy(() => import('./pages/PartnershipForm'));
 const StrapiBlog = React.lazy(() => import('./pages/StrapiBlog'));
 const StrapiArticlePage = React.lazy(() => import('./pages/StrapiArticle'));
+const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
@@ -51,11 +52,9 @@ function App() {
   
   // Initial app load effect
   useEffect(() => {
-    // Simulate a short loading period
     const timer = setTimeout(() => {
       setAppLoaded(true);
     }, 500);
-    
     return () => clearTimeout(timer);
   }, []);
   
@@ -79,11 +78,9 @@ function App() {
       const scrolled = window.scrollY;
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const progress = (scrolled / maxScroll) * 100;
-      
       setScrollProgress(progress);
       setShowBackToTop(scrolled > 500);
     };
-
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -143,6 +140,8 @@ function App() {
                   <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
                   <Route path="/blog" element={<StrapiBlog />} />
                   <Route path="/blog/:slug" element={<StrapiArticlePage />} />
+                  {/* Nouvelle route pour le portfolio */}
+                  <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                   <Route path="/success/:formType" element={<FormSuccess />} />
                   <Route path="*" element={<NotFound />} />
                 </Routes>

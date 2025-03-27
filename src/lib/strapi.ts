@@ -70,8 +70,8 @@ export const getPortfolioSites = async () => {
 // Récupère un projet du Portfolio Site Web par slug
 export const getPortfolioSiteBySlug = async (slug: string) => {
   try {
-    const response = await strapiClient.get<StrapiResponse<StrapiPortfolioSiteWeb>>(
-      `/portfolio-site-webs?filters[slug][$eq]=${slug}&populate=*`
+    const response = await strapiClient.get(
+      `/portfolio-site-webs?filters[Slug][$eq]=${slug}&populate=%2A`
     );
     if (!response.data.data || response.data.data.length === 0) {
       throw new Error('Portfolio site not found');
