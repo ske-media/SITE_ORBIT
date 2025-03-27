@@ -1,75 +1,126 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { ExternalLink } from 'lucide-react';
-import Button from '../ui/Button';
+import React, { useState, useEffect } from 'react';
+import WebCapsule from './WebCapsule';
+
+// Définition d'un type pour correspondre à la réponse "plateforme site web" de ton API
+export interface StrapiPortfolioSiteWebFlat {
+  id: number;
+  Titre: string;
+  Slug: string;
+  Short_description: string;
+  Tech_stack: string | null;
+  Date: string;
+  url: string;
+  Client: string;
+  Description: any; // On attend un tableau de blocs (rich text)
+  Featured: boolean;
+  Site_type: string;
+  Main_image: {
+    id: number;
+    documentId: string;
+    name: string;
+    alternativeText: string | null;
+    caption: string | null;
+    width: number;
+    height: number;
+    formats: {
+      thumbnail?: { url: string };
+      small?: { url: string };
+      medium?: { url: string };
+      large?: { url: string };
+    };
+    hash: string;
+    ext: string;
+    mime: string;
+    size: number;
+    url: string;
+    previewUrl: string | null;
+    provider: string;
+    provider_metadata: any;
+    createdAt: string;
+    updatedAt: string;
+    publishedAt: string;
+  };
+  // D'autres champs éventuels peuvent être présents...
+}
 
 const PortfolioSection: React.FC = () => {
+  const [projects, setProjects] = useState<StrapiPortfolioSiteWebFlat[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Utilise la variable d'environnement VITE_STRAPI_API_URL définie dans ton .env
+  // Par exemple, VITE_STRAPI_API_URL=https://siteorbit-cms-production.up.railway.app/api
+  const apiUrl = import.meta.env.VITE_STRAPI_API_URL || 'https://siteorbit-cms-production.up.railway.app/api';
+  console.log("apiUrl:", apiUrl);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        setLoading(true);
+        // Encode l'astérisque dans le populate
+        const endpoint = `${apiUrl}/portfolio-site-webs?populate=%2A`;
+        console.log("Fetching portfolio projects from:", endpoint);
+        const res = await fetch(endpoint);
+        if (!res.ok) {
+          throw new Error(`Erreur lors du chargement des projets. Statut: ${res.status}`);
+        }
+        const json = await res.json();
+        console.log("Portfolio response:", json);
+        setProjects(json.data);
+      } catch (err: any) {
+        console.error("Error fetching portfolio projects:", err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProjects();
+  }, [apiUrl]);
+
+  if (loading) return <div>Chargement...</div>;
+  if (error) return <div>Erreur : {error}</div>;
+
+  // Filtrer uniquement les projets qui ont un titre non vide
+  const validProjects = projects.filter((project) => project.Titre && project.Titre.trim() !== "");
+  console.log("Valid projects:", validProjects);
+
+  if (validProjects.length === 0) {
+    return <div>Aucun projet valide trouvé.</div>;
+  }
+
   return (
-    <section className="py-20 relative">
-      <div className="futuristic-container">
-        <div className="text-center mb-16">
-          <h2 className="futuristic-subtitle mb-4 text-gradient-purple">Nos réalisations</h2>
-          <p className="text-surface-300 max-w-2xl mx-auto">
-            Des projets dont nous sommes fiers, pour des clients qui le sont tout autant.
-          </p>
-        </div>
-        
-        <div className="grid md:grid-cols-3 gap-8 mb-12">
-          {[
-            {
-              image: "https://images.unsplash.com/photo-1547658719-da2b51169166?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-              title: "E-commerce Premium",
-              category: "Site de vente en ligne",
-            },
-            {
-              image: "https://images.unsplash.com/photo-1522542550221-31fd19575a2d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-              title: "Résidences Élégance",
-              category: "Site immobilier",
-            },
-            {
-              image: "https://images.unsplash.com/photo-1551434678-e076c223a692?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80",
-              title: "TaskFlow App",
-              category: "Application de productivité",
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {validProjects.map((project) => {
+        // Construction de l'URL de l'image à partir du champ "Main_image"
+        const imagePath = project.Main_image.url;
+        const baseUrl = apiUrl.replace('/api', '');
+        const imageUrl = imagePath.startsWith('/') ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
+        console.log(`Image URL for project "${project.Titre}":`, imageUrl);
+
+        return (
+          <WebCapsule
+            key={project.id}
+            title={project.Titre}
+            images={[imageUrl]}
+            // L'API ne renvoie pas de tags dans l'exemple, on passe un tableau vide
+            tags={[]}
+            client={project.Client}
+            // On extrait l'année à partir du champ Date
+            year={new Date(project.Date).getFullYear().toString()}
+            link={project.url}
+            // Pour la description, on convertit le rich text en texte brut (si c'est un tableau)
+            description={
+              Array.isArray(project.Description)
+                ? project.Description.map((block: any) =>
+                    block.children.map((child: any) => child.text).join(" ")
+                  ).join(" ")
+                : ""
             }
-          ].map((project, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.1 * index }}
-              whileHover={{ y: -10 }}
-              className="group overflow-hidden rounded-2xl border border-neon-purple/20 hover:border-neon-purple/40 transition-all"
-            >
-              <div className="relative aspect-video overflow-hidden">
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
-                  className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-dark-900 to-transparent flex items-end">
-                  <div className="p-6 w-full transform transition-transform duration-300 group-hover:-translate-y-2">
-                    <h3 className="text-xl font-bold mb-1 group-hover:text-neon-purple transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-sm text-surface-300 flex items-center gap-1">
-                      {project.category}
-                      <ExternalLink className="w-3 h-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-        
-        <div className="text-center">
-          <Button to="/creation-site-web#portfolio" variant="secondary">
-            Voir tous nos projets <ExternalLink className="w-4 h-4" />
-          </Button>
-        </div>
-      </div>
-    </section>
+          />
+        );
+      })}
+    </div>
   );
 };
 

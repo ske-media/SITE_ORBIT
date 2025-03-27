@@ -23,10 +23,6 @@ const WhyChooseUsSection: React.FC<WhyChooseUsSectionProps> = ({ forwardedRef })
               transition={{ duration: 0.6 }}
               className="text-center mb-16"
             >
-              <h2 className="futuristic-subtitle mb-4 text-gradient-purple">Pourquoi choisir Orbit ?</h2>
-              <p className="text-surface-300 max-w-2xl mx-auto">
-                Notre approche unique et notre expertise nous distinguent des autres agences.
-              </p>
             </motion.div>
           )}
         </AnimatePresence>

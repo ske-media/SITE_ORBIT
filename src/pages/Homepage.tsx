@@ -53,18 +53,15 @@ function Homepage() {
 
       {/* Prix + Avantage Planète */}
       <PricingPlanetSection forwardedRef={pricingPlanetRef} />
-      
-      {/* Pourquoi Orbit */}
-      <OrbitDifferenceSection forwardedRef={orbitDifferenceRef} />
 
       {/* Process Section */}
       <ProcessSection forwardedRef={processRef} />
-      
-      {/* Services Section */}
-      <ServicesSection forwardedRef={servicesRef} />
+
+      {/* Pourquoi Orbit */}
+      <OrbitDifferenceSection forwardedRef={orbitDifferenceRef} />
       
       {/* Why Choose Us Section */}
-      <WhyChooseUsSection forwardedRef={whyUsRef} />
+      <WhyChooseUsSection forwardedRef={whyUsRef} />    
       
       {/* Portfolio Preview Section */}
       <PortfolioSection />

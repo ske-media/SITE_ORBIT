@@ -64,3 +64,22 @@ export interface StrapiArticle {
   createdAt: string;
   updatedAt: string;
 }
+
+// Nouveau type pour la collection "Portfolio – Site Web"
+export interface StrapiPortfolioSiteWeb {
+  titre: string;
+  slug: string;
+  image_vedette: StrapiImage;
+  tags: {
+    data: Array<{
+      id: number;
+      attributes: {
+        nom: string;
+      };
+    }>;
+  };
+  client: string;
+  annee: string;
+  lien_projet: string;
+  description?: string;
+}
