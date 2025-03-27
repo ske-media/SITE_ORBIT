@@ -14,6 +14,7 @@ import ServicesSection from '../components/homepage/ServicesSection';
 import WhyChooseUsSection from '../components/homepage/WhyChooseUsSection';
 import PortfolioSection from '../components/homepage/PortfolioSection';
 import CTASection from '../components/homepage/CTASection';
+import MissionVisionSection from '../components/homepage/MissionVisionSection';
 import TeamSection from '../components/homepage/TeamSection';
 
 function Homepage() {
@@ -68,6 +69,9 @@ function Homepage() {
       
       {/* CTA Section */}
       <CTASection />
+      
+      {/* Mission & Vision Section */}
+      <MissionVisionSection />
       
       {/* Team Section */}
       <TeamSection forwardedRef={teamRef} />
