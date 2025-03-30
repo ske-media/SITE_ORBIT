@@ -19,6 +19,8 @@ import TeamSection from '../components/homepage/TeamSection';
 import NosValeursSection from '../components/homepage/NosValeursSection'; 
 import SocialMediaSection from '../components/homepage/SocialMediaSection'; 
 import AppCreationSection from '../components/homepage/AppCreationSection';
+import BeforeAfterSlider from '../components/BeforeAfterSlider';
+
 
 function Homepage() {
   // Refs for sections

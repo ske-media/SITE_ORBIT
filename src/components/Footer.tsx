@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Facebook, Instagram, Linkedin, Twitter, Mail, MapPin, Phone, Send, ExternalLink } from 'lucide-react';
+import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from './ui/Button';
 
@@ -18,7 +18,6 @@ function Footer() {
     { icon: <Facebook className="h-5 w-5" />, url: 'https://facebook.com', label: 'Facebook' },
     { icon: <Instagram className="h-5 w-5" />, url: 'https://instagram.com', label: 'Instagram' },
     { icon: <Linkedin className="h-5 w-5" />, url: 'https://linkedin.com', label: 'LinkedIn' },
-    { icon: <Twitter className="h-5 w-5" />, url: 'https://twitter.com', label: 'Twitter' },
   ];
   
   const contactInfo = [
