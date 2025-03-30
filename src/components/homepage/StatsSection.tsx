@@ -17,7 +17,7 @@ const StatsSection: React.FC<{ forwardedRef: React.RefObject<HTMLDivElement> }> 
           {[
             { number: 98, text: "de clients satisfaits", suffix: "%" },
             { number: 7, text: "pour la première version", suffix: " jours" },
-            { number: 0, text: "si vous n'êtes pas satisfait", suffix: "€" }
+            { number: 0, text: "si vous n'êtes pas satisfait", suffix: " CHF" }
           ].map((stat, index) => (
             <AnimatePresence key={index}>
               {statsInView && (

@@ -95,7 +95,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
           ></div>
         )}
         
-        <div className="absolute inset-0 bg-[#1a1a1a]/60 backdrop-blur-sm"></div>
+        <div className="absolute inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm"></div>
       </div>
       
       {/* Particle effect */}
@@ -114,28 +114,28 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
   style={{ opacity: heroOpacity, y: heroY }}
   className="futuristic-container relative z-10 text-center"
 >
-  <motion.h1 
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.8, delay: 0.3 }}
-    className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6 max-w-5xl mx-auto"
-  >
-    <span className="bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]">
-      Offrez-vous une vitrine digitale
-    </span>
-    <br className="hidden md:block" />
-    <span className="text-white">
-      à la hauteur de votre ambition.
-    </span>
-  </motion.h1>
-  
+ <motion.h1 
+  initial={{ opacity: 0, y: 20 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.3 }}
+  className="text-4xl md:text-6xl font-extrabold tracking-tight mb-6 max-w-5xl mx-auto leading-normal"
+>
+  <span className="block bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)] leading-tight">
+    Offrez-vous une vitrine digitale
+  </span>
+  <span className="block text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.25)] mt-2">
+    à la hauteur de votre ambition.
+  </span>
+</motion.h1>
+
+
   <motion.p 
     initial={{ opacity: 0, y: 20 }}
     animate={{ opacity: 1, y: 0 }}
     transition={{ duration: 0.8, delay: 0.5 }}
-    className="text-xl text-surface-300 mb-12 max-w-2xl mx-auto"
+    className="text-lg md:text-xl text-surface-300 mb-10 md:mb-12 max-w-2xl mx-auto"
   >
-    Votre présence en ligne mérite ce qu'il y a de mieux, et nous le créons pour vous.
+    Votre présence en ligne mérite ce qu’il y a de mieux, et nous le créons pour vous.
   </motion.p>
 
   <motion.div 
@@ -161,6 +161,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
     </Button>
   </motion.div>
 </motion.div>
+
 
       
       {/* Scroll indicator */}

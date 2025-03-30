@@ -9,6 +9,9 @@ import {
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import TrustedBySection from '../components/homepage/TrustedBySection';
 import Footer from '../components/Footer';
+import PortfolioSection from '../components/homepage/PortfolioSection';
+import Button from '../components/ui/Button';
+import PricingSection from '../components/PricingSection';
 import { motion } from 'framer-motion';
 
 // Variants pour les titres et textes de section
@@ -258,121 +261,8 @@ function WebsiteCreation() {
           </div>
         </section>
 
-        {/* PROCESS SECTION */}
-        <section id="process" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
-          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
-            <motion.div
-              variants={titleVariants}
-              initial="hidden"
-              whileInView="visible"
-              className="text-center mb-4"
-            >
-              <h2 className="text-5xl font-bold text-gradient-purple">Comment ça marche ?</h2>
-              <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-                Suivez nos 4 étapes simples pour passer de l'idée au site en ligne.
-              </p>
-            </motion.div>
-            <div className="relative">
-              <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-px bg-neon-purple/20" />
-              <div className="space-y-16">
-                {[
-                  {
-                    title: "1. Consultation Gratuite",
-                    description: "Nous définissons ensemble vos objectifs, votre univers visuel et votre message.",
-                    icon: <Rocket className="h-8 w-8" />
-                  },
-                  {
-                    title: "2. Première version en 7 jours",
-                    description: "Création d'une première maquette. Vous voyez directement à quoi ressemblera votre futur site.",
-                    icon: <Monitor className="h-8 w-8" />
-                  },
-                  {
-                    title: "3. Ajustements illimités",
-                    description: "Vous pouvez demander tous les changements nécessaires jusqu’à ce que le site corresponde parfaitement à vos attentes.",
-                    icon: <Settings className="h-8 w-8" />
-                  },
-                  {
-                    title: "4. Validation & Mise en ligne",
-                    description: "Dès validation, votre site est publié. Vous ne payez que si vous êtes entièrement satisfait.",
-                    icon: <Globe2 className="h-8 w-8" />
-                  }
-                ].map((step, index) => (
-                  <motion.div
-                    key={index}
-                    variants={titleVariants}
-                    initial="hidden"
-                    whileInView="visible"
-                    transition={{ duration: 0.5, delay: index * 0.15 }}
-                    className="relative"
-                  >
-                    <div className="timeline-dot w-4 h-4 bg-neon-purple rounded-full absolute left-4 md:left-1/2 transform md:-translate-x-1/2" />
-                    <div className={`flex flex-col md:flex-row items-start md:items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
-                      <div className="hidden md:block md:w-1/2" />
-                      <div className={`w-[calc(100%-2rem)] md:w-1/2 ml-12 md:ml-0 timeline-card bg-white/5 p-6 md:p-8 rounded-2xl gradient-border ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
-                        <div className={`flex items-center gap-4 mb-4 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
-                          <div className="p-2 md:p-3 bg-neon-purple/20 rounded-xl text-neon-purple flex-shrink-0">
-                            {step.icon}
-                          </div>
-                          <h3 className="text-lg md:text-xl font-bold">{step.title}</h3>
-                        </div>
-                        <p className="text-gray-400 text-sm md:text-base">{step.description}</p>
-                      </div>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-            <div className="text-center mt-16">
-              <motion.button
-                onClick={handleStartClick}
-                variants={titleVariants}
-                initial="hidden"
-                whileInView="visible"
-                className="inline-flex items-center gap-2 bg-neon-purple px-8 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95 group"
-              >
-                Démarrer mon projet
-                <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />
-              </motion.button>
-            </div>
-          </div>
-        </section>
 
-        {/* PORTFOLIO SECTION */}
-        <section id="portfolio" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
-             <div className="scanning-line-reverse"></div>
-
-         <motion.div
-              variants={titleVariants}
-              initial="hidden"
-              whileInView="visible"
-              className="text-center mb-4"
-            >
-              <h2 className="text-5xl font-bold text-gradient-purple">L'effet Orbit</h2>
-              <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
-                Explorez un exemple avant/après d'un projet conçu sur-mesure pour valoriser l'image et l'atmosphère d'une pizzeria.
-              </p>
-           
-            </motion.div>
-            <BeforeAfterSlider
-              beforeImage="https://i.imgur.com/sUBjFGZ.jpg"
-              afterImage="https://i.imgur.com/OUH2NM5.jpg"
-            />
-            <motion.div
-              variants={titleVariants}
-              initial="hidden"
-              whileInView="visible"
-              className="text-center mt-8 max-w-2xl mx-auto italic text-gray-400"
-            >
-              <p>
-                Refonte de l’identité visuelle pour valoriser l’authenticité et le savoir-faire artisanal de cette pizzeria familiale,
-                alliant tradition italienne et expérience moderne.
-              </p>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* SERVICES SECTION */}
+{/* SERVICES SECTION */}
         <section id="services" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
              <div className="scanning-line-reverse"></div>
@@ -494,7 +384,136 @@ function WebsiteCreation() {
           </div>
         
       </section>
+        
+        {/* PROCESS SECTION */}
+        <section id="process" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
+          <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+            <motion.div
+              variants={titleVariants}
+              initial="hidden"
+              whileInView="visible"
+              className="text-center mb-4"
+            >
+              <h2 className="text-5xl font-bold text-gradient-purple">Comment ça marche ?</h2>
+              <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+                Suivez nos 4 étapes simples pour passer de l'idée au site en ligne.
+              </p>
+            </motion.div>
+            <div className="relative">
+              <div className="absolute left-4 md:left-1/2 transform md:-translate-x-1/2 h-full w-px bg-neon-purple/20" />
+              <div className="space-y-16">
+                {[
+                  {
+                    title: "1. Consultation Gratuite",
+                    description: "Nous définissons ensemble vos objectifs, votre univers visuel et votre message.",
+                    icon: <Rocket className="h-8 w-8" />
+                  },
+                  {
+                    title: "2. Première version en 7 jours",
+                    description: "Création d'une première maquette. Vous voyez directement à quoi ressemblera votre futur site.",
+                    icon: <Monitor className="h-8 w-8" />
+                  },
+                  {
+                    title: "3. Ajustements illimités",
+                    description: "Vous pouvez demander tous les changements nécessaires jusqu’à ce que le site corresponde parfaitement à vos attentes.",
+                    icon: <Settings className="h-8 w-8" />
+                  },
+                  {
+                    title: "4. Validation & Mise en ligne",
+                    description: "Dès validation, votre site est publié. Vous ne payez que si vous êtes entièrement satisfait.",
+                    icon: <Globe2 className="h-8 w-8" />
+                  }
+                ].map((step, index) => (
+                  <motion.div
+                    key={index}
+                    variants={titleVariants}
+                    initial="hidden"
+                    whileInView="visible"
+                    transition={{ duration: 0.5, delay: index * 0.15 }}
+                    className="relative"
+                  >
+                    <div className="timeline-dot w-4 h-4 bg-neon-purple rounded-full absolute left-4 md:left-1/2 transform md:-translate-x-1/2" />
+                    <div className={`flex flex-col md:flex-row items-start md:items-center gap-8 ${index % 2 === 0 ? 'md:flex-row-reverse' : ''}`}>
+                      <div className="hidden md:block md:w-1/2" />
+                      <div className={`w-[calc(100%-2rem)] md:w-1/2 ml-12 md:ml-0 timeline-card bg-white/5 p-6 md:p-8 rounded-2xl gradient-border ${index % 2 === 0 ? 'md:text-right' : 'md:text-left'}`}>
+                        <div className={`flex items-center gap-4 mb-4 ${index % 2 === 0 ? 'md:justify-end' : ''}`}>
+                          <div className="p-2 md:p-3 bg-neon-purple/20 rounded-xl text-neon-purple flex-shrink-0">
+                            {step.icon}
+                          </div>
+                          <h3 className="text-lg md:text-xl font-bold">{step.title}</h3>
+                        </div>
+                        <p className="text-gray-400 text-sm md:text-base">{step.description}</p>
+                      </div>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+            <div className="text-center mt-16">
+              <motion.button
+                onClick={handleStartClick}
+                variants={titleVariants}
+                initial="hidden"
+                whileInView="visible"
+                className="inline-flex items-center gap-2 bg-neon-purple px-8 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95 group"
+              >
+                Démarrer mon projet
+                <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />
+              </motion.button>
+            </div>
+          </div>
+        </section>
 
+        
+
+   
+
+
+        {/* PORTFOLIO SECTION */}
+        <section id="portfolio" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-hidden">
+             <div className="scanning-line-reverse"></div>
+
+         <motion.div
+              variants={titleVariants}
+              initial="hidden"
+              whileInView="visible"
+              className="text-center mb-4"
+            >
+              <h2 className="text-5xl font-bold text-gradient-purple">L'effet Orbit</h2>
+              <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
+                Explorez un exemple avant/après d'un projet conçu sur-mesure pour valoriser l'image et l'atmosphère d'une pizzeria.
+              </p>
+           
+            </motion.div>
+            <BeforeAfterSlider
+              beforeImage="https://i.imgur.com/sUBjFGZ.jpg"
+              afterImage="https://i.imgur.com/OUH2NM5.jpg"
+            />
+            <motion.div
+              variants={titleVariants}
+              initial="hidden"
+              whileInView="visible"
+              className="text-center mt-8 max-w-2xl mx-auto italic text-gray-400"
+            >
+              <p>
+                Refonte de l’identité visuelle pour valoriser l’authenticité et le savoir-faire artisanal de cette pizzeria familiale,
+                alliant tradition italienne et expérience moderne.
+              </p>
+            </motion.div>
+          </div>
+        </section>
+
+{/* Portfolio Table Section */}
+      <PortfolioSection />
+
+{/* Pricing Section */}
+
+      <PricingSection />
+
+
+
+        
       {/* FAQ SECTION */}
       <section className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
         <div className="max-w-4xl mx-auto px-4">
