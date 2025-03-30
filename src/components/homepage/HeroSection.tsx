@@ -110,51 +110,58 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
       <div className="absolute bottom-1/3 right-1/4 translate-x-1/2 w-[400px] h-[400px] bg-neon-purple/20 mix-blend-soft-light rounded-full blur-[100px] opacity-40"></div>
       
       {/* Hero content */}
-      <motion.div 
-        style={{ opacity: heroOpacity, y: heroY }}
-        className="futuristic-container relative z-10 text-center"
-      >
-        <motion.h1 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3 }}
-          className="futuristic-title mb-6 max-w-4xl mx-auto"
-        >
-          Un site web, une image, <span className="text-gradient-purple">une transformation.</span>
-        </motion.h1>
-        
-        <motion.p 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.5 }}
-          className="text-xl text-surface-300 mb-12 max-w-2xl mx-auto"
-        >
-          Votre présence en ligne mérite ce qu'il y a de mieux, et nous le créons pour vous.
-        </motion.p>
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.7 }}
-          className="flex flex-col sm:flex-row gap-4 justify-center"
-        >
-          <Button
-            onClick={handleStartClick}
-            size="lg"
-            glowing
-          >
-            Créer mon site web
-          </Button>
-          
-          <Button
-            to="/creation-site-web#portfolio"
-            variant="secondary"
-            size="lg"
-          >
-            Voir nos réalisations
-          </Button>
-        </motion.div>
-      </motion.div>
+<motion.div 
+  style={{ opacity: heroOpacity, y: heroY }}
+  className="futuristic-container relative z-10 text-center"
+>
+  <motion.h1 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.3 }}
+    className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6 max-w-5xl mx-auto"
+  >
+    <span className="bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]">
+      Offrez-vous une vitrine digitale
+    </span>
+    <br className="hidden md:block" />
+    <span className="text-white">
+      à la hauteur de votre ambition.
+    </span>
+  </motion.h1>
+  
+  <motion.p 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.5 }}
+    className="text-xl text-surface-300 mb-12 max-w-2xl mx-auto"
+  >
+    Votre présence en ligne mérite ce qu'il y a de mieux, et nous le créons pour vous.
+  </motion.p>
+
+  <motion.div 
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, delay: 0.7 }}
+    className="flex flex-col sm:flex-row gap-4 justify-center"
+  >
+    <Button
+      onClick={handleStartClick}
+      size="lg"
+      glowing
+    >
+      Créer mon site web
+    </Button>
+    
+    <Button
+      to="/creation-site-web#portfolio"
+      variant="secondary"
+      size="lg"
+    >
+      Voir nos réalisations
+    </Button>
+  </motion.div>
+</motion.div>
+
       
       {/* Scroll indicator */}
       <motion.div 

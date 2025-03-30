@@ -116,19 +116,20 @@ function WebsiteCreation() {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: 'easeOut' }}
-      className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight 
-        bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] 
-        bg-clip-text text-transparent 
-        drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]"
+      className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight"
     >
-      Un site vitrine sur mesure.
+      <span className="bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]">
+        Un site vitrine sur mesure.
+      </span>
       <br className="hidden md:block" />
-      <span className="text-white drop-shadow-[0_0_6px_rgba(255,255,255,0.25)]">
+      <span className="text-white">
         Payez uniquement si vous êtes 100% satisfait.
       </span>
     </motion.h1>
   </div>
 </div>
+
+
 
 
 
