@@ -181,7 +181,7 @@ const OrbitDifferenceSection: React.FC = () => {
             {/* En-tête */}
             <div className="p-4 text-center font-bold border-b border-white/20"></div>
             <div className="p-4 text-center font-bold border-b border-white/20">Orbit</div>
-            <div className="p-4 text-center font-bold border-b border-white/20">Agences</div>
+            <div className="p-4 text-center font-bold border-b border-white/20">Autres Agences</div>
             {comparisonData.map((item, index) => (
               <React.Fragment key={index}>
                 <div className="p-4 text-center border border-white/10 bg-dark-900">
