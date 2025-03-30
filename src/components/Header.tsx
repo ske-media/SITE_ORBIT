@@ -14,11 +14,7 @@ const Header: React.FC = () => {
   const headerRef = useRef<HTMLElement>(null);
   const logoRef = useRef<HTMLDivElement>(null);
 
-  // Check if on homepage
-  const isHomepage = location.pathname === '/';
-
   useEffect(() => {
-    // Initial animation
     const tl = gsap.timeline();
     tl.fromTo(headerRef.current, 
       { y: -100, opacity: 0 }, 
@@ -34,7 +30,6 @@ const Header: React.FC = () => {
       );
     }
 
-    // Handle scroll events
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
     };
@@ -44,17 +39,11 @@ const Header: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    // Close mobile menu when route changes
     setIsMenuOpen(false);
   }, [location.pathname]);
 
-  // Lock body scroll when menu is open
   useEffect(() => {
-    if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-    }
+    document.body.style.overflow = isMenuOpen ? 'hidden' : '';
     return () => {
       document.body.style.overflow = '';
     };
@@ -80,8 +69,8 @@ const Header: React.FC = () => {
 
   const headerClasses = `
     fixed top-0 left-0 right-0 z-50 transition-all duration-500
-    ${isScrolled || !isHomepage 
-      ? 'glass-effect-dark border-b border-neon-purple/10 backdrop-blur-md h-20' 
+    ${isScrolled
+      ? 'glass-effect-dark border-b border-neon-purple/10 backdrop-blur-md h-20'
       : 'bg-transparent h-24'}
   `;
 
@@ -89,12 +78,8 @@ const Header: React.FC = () => {
     <header ref={headerRef} className={headerClasses}>
       <div className="futuristic-container h-full">
         <div className="flex justify-between items-center h-full">
-          {/* Logo */}
           <Link to="/" className="relative z-10">
-            <div 
-              ref={logoRef} 
-              className="flex items-center space-x-2 relative"
-            >
+            <div ref={logoRef} className="flex items-center space-x-2 relative">
               <div className="relative group">
                 <motion.img 
                   src="https://i.imgur.com/aM3st2Q.png" 
@@ -108,39 +93,43 @@ const Header: React.FC = () => {
             </div>
           </Link>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-1">
             {navLinks.map((link, index) => (
               <Link
-                key={link.to}
-                to={link.to}
-                className={`group relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 overflow-hidden ${
-                  location.pathname === link.to
-                    ? 'text-neon-purple'
-                    : 'text-white/80 hover:text-white'
-                }`}
-                onMouseEnter={() => setHoveredItem(link.to)}
-                onMouseLeave={() => setHoveredItem(null)}
-              >
-                <span className="relative z-10">{link.text}</span>
-                
-                {/* Animated highlight effect */}
-                {hoveredItem === link.to && (
-                  <motion.span 
-                    className="absolute inset-0 bg-dark-100/50 rounded-full -z-0"
-                    layoutId="navHighlight"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                  />
-                )}
-                
-                {/* Active indicator */}
-                {location.pathname === link.to && (
-                  <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-neon-purple rounded-full"></span>
-                )}
-              </Link>
+  key={link.to}
+  to={link.to}
+  className={`group relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 overflow-hidden ${
+    location.pathname === link.to
+      ? 'text-neon-purple'
+      : 'text-white/80 hover:text-white'
+  }`}
+  onMouseEnter={() => setHoveredItem(link.to)}
+  onMouseLeave={() => setHoveredItem(null)}
+>
+  <span className="relative z-10">{link.text}</span>
+
+  {/* Hover effect */}
+  {hoveredItem === link.to && (
+    <motion.span 
+      className="absolute inset-0 bg-dark-100/50 rounded-full -z-0"
+      layoutId="navHighlight"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    />
+  )}
+
+  {/* New active underline */}
+  {location.pathname === link.to && (
+    <motion.span
+      layoutId="activeLinkUnderline"
+      className="absolute bottom-0 left-0 w-full h-[2px] bg-neon-purple rounded-full"
+      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+    />
+  )}
+</Link>
+
             ))}
             <div className="ml-4">
               <Button
@@ -154,7 +143,7 @@ const Header: React.FC = () => {
             </div>
           </nav>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile button */}
           <motion.button
             className="md:hidden relative z-10 p-2 focus:outline-none"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -191,7 +180,6 @@ const Header: React.FC = () => {
             >
               <div className="grid-background transform scale-150 opacity-30"></div>
               <div className="scanning-line"></div>
-                
               <nav className="flex flex-col space-y-6 relative z-10">
                 {navLinks.map((link, index) => (
                   <motion.div

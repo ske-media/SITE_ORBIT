@@ -30,9 +30,10 @@ const PricingSection: React.FC = () => {
           viewport={{ once: true }}
           className="bg-white/5 border border-[#B026FF] rounded-3xl p-10 md:p-14 mb-20 relative overflow-hidden shadow-lg max-w-4xl mx-auto"
         >
-          <div className="absolute -top-4 left-4 bg-[#B026FF] text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">
-            Offre Principale
-          </div>
+          <div className="absolute top-0 left-0 z-20 bg-[#B026FF] text-white text-xs font-semibold px-4 py-2 rounded-br-xl uppercase tracking-wider shadow-lg">
+  Offre Principale
+</div>
+
 
           <h3 className="text-3xl font-bold mb-4 text-white">Site Vitrine – Clé en Main</h3>
           <p className="text-gray-300 text-lg mb-6">
