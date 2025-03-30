@@ -1,34 +1,54 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import ReactorAnimation from './ReactorAnimation';
 
 const MissionVisionSection: React.FC = () => {
-  return (
-    <section 
-      className="relative w-full min-h-[80vh] flex items-center bg-dark-900 text-white overflow-hidden"
-    >
-      {/* Dégradé radial pour un fond plus sophistiqué */}
-      <div 
-        className="absolute inset-0 -z-10"
-        style={{
-          background: 'radial-gradient(closest-corner at 20% 40%, rgba(47,115,255,0.1), transparent 80%)'
-        }}
-      />
+  // Variants pour l'animation du contenu
+  const containerVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.8, staggerChildren: 0.3 },
+    },
+  };
 
-      {/* Conteneur texte */}
-      <div className="max-w-5xl mx-auto px-8 md:px-16">
-        <h2 className="text-4xl md:text-5xl font-bold text-gradient-purple leading-tight mb-6">
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  };
+
+  return (
+    <section className="relative py-20 min-h-[50vh] flex items-center overflow-hidden">
+      {/* Surcouche de fond inspirée du style TeamSection */}
+      <div className="absolute inset-0 bg-gradient-to-b from-neon-purple/5 to-transparent"></div>
+
+      {/* Conteneur central du contenu */}
+      <div className="futuristic-container relative z-10 max-w-4xl mx-auto px-4 text-center">
+        <motion.h2
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="font-display font-bold text-3xl md:text-4xl mb-4 text-gradient-purple leading-tight"
+        >
           Mission & Vision
-        </h2>
-        <p className="text-surface-300 text-lg md:text-xl max-w-2xl leading-relaxed">
-          Nous propulsons votre transformation digitale en plaçant l'innovation 
-          et l'humain au cœur de chaque projet. Notre mission est de vous accompagner 
-          vers de nouveaux horizons, tandis que notre vision est de faire du numérique 
-          un levier d’inspiration et de liberté pour toutes les entreprises.
-        </p>
+        </motion.h2>
+        <motion.p
+          variants={itemVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
+          className="text-surface-300 text-base md:text-lg max-w-2xl mx-auto leading-relaxed"
+        >
+          Nous propulsons votre transformation digitale en plaçant l'innovation et l'humain au cœur de chaque projet.
+          Notre mission est de vous accompagner vers de nouveaux horizons, tandis que notre vision transforme le numérique
+          en un levier d’inspiration et de liberté.
+        </motion.p>
       </div>
 
-      {/* Animation placée en bas à droite */}
-      <div className="absolute bottom-0 right-0 mr-8 mb-8">
+      {/* ReactorAnimation positionné en bas à droite */}
+      <div className="absolute bottom-4 right-4">
         <ReactorAnimation />
       </div>
     </section>
