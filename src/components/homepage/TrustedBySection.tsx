@@ -18,7 +18,8 @@ const TrustedBySection: React.FC<TrustedBySectionProps> = ({ forwardedRef }) => 
     { name: 'Association Le CAB', logo: 'https://i.imgur.com/dnpmceu.png' },
     { name: 'CleanLeman', logo: 'https://i.imgur.com/FNKn8Sh.png' },
     { name: 'HUB Environnement', logo: 'https://i.imgur.com/QrDXvdf.png' },
-    { name: 'Vuache Pizza', logo: 'https://i.imgur.com/PU0psWu.png' },
+    { name: 'Vuache Pizza', logo: 'https://i.imgur.com/PU0psWu.png' }, 
+    { name: 'Éveil Immobilier', logo: 'https://i.imgur.com/7Ld9L2x.png' },
   ];
 
  // Testimonials data

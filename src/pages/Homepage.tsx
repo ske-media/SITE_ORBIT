@@ -17,7 +17,8 @@ import CTASection from '../components/homepage/CTASection';
 import MissionVisionSection from '../components/homepage/MissionVisionSection';
 import TeamSection from '../components/homepage/TeamSection'; 
 import NosValeursSection from '../components/homepage/NosValeursSection'; 
-import SocialMediaSection from '../components/homepage/SocialMediaSection';
+import SocialMediaSection from '../components/homepage/SocialMediaSection'; 
+import AppCreationSection from '../components/homepage/AppCreationSection';
 
 function Homepage() {
   // Refs for sections
@@ -32,6 +33,7 @@ function Homepage() {
   const orbitDifferenceRef = useRef<HTMLDivElement>(null);
   const nosValeursRef = useRef<HTMLDivElement>(null);
   const socialRef = useRef<HTMLDivElement>(null);
+  const appRef = useRef<HTMLDivElement>(null);
 
 
   const scrollToNext = () => {
@@ -85,7 +87,10 @@ function Homepage() {
       <NosValeursSection forwardedRef={nosValeursRef} /> 
 
       {/* Réseaux Sociaux Section */}
-      <SocialMediaSection forwardedRef={socialRef} />
+      <SocialMediaSection forwardedRef={socialRef} /> 
+      
+      {/* Création d'App Section */}
+      <AppCreationSection forwardedRef={appRef} />
       
     </div>
   );
