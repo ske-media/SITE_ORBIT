@@ -15,7 +15,8 @@ import WhyChooseUsSection from '../components/homepage/WhyChooseUsSection';
 import PortfolioSection from '../components/homepage/PortfolioSection';
 import CTASection from '../components/homepage/CTASection';
 import MissionVisionSection from '../components/homepage/MissionVisionSection';
-import TeamSection from '../components/homepage/TeamSection';
+import TeamSection from '../components/homepage/TeamSection'; 
+import NosValeursSection from '../components/homepage/NosValeursSection';
 
 function Homepage() {
   // Refs for sections
@@ -28,6 +29,7 @@ function Homepage() {
   const processRef = useRef<HTMLDivElement>(null);
   const pricingPlanetRef = useRef<HTMLDivElement>(null);
   const orbitDifferenceRef = useRef<HTMLDivElement>(null);
+  const nosValeursRef = useRef<HTMLDivElement>(null);
 
   const scrollToNext = () => {
     if (trustedByRef.current) {
@@ -74,7 +76,11 @@ function Homepage() {
       <MissionVisionSection />
       
       {/* Team Section */}
-      <TeamSection forwardedRef={teamRef} />
+      <TeamSection forwardedRef={teamRef} /> 
+
+      {/* Valeurs Section */}
+      <NosValeursSection forwardedRef={nosValeursRef} />
+      
     </div>
   );
 }
