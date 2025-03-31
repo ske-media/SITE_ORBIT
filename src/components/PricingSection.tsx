@@ -111,6 +111,43 @@ const PricingSection: React.FC = () => {
           </div>
         </motion.div>
       </div>
+
+     {/* Final CTA */}
+<motion.div 
+  initial={{ opacity: 0, y: 30 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8, delay: 0.2 }}
+  viewport={{ once: true }}
+  className="mt-24 text-center"
+>
+  <h3 className="text-3xl md:text-4xl font-bold text-white mb-6">
+    Vous êtes prêt à passer à l’action ?
+  </h3>
+  <p className="text-lg text-surface-300 mb-8 max-w-xl mx-auto">
+    Lancez votre projet dès aujourd’hui et recevez une première version de votre site en 7 jours.
+  </p>
+  <a
+    href="/contact"
+    className="futuristic-button inline-flex items-center text-lg"
+  >
+    Je veux mon site maintenant
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="ml-2 h-5 w-5"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M17 8l4 4m0 0l-4 4m4-4H3"
+      />
+    </svg>
+  </a>
+</motion.div>
+
     </section>
   );
 };
