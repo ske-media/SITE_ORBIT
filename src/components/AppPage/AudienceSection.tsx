@@ -1,108 +1,118 @@
 // src/components/AppPage/AudienceSection.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
+import { CheckCircle } from 'lucide-react';
 
 interface AudienceSectionProps {
   forwardedRef?: React.RefObject<HTMLDivElement>;
 }
 
+// Variants pour le conteneur global (staggering)
 const containerVariants = {
-  hidden: { opacity: 0, y: 20 },
   visible: {
-    opacity: 1,
-    y: 0,
-    transition: { staggerChildren: 0.2, duration: 0.8 },
+    transition: {
+      staggerChildren: 0.2,
+    },
   },
 };
 
-const itemVariants = {
+// Variants pour les titres
+const titleVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.7, ease: 'easeOut' },
-  },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: 'easeOut' } },
+};
+
+// Variants pour les listes (chaque item)
+const listItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.5, ease: 'easeOut' } },
 };
 
 const AudienceSection: React.FC<AudienceSectionProps> = ({ forwardedRef }) => {
   return (
     <section ref={forwardedRef} className="py-20 bg-gradient-to-b from-dark-900 to-dark-800">
-      <div className="futuristic-container mx-auto px-4">
-        {/* Titre scindé pour renforcer l'impact */}
+      <div className="futuristic-container mx-auto px-4 text-center">
+        {/* Titre et introduction */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="text-center mb-12"
+          className="mb-12"
         >
-          <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-gradient-purple">
-            Pour ceux qui n'ont pas encore identifié leur besoin...
+          <motion.h2 variants={titleVariants} className="text-3xl md:text-4xl font-extrabold text-gradient-purple leading-tight">
+            Pour ceux qui ignorent encore leur besoin...
           </motion.h2>
-          <motion.h2 variants={itemVariants} className="text-3xl md:text-4xl font-bold text-gradient-purple mt-2">
-            ...et pour ceux qui savent déjà ce qu'ils veulent.
-          </motion.h2>
-          <motion.p variants={itemVariants} className="mt-4 text-lg text-surface-300 max-w-3xl mx-auto">
-            Découvrez comment une application sur-mesure peut transformer votre organisation.
+          <motion.p variants={titleVariants} className="mt-4 text-lg text-surface-300 max-w-3xl mx-auto">
+            Vos processus actuels vous freinent. Il existe une manière plus simple et efficace de travailler.
           </motion.p>
         </motion.div>
 
         {/* Présentation en deux colonnes */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Colonne A : Besoin non identifié */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+          {/* Colonne gauche : Besoin non identifié */}
           <motion.div
-            variants={itemVariants}
-            className="bg-white/5 rounded-2xl p-8 border border-neon-purple/30 shadow-neon transition-all duration-300 hover:shadow-neon-lg"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            className="p-6 bg-white/10 rounded-xl border border-neon-purple/30 shadow-neon transition-transform duration-300 hover:scale-105"
           >
-            <h3 className="text-2xl font-semibold text-neon-purple mb-4">
-              Vous ne savez pas encore ce qui vous manque…
-            </h3>
-            <ul className="list-disc ml-6 text-gray-300 space-y-2">
-              <li>Dossiers Excel dispersés</li>
-              <li>Multiples e-mails sans coordination</li>
-              <li>Perte de temps et de productivité</li>
-              <li>Difficultés à suivre vos performances</li>
-            </ul>
-            <motion.p variants={itemVariants} className="mt-4 text-lg text-surface-300">
-              Il existe une méthode plus simple pour organiser vos process et booster votre efficacité.
-            </motion.p>
+            <motion.h3 variants={titleVariants} className="text-2xl font-semibold text-neon-purple mb-4">
+              Votre Chaos Digital
+            </motion.h3>
+            <motion.ul variants={containerVariants} className="space-y-3">
+              {[
+                "Dossiers Excel mal organisés",
+                "Emails en pagaille",
+                "Perte de temps et erreurs répétées"
+              ].map((item, index) => (
+                <motion.li key={index} variants={listItemVariants} className="flex items-center gap-2 text-gray-300">
+                  <CheckCircle className="w-6 h-6 text-neon-purple" />
+                  <span>{item}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
           </motion.div>
 
-          {/* Colonne B : Besoin clairement défini */}
+          {/* Colonne droite : Vision clarifiée */}
           <motion.div
-            variants={itemVariants}
-            className="bg-white/5 rounded-2xl p-8 border border-neon-purple/30 shadow-neon transition-all duration-300 hover:shadow-neon-lg"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            className="p-6 bg-white/10 rounded-xl border border-neon-purple/30 shadow-neon transition-transform duration-300 hover:scale-105"
           >
-            <h3 className="text-2xl font-semibold text-neon-purple mb-4">
-              Vous savez exactement ce que vous attendez…
-            </h3>
-            <ul className="list-disc ml-6 text-gray-300 space-y-2">
-              <li>ERP personnalisé sur mesure</li>
-              <li>Logiciel métier adapté</li>
-              <li>Intégrations techniques avancées</li>
-              <li>Automatisation des processus critiques</li>
-            </ul>
-            <motion.p variants={itemVariants} className="mt-4 text-lg text-surface-300">
-              Orbit concrétise votre vision grâce à une approche agile et premium.
-            </motion.p>
+            <motion.h3 variants={titleVariants} className="text-2xl font-semibold text-neon-purple mb-4">
+              Votre Vision Clarifiée
+            </motion.h3>
+            <motion.ul variants={containerVariants} className="space-y-3">
+              {[
+                "Besoin d’un ERP personnalisé",
+                "Automatisation intelligente",
+                "Intégration d’outils performants"
+              ].map((item, index) => (
+                <motion.li key={index} variants={listItemVariants} className="flex items-center gap-2 text-gray-300">
+                  <CheckCircle className="w-6 h-6 text-neon-purple" />
+                  <span>{item}</span>
+                </motion.li>
+              ))}
+            </motion.ul>
           </motion.div>
         </div>
 
-        {/* Bouton CTA pour faire défiler vers la section suivante */}
-        <div className="mt-12 text-center">
-          <motion.button
-            variants={itemVariants}
+        {/* Bouton CTA */}
+        <motion.div variants={titleVariants} className="mt-10">
+          <button
             onClick={() => {
-              const processSection = document.getElementById('process-section');
-              if (processSection) {
-                processSection.scrollIntoView({ behavior: 'smooth' });
+              const nextSection = document.getElementById('process-section');
+              if (nextSection) {
+                nextSection.scrollIntoView({ behavior: 'smooth' });
               }
             }}
-            className="inline-flex items-center gap-3 bg-neon-purple px-8 py-4 rounded-full text-lg font-medium transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95"
+            className="inline-flex items-center gap-3 bg-neon-purple px-8 py-4 rounded-full text-lg font-bold transition-transform duration-300 hover:scale-110 hover:shadow-[0_0_20px_rgba(176,38,255,0.5)]"
           >
             Découvrir le processus
-          </motion.button>
-        </div>
+          </button>
+        </motion.div>
       </div>
     </section>
   );
