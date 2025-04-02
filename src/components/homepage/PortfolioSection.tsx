@@ -7,15 +7,15 @@ interface PortfolioProject {
   Slug: string;
   Short_description: string;
   Tech_stack: string | null;
-  Date: string; // par exemple "2025-02-05"
-  url: string; // lien externe du site
+  Date: string;
+  url: string;
   Client: string;
-  Description: any; // rich text array
+  Description: any;
   Featured: boolean;
   Site_type: string;
   Main_image: {
     url: string;
-  };
+  } | null;
 }
 
 const PortfolioSection: React.FC = () => {
@@ -23,25 +23,20 @@ const PortfolioSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Utilise VITE_STRAPI_API_URL depuis ton .env
   const apiUrl = import.meta.env.VITE_STRAPI_API_URL || 'https://siteorbit-cms-production.up.railway.app/api';
-  console.log("apiUrl:", apiUrl);
 
   useEffect(() => {
     const fetchProjects = async () => {
       try {
         setLoading(true);
         const endpoint = `${apiUrl}/portfolio-site-webs?populate=%2A`;
-        console.log("Fetching portfolio projects from:", endpoint);
         const res = await fetch(endpoint);
         if (!res.ok) {
           throw new Error(`Erreur lors du chargement des projets. Statut: ${res.status}`);
         }
         const json = await res.json();
-        console.log("Portfolio response:", json);
         setProjects(json.data);
       } catch (err: any) {
-        console.error("Error fetching portfolio projects:", err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -54,9 +49,8 @@ const PortfolioSection: React.FC = () => {
   if (loading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error}</div>;
 
-  // Filtrer uniquement les projets avec un titre non vide
+  // On conserve tous les projets pour l'affichage (on utilise une image par défaut si Main_image est null)
   const validProjects = projects.filter((project) => project.Titre && project.Titre.trim() !== "");
-  console.log("Valid projects:", validProjects);
 
   if (validProjects.length === 0) {
     return <div>Aucun projet valide trouvé.</div>;
@@ -65,17 +59,16 @@ const PortfolioSection: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {validProjects.map((project) => {
-        // Renommage du champ "Date" en "projectDate" pour éviter de masquer le constructeur global Date
         const { Titre, Slug, Main_image, Client, Date: projectDate, url, Description } = project;
-        const imagePath = Main_image.url;
+        // Utilise l'opérateur de chaînage pour gérer le cas où Main_image est null
+        const imagePath = Main_image?.url || '/default-image.png';
         const baseUrl = apiUrl.replace('/api', '');
         const imageUrl = imagePath.startsWith('/') ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
-        console.log(`Image URL for project "${Titre}":`, imageUrl);
 
-        // Construction du lien vers la page détail du portfolio
+        // Lien vers la page détail du portfolio
         const portfolioLink = `/portfolio/${Slug}`;
 
-        // Extraction de l'année à partir de projectDate
+        // Extraction de l'année depuis projectDate
         let year = '';
         try {
           year = new Date(projectDate).getFullYear().toString();
@@ -83,7 +76,7 @@ const PortfolioSection: React.FC = () => {
           console.error("Error parsing date:", projectDate, e);
         }
 
-        // Conversion de Description (rich text) en texte brut (si c'est un tableau)
+        // Conversion du rich text en texte brut si nécessaire
         const descriptionText = Array.isArray(Description)
           ? Description.map((block: any) =>
               block.children.map((child: any) => child.text).join(" ")
@@ -95,7 +88,7 @@ const PortfolioSection: React.FC = () => {
             key={project.id}
             title={Titre}
             images={[imageUrl]}
-            tags={[]} // Si tu as des tags, adapte ici
+            tags={[]} // À adapter si vous avez des tags
             client={Client}
             year={year}
             linkExternal={url}

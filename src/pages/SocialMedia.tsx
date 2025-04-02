@@ -9,7 +9,8 @@ import {
 } from 'lucide-react';
 import Button from '../components/ui/Button';
 import ParticleBackground from '../components/ParticleBackground'; 
-import SocialMediaLogosCarousel from '../components/SocialMediaLogosCarousel';
+import SocialMediaLogosCarousel from '../components/SocialMediaLogosCarousel'; 
+import SocialMediaImpact from '../components/SocialMediaPage/SocialMediaImpact'; 
 import Footer from '../components/Footer';
 
 const HERO_VIDEO_URL = "https://res.cloudinary.com/agence-orbit/video/upload/v1743362272/Fond_univers_Orbit_p7qvqe.mp4";
@@ -215,6 +216,12 @@ const SocialMediaPage: React.FC = () => {
           </div>
         </section>
 
+
+
+        {/* CHIFFRES CLÉS SUR LES RÉSEAUX SOCIAUX */}
+        <SocialMediaImpact />
+
+        
         {/* OFFRES SOCIAL MEDIA */}
         <section id="offers" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -284,6 +291,7 @@ const SocialMediaPage: React.FC = () => {
           </div>
         </section>
 
+        {/* CAROUSEL LOGO RÉSEAUX SOCIAUX */}
         <SocialMediaLogosCarousel />
 
         {/* SERVICES À LA CARTE */}
