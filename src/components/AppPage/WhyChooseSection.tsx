@@ -1,176 +1,195 @@
-// src/components/AppPage/BenefitsSection.tsx
+// src/components/AppPage/WhyChooseSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
+import { Briefcase, Activity, Settings, CreditCard, LifeBuoy } from 'lucide-react';
 
-// -----------------------------------------------------------------------------
-// Définition du type et des données
-// -----------------------------------------------------------------------------
-interface Benefit {
+// Définition du type de donnée pour chaque avantage
+interface WhyChooseItem {
   id: number;
   title: string;
   description: string;
-  // Icônes en couleur unie pour un rendu épuré
-  icon: string;
+  // L'icône est un composant React (importé depuis lucide-react)
+  Icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  // Couleur principale pour l’icône et le glow
+  color: string;
 }
 
-const benefits: Benefit[] = [
+// Données à afficher
+const whyChooseItems: WhyChooseItem[] = [
   {
     id: 1,
-    title: "Automatisation des tâches",
-    description: "Fini le copier-coller et la saisie redondante. Gagnez du temps et réduisez les erreurs.",
-    icon: "https://img.icons8.com/fluency/96/000000/automation.png",
+    title: "Expérience en développement sur mesure",
+    description: "Une équipe à l’aise avec la Suisse, ses spécificités, et les attentes de qualité élevées du marché.",
+    Icon: Briefcase,
+    color: "#B026FF",
   },
   {
     id: 2,
-    title: "Centralisation de l’information",
-    description: "Regroupez CRM, projets, finances, RH et plus en un seul endroit pour une vue d'ensemble optimale.",
-    icon: "https://img.icons8.com/fluency/96/000000/data-configuration.png",
+    title: "Process Agile & Transparent",
+    description: "Suivez l’avancement pas à pas, sans mauvaise surprise sur le budget.",
+    Icon: Activity,
+    color: "#2F73FF",
   },
   {
     id: 3,
-    title: "Collaboration fluide",
-    description: "Optimisez la communication et le travail d'équipe avec des outils intégrés et intuitifs.",
-    icon: "https://img.icons8.com/fluency/96/000000/communication.png",
+    title: "Approche Premium & Clé en Main",
+    description: "Nous gérons tout : développement, intégration, hébergement, maintenance et formation.",
+    Icon: Settings,
+    color: "#05D9E8",
   },
   {
     id: 4,
-    title: "Réduction des erreurs",
-    description: "Des processus automatisés et validés pour minimiser les risques et augmenter la fiabilité.",
-    icon: "https://img.icons8.com/fluency/96/000000/error.png",
+    title: "Tarifs Clairs",
+    description: "Une base solide + des modules premium, et, si besoin, un audit déductible pour optimiser votre investissement.",
+    Icon: CreditCard,
+    color: "#FFE53B",
   },
   {
     id: 5,
-    title: "ROI tangible",
-    description: "Améliorez la productivité et rentabilisez rapidement votre investissement grâce à une solution sur-mesure.",
-    icon: "https://img.icons8.com/fluency/96/000000/money-bag.png",
+    title: "Support & Évolutions",
+    description: "Nous restons à vos côtés pour les mises à jour et l’évolution de votre outil, afin qu’il grandisse avec vous.",
+    Icon: LifeBuoy,
+    color: "#FF3864",
   },
 ];
 
-// -----------------------------------------------------------------------------
-// Variantes d'animation pour le conteneur et les cartes
-// -----------------------------------------------------------------------------
+// Variantes d'animation pour le conteneur
 const containerVariants: Variants = {
   hidden: {},
-  visible: { transition: { staggerChildren: 0.3, delayChildren: 0.2 } },
-};
-
-const cardVariants: Variants = {
-  hidden: { opacity: 0, y: 40, scale: 0.95 },
-  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.8, ease: 'easeOut' } },
-};
-
-const textVariants: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-const iconGlowVariants: Variants = {
-  hidden: { scale: 0.9, opacity: 0.8 },
-  visible: { scale: 1, opacity: 1, transition: { duration: 0.5, ease: 'easeOut' } },
-  hover: {
-    scale: 1.2,
-    filter: "drop-shadow(0 0 10px rgba(176,38,255,0.8))",
-    transition: { duration: 0.3, ease: 'easeOut' },
+  visible: {
+    transition: {
+      staggerChildren: 0.25,
+      delayChildren: 0.3,
+    },
   },
 };
 
-// -----------------------------------------------------------------------------
-// Composant BenefitCard
-// -----------------------------------------------------------------------------
-interface BenefitCardProps {
-  benefit: Benefit;
-  reverse?: boolean;
-}
-
-const BenefitCard: React.FC<BenefitCardProps> = ({ benefit, reverse = false }) => {
-  return (
-    <motion.div
-      variants={cardVariants}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, amount: 0.3 }}
-      whileHover="hover"
-      className={`flex flex-col md:flex-row items-center p-6 border border-neon-purple/20 rounded-2xl bg-white/10 transition-transform duration-300 ${
-        reverse ? "md:flex-row-reverse" : ""
-      }`}
-    >
-      <motion.div
-        variants={iconGlowVariants}
-        className="flex-shrink-0 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center rounded-full bg-neon-purple/20 mr-4 md:mr-8"
-      >
-        <img
-          src={benefit.icon}
-          alt={benefit.title}
-          className="w-10 h-10 md:w-12 md:h-12 object-contain"
-        />
-      </motion.div>
-      <div>
-        <motion.h3
-          variants={textVariants}
-          className="text-xl md:text-2xl font-bold mb-2 text-white"
-        >
-          {benefit.title}
-        </motion.h3>
-        <motion.p
-          variants={textVariants}
-          className="text-sm md:text-base text-surface-300"
-        >
-          {benefit.description}
-        </motion.p>
-      </div>
-    </motion.div>
-  );
+// Variantes d'animation pour chaque carte
+const cardVariants: Variants = {
+  hidden: { opacity: 0, y: 50, scale: 0.95 },
+  visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, ease: "easeOut" } },
 };
 
-// -----------------------------------------------------------------------------
-// Composant principal : BenefitsSection
-// -----------------------------------------------------------------------------
-const BenefitsSection: React.FC = () => {
+// Variantes d'animation pour le contenu textuel à l'intérieur des cartes
+const textVariants: Variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
+};
+
+// Variantes d'animation pour l'icône et son effet glow
+const iconVariants: Variants = {
+  hidden: { scale: 0.8, opacity: 0.7 },
+  visible: { scale: 1, opacity: 1, transition: { duration: 0.5, ease: "easeOut" } },
+  hover: {
+    scale: 1.2,
+    filter: "drop-shadow(0 0 12px rgba(176,38,255,0.8))",
+    transition: { duration: 0.3, ease: "easeOut" },
+  },
+};
+
+// Variante pour un élément décoratif en bas
+const decorativeVariants: Variants = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 0.1, transition: { duration: 3, ease: "easeInOut", repeat: Infinity, repeatType: "mirror" } },
+};
+
+const WhyChooseSection: React.FC = () => {
   return (
-    <section className="py-20 bg-gradient-to-b from-dark-900 to-dark-800 overflow-hidden relative">
-      <div className="container mx-auto px-4">
-        {/* Titre et sous-titre */}
+    <section className="relative py-24 bg-gradient-to-b from-dark-900 to-dark-800 overflow-hidden">
+      {/* Éléments de fond décoratifs */}
+      <motion.div variants={decorativeVariants} initial="hidden" animate="visible" className="absolute inset-0">
+        <div className="absolute inset-0 bg-dark-900 opacity-60"></div>
+        <div className="absolute top-0 left-0 w-1/2 h-full bg-gradient-to-r from-black to-transparent opacity-30"></div>
+        <div className="absolute bottom-0 right-0 w-1/2 h-full bg-gradient-to-l from-black to-transparent opacity-30"></div>
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          initial={{ scale: 0.8, opacity: 0.4 }}
+          animate={{ scale: 1.2, opacity: 0.2 }}
+          transition={{ duration: 10, repeat: Infinity, repeatType: "mirror", ease: "easeInOut" }}
+          className="w-64 h-64 bg-neon-purple rounded-full mx-auto"
+        ></motion.div>
+      </motion.div>
+
+      {/* Conteneur principal */}
+      <div className="relative z-10 container mx-auto px-4">
+        {/* Titre et sous-titre de la section */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
           className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gradient-purple">
-            Les avantages concrets pour votre entreprise
+          <h2 className="text-4xl md:text-5xl font-bold text-gradient-purple mb-4">
+            POURQUOI CHOISIR AGENCE ORBIT ?
           </h2>
-          <p className="mt-4 text-lg text-surface-300 max-w-3xl mx-auto">
-            Transformez vos processus et boostez votre performance grâce à une solution entièrement adaptée.
+          <p className="text-lg text-surface-300 max-w-3xl mx-auto">
+            Nos solutions sur mesure, notre approche agile et notre expertise premium vous garantissent un accompagnement complet, du développement à la maintenance.
           </p>
         </motion.div>
 
-        {/* Grille des cartes de bénéfices */}
+        {/* Grille des cartes avec les avantages */}
         <motion.div
           variants={containerVariants}
           initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+          animate="visible"
           className="grid grid-cols-1 md:grid-cols-2 gap-8"
         >
-          {benefits.map((benefit, index) => (
-            <BenefitCard
-              key={benefit.id}
-              benefit={benefit}
-              reverse={index % 2 === 1}
-            />
+          {whyChooseItems.map((item) => (
+            <motion.div
+              key={item.id}
+              variants={cardVariants}
+              whileHover={{ scale: 1.05, transition: { duration: 0.3 } }}
+              className="p-6 bg-white/10 border border-neon-purple/20 rounded-2xl shadow-lg transition-transform duration-300"
+            >
+              <div className="flex flex-col md:flex-row items-center">
+                <motion.div
+                  variants={iconVariants}
+                  whileHover="hover"
+                  className="flex-shrink-0 w-16 h-16 flex items-center justify-center rounded-full"
+                  style={{ backgroundColor: item.color + "33" }}
+                >
+                  <item.Icon className="w-8 h-8" style={{ color: item.color }} />
+                </motion.div>
+                <div className="mt-4 md:mt-0 md:ml-6">
+                  <motion.h3 variants={textVariants} className="text-xl font-bold text-white mb-2">
+                    {item.title}
+                  </motion.h3>
+                  <motion.p variants={textVariants} className="text-base text-surface-300">
+                    {item.description}
+                  </motion.p>
+                </div>
+              </div>
+              <div className="mt-6">
+                <motion.div
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: 0.2 }}
+                  className="w-full h-px bg-neon-purple/40"
+                ></motion.div>
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+                className="mt-4 text-sm text-gray-400"
+              >
+                &nbsp;
+              </motion.div>
+            </motion.div>
           ))}
         </motion.div>
 
-        {/* Effet décoratif en bas */}
+        {/* Élément décoratif en bas */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0.1 }}
-          transition={{ duration: 3, ease: 'easeInOut', repeat: Infinity, repeatType: 'mirror' }}
+          variants={decorativeVariants}
+          initial="hidden"
+          animate="visible"
           className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-dark-800 to-transparent pointer-events-none"
-        />
+        ></motion.div>
       </div>
+      {/* Espacement additionnel pour l'esthétique */}
+      <div className="h-16"></div>
     </section>
   );
 };
 
-export default BenefitsSection;
+export default WhyChooseSection;
