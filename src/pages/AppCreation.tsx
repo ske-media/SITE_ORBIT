@@ -2,7 +2,7 @@
 import React, { useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 
-// Import des composants de chaque section (à créer dans src/components/AppPage/)
+// Import des composants de chaque section
 import AppHeroSection from '../components/AppPage/AppHeroSection';
 import AudienceSection from '../components/AppPage/AudienceSection';
 import BenefitsSection from '../components/AppPage/BenefitsSection';
