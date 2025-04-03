@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Menu, X, ChevronDown, Hexagon, ExternalLink } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Button from './ui/Button';
-import gsap from 'gsap';
+import gsap, { Back } from "gsap";
 
 const Header: React.FC = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -23,12 +23,13 @@ const Header: React.FC = () => {
     );
     
     if (logoRef.current) {
-      tl.fromTo(logoRef.current,
-        { scale: 0.8, opacity: 0 },
-        { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" },
-        0.8
-      );
-    }
+  tl.fromTo(
+    logoRef.current,
+    { scale: 0.8, opacity: 0 },
+    { scale: 1, opacity: 1, duration: 0.6, ease: Back.easeOut.config(1.7) },
+    0.8
+  );
+}
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);

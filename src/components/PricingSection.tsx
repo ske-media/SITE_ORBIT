@@ -18,7 +18,7 @@ const PricingSection: React.FC = () => {
             Une offre irrésistible
           </h2>
           <p className="text-lg text-surface-300 max-w-2xl mx-auto">
-            Votre site en 7 jours, ajusté jusqu’à satisfaction, avec un an de gestion premium inclus.
+            Votre site en 7 jours, ajusté jusqu’à satisfaction, avec un an de gestion premium.
           </p>
         </motion.div>
 

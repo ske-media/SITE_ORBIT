@@ -26,25 +26,30 @@ const PortfolioSection: React.FC = () => {
   const apiUrl = import.meta.env.VITE_STRAPI_API_URL || 'https://siteorbit-cms-production.up.railway.app/api';
 
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        setLoading(true);
-        const endpoint = `${apiUrl}/portfolio-site-webs?populate=%2A`;
-        const res = await fetch(endpoint);
-        if (!res.ok) {
-          throw new Error(`Erreur lors du chargement des projets. Statut: ${res.status}`);
-        }
-        const json = await res.json();
-        setProjects(json.data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      const endpoint = `${apiUrl}/portfolio-site-webs?populate=*`;
+      const res = await fetch(endpoint);
+      if (!res.ok) {
+        throw new Error(`Erreur lors du chargement des projets. Statut: ${res.status}`);
       }
-    };
-
-    fetchProjects();
-  }, [apiUrl]);
+      const json = await res.json();
+      // Vérifier que json.data existe et est un tableau
+      if (json.data && Array.isArray(json.data)) {
+        setProjects(json.data);
+      } else {
+        console.warn("Réponse inattendue :", json);
+      }
+    } catch (err) {
+      console.error("Error fetching portfolio projects:", err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  fetchProjects();
+}, [apiUrl]);
 
   if (loading) return <div>Chargement...</div>;
   if (error) return <div>Erreur : {error}</div>;
