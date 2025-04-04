@@ -1,4 +1,3 @@
-// utils/useResponsiveOrbitConfig.ts
 import { useEffect, useState } from 'react';
 
 export const useResponsiveOrbitConfig = () => {

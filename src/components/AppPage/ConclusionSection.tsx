@@ -1,4 +1,3 @@
-// src/components/AppPage/ConclusionSection.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 

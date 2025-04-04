@@ -1,5 +1,3 @@
-// src/components/AppPage/ProcessSection.tsx
-
 import React, { useEffect, useRef } from 'react';
 import { motion, useAnimation, useInView, Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -257,35 +255,3 @@ const ProcessSection: React.FC = () => {
 export default ProcessSection;
 
 
-/* ---------------------------------------------------------------------------
-   FIN DU COMPOSANT ProcessSection.tsx
---------------------------------------------------------------------------- */
-
-// ============================================================================
-// NOTES POUR L'INTÉGRATION ET L'EXTENSION
-// ============================================================================
-//
-// Ce composant "ProcessSection" présente une frise verticale animée qui décrit
-// le processus de création d'une application Orbit en 5 étapes. Il utilise la
-// librairie Framer Motion pour orchestrer les animations (apparition, glissement,
-// et pulsation du halo autour des icônes).
-//
-// Points à personnaliser :
-// - Les textes et descriptions pour chaque étape dans le tableau processSteps.
-// - Les variantes d'animation (durée, délai, easing) via les objets containerVariants,
-//   rightItemVariants, leftItemVariants, et glowVariants.
-// - Les classes CSS utilisées, en particulier celles définies dans Tailwind CSS (par
-//   exemple, bg-neon-purple, text-gradient-purple, etc.). Assurez-vous que votre
-//   configuration Tailwind inclut ces classes personnalisées.
-//
-// Ce composant est responsive : sur mobile, les étapes s'affichent en colonne, et sur
-// écran plus large, elles s'alternent à gauche et à droite pour un rendu dynamique.
-//
-// N'hésitez pas à ajouter d'autres éléments décoratifs ou ajuster le layout selon vos
-// préférences. L'approche modulaire vous permet d'intégrer ce composant dans votre page
-// principale et de le combiner avec d'autres sections pour une landing page complète.
-//
-// ============================================================================
-// FIN DU CODE
-
-// src/components/AppPage/BenefitsSection.tsx

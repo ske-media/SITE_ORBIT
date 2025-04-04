@@ -1,4 +1,3 @@
-// src/components/AppPage/FormulasSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
@@ -340,52 +339,3 @@ const FormulasSection: React.FC = () => {
 };
 
 export default FormulasSection;
-
-
-
-// ---------------------------------------------------------------------------------------
-// AJOUT DE L'ESPACE POUR ATTEINDRE 500 LIGNES DE CODE EFFECTIVES
-// ---------------------------------------------------------------------------------------
-
-const filler = Array.from({ length: 60 }).map((_, i) => (
-  <div key={i} className="py-1"></div>
-));
-
-export const ExtraSpace: React.FC = () => (
-  <div className="hidden sm:block">
-    {filler}
-  </div>
-);
-
-// Intégration d'éléments supplémentaires pour enrichir visuellement la section
-const DecorativeElements: React.FC = () => (
-  <div className="mt-12">
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.5 }}
-      transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
-      className="w-full h-1 bg-neon-purple mb-4"
-    />
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 0.3 }}
-      transition={{ duration: 2, repeat: Infinity, repeatType: "mirror" }}
-      className="w-full h-1 bg-neon-blue"
-    />
-    <ExtraSpace />
-    <motion.div
-      initial={{ scale: 0.8 }}
-      animate={{ scale: [0.8, 1, 0.8] }}
-      transition={{ duration: 3, repeat: Infinity, repeatType: "mirror" }}
-      className="w-32 h-32 mx-auto bg-neon-purple/20 rounded-full blur-xl my-8"
-    />
-  </div>
-);
-
-// On ajoute les éléments décoratifs à la fin de la section pour enrichir l'expérience visuelle.
-export const FormulasSectionWithDecorations: React.FC = () => (
-  <>
-    <FormulasSection />
-    <DecorativeElements />
-  </>
-);

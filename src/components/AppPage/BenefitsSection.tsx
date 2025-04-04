@@ -1,4 +1,3 @@
-// src/components/AppPage/BenefitsSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 

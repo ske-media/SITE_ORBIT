@@ -3,7 +3,7 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Button from '../ui/Button';
-import ParticleBackground from "../ParticleBackground";
+import ParticleBackground from '../ParticleBackground';
 
 interface AppHeroSectionProps {
   forwardedRef?: React.RefObject<HTMLDivElement>;
@@ -16,7 +16,7 @@ const AppHeroSection: React.FC<AppHeroSectionProps> = ({ forwardedRef, videoUrl 
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
 
-  // Parallax effect : modifie l'opacité et la position verticale du contenu en fonction du scroll
+  // Effet parallax sur le contenu du Hero
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
@@ -49,7 +49,6 @@ const AppHeroSection: React.FC<AppHeroSectionProps> = ({ forwardedRef, videoUrl 
   }, []);
 
   const handleCTAClick = () => {
-    // Redirige vers la page de contact pour la prise de rendez-vous
     window.location.href = '/contact';
   };
 
@@ -82,7 +81,7 @@ const AppHeroSection: React.FC<AppHeroSectionProps> = ({ forwardedRef, videoUrl 
         <div className="absolute inset-0 bg-black/40"></div>
       </div>
 
-      {/* Particules en fond */}
+      {/* Particules de fond */}
       <ParticleBackground className="absolute inset-0 z-10" />
 
       {/* Contenu du Hero */}
@@ -121,7 +120,7 @@ const AppHeroSection: React.FC<AppHeroSectionProps> = ({ forwardedRef, videoUrl 
             Prendre Rendez-vous
           </Button>
         </motion.div>
-        {/* Indicateur de scroll (optionnel) */}
+        {/* Indicateur de scroll */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

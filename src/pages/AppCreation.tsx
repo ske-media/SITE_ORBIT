@@ -1,4 +1,3 @@
-// src/pages/AppCreationPage.tsx
 import React, { useRef } from 'react';
 import { Helmet } from 'react-helmet-async';
 

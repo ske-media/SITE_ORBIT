@@ -8,14 +8,14 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 
-// Simplified Loader component for initial page load
+// Loader pour le chargement initial
 const InitialLoader = () => (
   <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50">
     <div className="loader"></div>
   </div>
 );
 
-// Code-splitting for routes with proper loading fallback
+// Loader pour le code-splitting (fallback)
 const PageLoader = () => (
   <div className="min-h-screen flex items-center justify-center bg-dark-900">
     <div className="flex flex-col items-center">
@@ -26,7 +26,7 @@ const PageLoader = () => (
   </div>
 );
 
-// Lazy load components
+// Chargement lazy des composants pages
 const Homepage = React.lazy(() => import('./pages/Homepage'));
 const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
 const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
@@ -49,21 +49,21 @@ function App() {
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [appLoaded, setAppLoaded] = useState(false);
-  
-  // Initial app load effect
+
+  // Effet de chargement initial (affichage du loader pendant 500ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppLoaded(true);
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-  
-  // Scroll to top when route changes
+
+  // Scroll to top lors du changement de route
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
-  
-  // Track page views
+
+  // Suivi des vues de page (pour analytics)
   useEffect(() => {
     if (window.gtag) {
       window.gtag('event', 'page_view', {
@@ -71,8 +71,8 @@ function App() {
       });
     }
   }, [location]);
-  
-  // Handle scroll events
+
+  // Gestion du scroll pour la barre de progression et le bouton "Back to Top"
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -84,7 +84,7 @@ function App() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   const scrollToTop = () => {
     smoothScrollTo(0, 800);
   };
@@ -99,19 +99,19 @@ function App() {
         <Helmet>
           <link rel="canonical" href={`https://agence-orbit.ch${location.pathname}`} />
         </Helmet>
-        
-        {/* Progress Bar */}
-        <div 
-          className="scroll-progress" 
+
+        {/* Barre de progression */}
+        <div
+          className="scroll-progress"
           style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties}
         />
-        
-        {/* Global Background Elements */}
+
+        {/* Arrière-plans globaux */}
         <div className="fixed inset-0 bg-dark-900 -z-50"></div>
         <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
         <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
-        
-        {/* Back to Top Button */}
+
+        {/* Bouton "Back to Top" */}
         <button
           onClick={scrollToTop}
           className={`back-to-top ${showBackToTop ? 'visible' : ''}`}
@@ -119,10 +119,9 @@ function App() {
         >
           <ArrowUp className="h-5 w-5" />
         </button>
-        
+
         <div className="flex flex-col min-h-screen">
           <Header />
-          
           <main className="flex-grow relative">
             <Suspense fallback={<PageLoader />}>
               <AnimatePresence mode="wait">
@@ -140,7 +139,6 @@ function App() {
                   <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
                   <Route path="/blog" element={<StrapiBlog />} />
                   <Route path="/blog/:slug" element={<StrapiArticlePage />} />
-                  {/* Nouvelle route pour le portfolio */}
                   <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                   <Route path="/success/:formType" element={<FormSuccess />} />
                   <Route path="*" element={<NotFound />} />
@@ -148,7 +146,6 @@ function App() {
               </AnimatePresence>
             </Suspense>
           </main>
-          
           <Footer />
         </div>
       </AnalyticsProvider>

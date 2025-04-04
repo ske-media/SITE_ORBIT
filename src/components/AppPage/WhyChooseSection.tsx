@@ -1,4 +1,3 @@
-// src/components/AppPage/WhyChooseSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { Briefcase, Activity, Settings, CreditCard, LifeBuoy } from 'lucide-react';
