@@ -1,5 +1,6 @@
+// src/App.tsx
 import React, { useEffect, useState, Suspense } from 'react';
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { AnimatePresence } from 'framer-motion';
 import Header from './components/Header';
@@ -7,6 +8,7 @@ import Footer from './components/Footer';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
+import WelcomePage from './pages/WelcomePage';
 
 // Loader pour le chargement initial
 const InitialLoader = () => (
@@ -44,8 +46,17 @@ const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
+/**
+ * Fonction utilitaire pour récupérer la valeur d'un cookie par son nom
+ */
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
 function App() {
   const location = useLocation();
+  const navigate = useNavigate();
   const [showBackToTop, setShowBackToTop] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [appLoaded, setAppLoaded] = useState(false);
@@ -57,6 +68,22 @@ function App() {
     }, 500);
     return () => clearTimeout(timer);
   }, []);
+
+  // Gestion de la redirection selon le cookie
+  useEffect(() => {
+    // Le cookie "selectedCountry" est supposé être défini lors du choix dans CountrySelector.tsx
+    const selectedCountry = getCookie('selectedCountry');
+
+    // Si le cookie n'existe pas et que l'utilisateur n'est pas déjà sur la page welcome, rediriger vers /welcome
+    if (!selectedCountry && location.pathname !== '/welcome') {
+      navigate('/welcome', { replace: true });
+    }
+
+    // Si le cookie existe et que l'utilisateur se trouve sur la page /welcome, le rediriger vers la page associée
+    if (selectedCountry && location.pathname === '/welcome') {
+      navigate(`/${selectedCountry}`, { replace: true });
+    }
+  }, [location, navigate]);
 
   // Scroll to top lors du changement de route
   useEffect(() => {
@@ -126,6 +153,9 @@ function App() {
             <Suspense fallback={<PageLoader />}>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
+                  {/* Page de bienvenue / sélection du pays */}
+                  <Route path="/welcome" element={<WelcomePage />} />
+                  {/* Page d'accueil et autres routes */}
                   <Route path="/" element={<Homepage />} />
                   <Route path="/creation-site-web" element={<WebsiteCreation />} />
                   <Route path="/reseaux-sociaux" element={<SocialMedia />} />
