@@ -1,157 +1,139 @@
 // src/pages/WelcomePage.tsx
-import React, { useRef, useState, useEffect } from 'react';
+import React from 'react';
 import { Helmet } from 'react-helmet-async';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ChevronDown, ArrowRight } from 'lucide-react';
-import Button from '../components/ui/Button';
-import ParticleBackground from '../components/ParticleBackground';
-import CountrySelector from '../components/CountrySelector'; // Composant que vous avez déjà créé
-
-// URL de la vidéo d'arrière-plan
-const HERO_VIDEO_URL = "https://res.cloudinary.com/agence-orbit/video/upload/v1743616165/galaxy_orbit_xneixx.mp4";
+import { motion } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 
 const WelcomePage: React.FC = () => {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const [videoLoaded, setVideoLoaded] = useState(false);
-  const [videoError, setVideoError] = useState(false);
+  const navigate = useNavigate();
 
-  // Effet parallax pour le contenu de la section héro
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const heroY = useTransform(scrollYProgress, [0, 0.5], [0, 100]);
+  // Variantes d'animation pour le container
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { duration: 1 } },
+  };
 
-  // Gestion du chargement de la vidéo
-  useEffect(() => {
-    if (videoRef.current) {
-      if (videoRef.current.readyState >= 3) {
-        setVideoLoaded(true);
-      } else {
-        const onLoaded = () => setVideoLoaded(true);
-        const onError = () => {
-          console.error("Erreur lors du chargement de la vidéo");
-          setVideoError(true);
-          setVideoLoaded(true);
-        };
-        videoRef.current.addEventListener('loadeddata', onLoaded);
-        videoRef.current.addEventListener('error', onError);
-        const timeout = setTimeout(() => setVideoLoaded(true), 3000);
-        return () => {
-          videoRef.current?.removeEventListener('loadeddata', onLoaded);
-          videoRef.current?.removeEventListener('error', onError);
-          clearTimeout(timeout);
-        };
-      }
-    }
-  }, []);
+  // Animation pour la lune (flottement)
+  const moonAnimation = {
+    float: {
+      y: [0, -20, 0],
+      transition: { duration: 6, repeat: Infinity, ease: "easeInOut" },
+    },
+  };
 
-  const handleCTAClick = () => {
-    // Redirige vers une section contact ou une autre page
-    window.location.href = '/contact';
+  // Animation pour les drapeaux (effet hover et léger ajustement)
+  const flagAnimation = {
+    hover: {
+      scale: 1.1,
+      rotate: [0, 5, -5, 0],
+      transition: { duration: 0.6 },
+    },
+  };
+
+  // Animation pour les astronautes (flottement doux)
+  const astronautAnimation = {
+    float: {
+      y: [0, -15, 0],
+      transition: { duration: 5, repeat: Infinity, ease: "easeInOut" },
+    },
+  };
+
+  // Fonction de gestion de la sélection du pays
+  const handleCountrySelect = (country: string) => {
+    // Enregistrement du choix dans un cookie (30 jours)
+    document.cookie = `selectedCountry=${country};path=/;max-age=${60 * 60 * 24 * 30}`;
+    navigate(`/${country}`);
   };
 
   return (
     <>
       <Helmet>
         <title>Bienvenue chez Agence Orbit</title>
-        <meta name="description" content="Découvrez comment Agence Orbit transforme votre présence digitale grâce à des solutions innovantes et sur mesure." />
+        <meta
+          name="description"
+          content="Choisissez votre pays pour accéder aux services locaux d'Agence Orbit."
+        />
       </Helmet>
-      <div className="relative min-h-screen bg-dark-900">
-        {/* Section HERO */}
-        <section ref={heroRef} className="relative min-h-screen flex items-center justify-center overflow-hidden">
-          {/* Vidéo d'arrière-plan avec overlay */}
-          <div className={`absolute inset-0 z-0 transition-opacity duration-1000 ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}>
-            {!videoError ? (
-              <video
-                ref={videoRef}
-                autoPlay
-                muted
-                loop
-                playsInline
-                className="w-full h-full object-cover"
-                poster="https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80"
-              >
-                <source src={HERO_VIDEO_URL} type="video/mp4" />
-              </video>
-            ) : (
-              <div
-                className="w-full h-full bg-gray-900"
-                style={{
-                  backgroundImage: "url('https://images.unsplash.com/photo-1534972195531-d756b9bfa9f2?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80')",
-                  backgroundSize: "cover",
-                  backgroundPosition: "center",
-                }}
-              ></div>
-            )}
-            <div className="absolute inset-0 bg-black/40"></div>
-          </div>
+      <motion.div
+        className="min-h-screen relative bg-dark-900 overflow-hidden flex flex-col items-center justify-center"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {/* Titre et sous-titre */}
+        <div className="z-30 text-center px-4">
+          <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">Choisissez votre pays</h2>
+          <p className="text-lg md:text-xl text-gray-300 mb-8">
+            Pour une expérience locale optimale, sélectionnez votre pays.
+          </p>
+        </div>
 
-          {/* Particules en fond */}
-          <ParticleBackground className="absolute inset-0 z-10" />
+        {/* Lune agrandie, en premier plan avec effet de flottement et atténuation */}
+        <motion.img
+          src="https://i.imgur.com/FOpAz73.png"  // Votre image de lune
+          alt="Lune"
+          className="w-[80%] md:w-[60%] lg:w-[50%] object-contain z-20"
+          style={{ filter: 'brightness(0.7)' }}
+          variants={moonAnimation}
+          animate="float"
+        />
 
-          {/* Contenu du HERO */}
-          <motion.div
-            style={{ opacity: heroOpacity, y: heroY }}
-            className="relative z-20 text-center px-4 max-w-5xl mx-auto"
-          >
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6"
-            >
-              <span className="block bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]">
-                Transformez le quotidien de votre entreprise
-              </span>
-              <span className="block text-white mt-2">
-                avec une application sur mesure.
-              </span>
-            </motion.h1>
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5 }}
-              className="text-lg md:text-xl text-surface-300 mb-10 max-w-2xl mx-auto"
-            >
-              Simplifiez, automatisez et centralisez vos processus, grâce à un partenaire qui comprend les exigences du marché suisse.
-            </motion.p>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.7 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center"
-            >
-              <Button onClick={handleCTAClick} size="lg" glowing>
-                Prendre Rendez-vous
-              </Button>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.4, duration: 0.8 }}
-              className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center cursor-pointer"
-              onClick={() => {
-                const nextSection = document.getElementById('audience-section');
-                nextSection?.scrollIntoView({ behavior: 'smooth' });
-              }}
-            >
-              <span className="text-surface-300 text-sm mb-2">Découvrir</span>
-              <ChevronDown className="w-8 h-8 text-neon-purple" />
-            </motion.div>
-          </motion.div>
-        </section>
+        {/* Drapeau français avec mât, positionné à gauche */}
+        <motion.img
+          src="https://i.imgur.com/Y1Rkp0o.png"  // Drapeau avec mât pour la France
+          alt="France"
+          className="absolute z-10"
+          style={{
+            top: '50%',
+            left: '5%',
+            transform: 'translateY(-50%) rotate(-10deg)',
+          }}
+          variants={flagAnimation}
+          whileHover="hover"
+          onClick={() => handleCountrySelect("fr")}
+        />
 
-        {/* Section de sélection du pays */}
-        <section className="py-12 bg-dark-800">
-          <div className="max-w-4xl mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold text-white mb-4">Choisissez votre pays</h2>
-            <p className="text-lg text-gray-300 mb-8">Pour une expérience locale optimale, sélectionnez votre pays.</p>
-            <CountrySelector />
-          </div>
-        </section>
+        {/* Drapeau suisse avec mât, positionné à droite (légèrement plus grand) */}
+        <motion.img
+          src="https://i.imgur.com/deWwaH2.png"  // Drapeau avec mât pour la Suisse
+          alt="Suisse"
+          className="absolute z-10"
+          style={{
+            top: '50%',
+            right: '5%',
+            transform: 'translateY(-50%) rotate(10deg)',
+          }}
+          variants={flagAnimation}
+          whileHover="hover"
+          onClick={() => handleCountrySelect("ch")}
+        />
 
-        {/* Ici vous pourrez ajouter d'autres composants ou sections spécifiques */}
-      </div>
+        {/* Astronaute 1, flottant sur le côté gauche */}
+        <motion.img
+          src="https://i.imgur.com/Yw2O42F.png"
+          alt="Astronaute 1"
+          className="absolute z-0"
+          style={{
+            top: '10%',
+            left: '2%',
+          }}
+          variants={astronautAnimation}
+          animate="float"
+        />
+
+        {/* Astronaute 2, flottant sur le côté droit */}
+        <motion.img
+          src="https://i.imgur.com/0bsqFHn.png"
+          alt="Astronaute 2"
+          className="absolute z-0"
+          style={{
+            bottom: '10%',
+            right: '2%',
+          }}
+          variants={astronautAnimation}
+          animate="float"
+        />
+      </motion.div>
     </>
   );
 };

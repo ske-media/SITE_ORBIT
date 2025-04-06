@@ -69,17 +69,12 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Gestion de la redirection selon le cookie
+  // Gestion de la redirection selon le cookie "selectedCountry"
   useEffect(() => {
-    // Le cookie "selectedCountry" est supposé être défini lors du choix dans CountrySelector.tsx
     const selectedCountry = getCookie('selectedCountry');
-
-    // Si le cookie n'existe pas et que l'utilisateur n'est pas déjà sur la page welcome, rediriger vers /welcome
     if (!selectedCountry && location.pathname !== '/welcome') {
       navigate('/welcome', { replace: true });
     }
-
-    // Si le cookie existe et que l'utilisateur se trouve sur la page /welcome, le rediriger vers la page associée
     if (selectedCountry && location.pathname === '/welcome') {
       navigate(`/${selectedCountry}`, { replace: true });
     }
@@ -148,7 +143,8 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          <Header />
+          {/* Afficher Header et Footer sauf pour /welcome */}
+          {location.pathname !== '/welcome' && <Header />}
           <main className="flex-grow relative">
             <Suspense fallback={<PageLoader />}>
               <AnimatePresence mode="wait">
@@ -176,7 +172,7 @@ function App() {
               </AnimatePresence>
             </Suspense>
           </main>
-          <Footer />
+          {location.pathname !== '/welcome' && <Footer />}
         </div>
       </AnalyticsProvider>
     </HelmetProvider>
