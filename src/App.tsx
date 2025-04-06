@@ -9,7 +9,6 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 import WelcomePage from './pages/WelcomePage';
-import TestBackgroundPage from './pages/TestBackgroundPage'; // Import de la page de test
 
 // Loader pour le chargement initial
 const InitialLoader = () => (
@@ -62,7 +61,7 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [appLoaded, setAppLoaded] = useState(false);
 
-  // Effet de chargement initial (affichage du loader pendant 500ms)
+  // Effet de chargement initial
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppLoaded(true);
@@ -70,14 +69,14 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Gestion de la redirection selon le cookie "selectedCountry"
+  // Gestion du cookie "selectedCountry" et redirection initiale
   useEffect(() => {
     const selectedCountry = getCookie('selectedCountry');
-    if (!selectedCountry && location.pathname !== '/welcome' && location.pathname !== '/test') {
+    if (!selectedCountry && location.pathname !== '/welcome') {
       navigate('/welcome', { replace: true });
-    }
-    if (selectedCountry && location.pathname === '/welcome') {
-      navigate(`/${selectedCountry}`, { replace: true });
+    } else if (selectedCountry && location.pathname === '/welcome') {
+      // Si le cookie existe et qu'on est sur la page de bienvenue, on redirige vers la page d'accueil
+      navigate('/', { replace: true });
     }
   }, [location, navigate]);
 
@@ -120,7 +119,8 @@ function App() {
     <HelmetProvider>
       <AnalyticsProvider>
         <Helmet>
-          <link rel="canonical" href={`https://agence-orbit.ch${location.pathname}`} />
+          {/* Ici, on force le domaine canonique à agence-orbit.com pour le SEO */}
+          <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
         </Helmet>
 
         {/* Barre de progression */}
@@ -144,14 +144,12 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Affichage conditionnel du Header et Footer */}
-          {location.pathname !== '/welcome' && location.pathname !== '/test' && <Header />}
+          {/* Header et Footer s'affichent sur toutes les pages sauf Welcome */}
+          {location.pathname !== '/welcome' && <Header />}
           <main className="flex-grow relative">
             <Suspense fallback={<PageLoader />}>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
-                  {/* Page de test pour les animations de fond */}
-                  <Route path="/test" element={<TestBackgroundPage />} />
                   {/* Page de bienvenue / sélection du pays */}
                   <Route path="/welcome" element={<WelcomePage />} />
                   {/* Autres pages */}
@@ -175,7 +173,7 @@ function App() {
               </AnimatePresence>
             </Suspense>
           </main>
-          {location.pathname !== '/welcome' && location.pathname !== '/test' && <Footer />}
+          {location.pathname !== '/welcome' && <Footer />}
         </div>
       </AnalyticsProvider>
     </HelmetProvider>

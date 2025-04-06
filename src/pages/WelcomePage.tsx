@@ -3,7 +3,7 @@ import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import ShootingStar from '../components/ShootingStarManager'; // Vérifiez le chemin
+import ShootingStar from '../components/ShootingStarManager'; // Vérifiez que le chemin est correct
 
 const NUM_STARS = 400;
 
@@ -45,7 +45,6 @@ const StarrySky: React.FC = () => {
   );
 };
 
-// Animation de flottement commune pour la lune et le conteneur de drapeaux
 const floatAnimation = {
   float: {
     y: [0, -10, 0],
@@ -53,16 +52,15 @@ const floatAnimation = {
   },
 };
 
-// Composant regroupant la lune et les deux drapeaux qui flottent ensemble
 const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }> = ({ handleCountrySelect }) => {
   return (
     <motion.div
       className="relative z-20"
       variants={floatAnimation}
       animate="float"
-      style={{ width: '20rem' }} // Conteneur de la lune et des drapeaux
+      style={{ width: '20rem' }}
     >
-      {/* Lune (prend toute la largeur du conteneur) */}
+      {/* Lune */}
       <motion.img
         src="https://i.imgur.com/FOpAz73.png"
         alt="Lune"
@@ -70,7 +68,7 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
         style={{ filter: 'brightness(1)' }}
       />
 
-      {/* Drapeau français (positionné à gauche) */}
+      {/* Drapeau français (à gauche) */}
       <motion.img
         src="https://i.imgur.com/Y1Rkp0o.png"
         alt="France"
@@ -78,19 +76,17 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
         style={{
           width: '9rem',
           top: '-20%',
-          left: '1%', // à ajuster pour l'alignement par rapport à la lune
+          left: '1%',
         }}
         initial={{ rotate: -15, scale: 1 }}
         whileHover={{
           scale: 1.1,
           filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))',
         }}
-        // Lorsque la souris quitte, le composant revient à son état initial
-        onHoverEnd={() => {}}
         onClick={() => handleCountrySelect('fr')}
       />
 
-      {/* Drapeau suisse (positionné à droite) */}
+      {/* Drapeau suisse (à droite) */}
       <motion.img
         src="https://i.imgur.com/deWwaH2.png"
         alt="Suisse"
@@ -98,14 +94,13 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
         style={{
           width: '10rem',
           top: '-20%',
-          right: '-20%', // à ajuster pour l'alignement par rapport à la lune
+          right: '-20%',
         }}
         initial={{ rotate: 15, scale: 1 }}
         whileHover={{
           scale: 1.1,
           filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))',
         }}
-        onHoverEnd={() => {}}
         onClick={() => handleCountrySelect('ch')}
       />
     </motion.div>
@@ -115,9 +110,11 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
 
+  // Modification : on redirige vers la page d'accueil ("/") après avoir enregistré le cookie
   const handleCountrySelect = (country: string) => {
     document.cookie = `selectedCountry=${country};path=/;max-age=${60 * 60 * 24 * 30}`;
-    navigate(`/${country}`);
+    // Rediriger vers la page d'accueil plutôt que vers /fr ou /ch
+    navigate(`/`);
   };
 
   return (
@@ -132,13 +129,13 @@ const WelcomePage: React.FC = () => {
         `}</style>
       </Helmet>
 
-      {/* Fond animé : ciel étoilé et étoiles filantes */}
+      {/* Fond animé */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <StarrySky />
         <ShootingStar />
       </div>
 
-      {/* Conteneur principal en plein écran */}
+      {/* Conteneur principal */}
       <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center">
         {/* Titres */}
         <div className="absolute top-8 text-center z-40 px-4">
@@ -150,7 +147,7 @@ const WelcomePage: React.FC = () => {
           </p>
         </div>
 
-        {/* Groupe de la Lune et des drapeaux qui flottent ensemble */}
+        {/* Lune et drapeaux flottants */}
         <MoonAndFlags handleCountrySelect={handleCountrySelect} />
 
         {/* Astronautes */}
