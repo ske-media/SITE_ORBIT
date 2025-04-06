@@ -9,6 +9,7 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 import WelcomePage from './pages/WelcomePage';
+import TestBackgroundPage from './pages/TestBackgroundPage'; // Import de la page de test
 
 // Loader pour le chargement initial
 const InitialLoader = () => (
@@ -28,7 +29,7 @@ const PageLoader = () => (
   </div>
 );
 
-// Chargement lazy des composants pages
+// Chargement lazy des autres pages
 const Homepage = React.lazy(() => import('./pages/Homepage'));
 const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
 const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
@@ -72,7 +73,7 @@ function App() {
   // Gestion de la redirection selon le cookie "selectedCountry"
   useEffect(() => {
     const selectedCountry = getCookie('selectedCountry');
-    if (!selectedCountry && location.pathname !== '/welcome') {
+    if (!selectedCountry && location.pathname !== '/welcome' && location.pathname !== '/test') {
       navigate('/welcome', { replace: true });
     }
     if (selectedCountry && location.pathname === '/welcome') {
@@ -143,15 +144,17 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Afficher Header et Footer sauf pour /welcome */}
-          {location.pathname !== '/welcome' && <Header />}
+          {/* Affichage conditionnel du Header et Footer */}
+          {location.pathname !== '/welcome' && location.pathname !== '/test' && <Header />}
           <main className="flex-grow relative">
             <Suspense fallback={<PageLoader />}>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
+                  {/* Page de test pour les animations de fond */}
+                  <Route path="/test" element={<TestBackgroundPage />} />
                   {/* Page de bienvenue / sélection du pays */}
                   <Route path="/welcome" element={<WelcomePage />} />
-                  {/* Page d'accueil et autres routes */}
+                  {/* Autres pages */}
                   <Route path="/" element={<Homepage />} />
                   <Route path="/creation-site-web" element={<WebsiteCreation />} />
                   <Route path="/reseaux-sociaux" element={<SocialMedia />} />
@@ -172,7 +175,7 @@ function App() {
               </AnimatePresence>
             </Suspense>
           </main>
-          {location.pathname !== '/welcome' && <Footer />}
+          {location.pathname !== '/welcome' && location.pathname !== '/test' && <Footer />}
         </div>
       </AnalyticsProvider>
     </HelmetProvider>

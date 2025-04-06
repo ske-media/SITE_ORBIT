@@ -1,21 +1,60 @@
 // src/pages/WelcomePage.tsx
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
+import ShootingStar from '../components/ShootingStarManager'; // Assurez-vous que ce chemin correspond à votre fichier
+
+const NUM_STARS = 150;
+
+const StarrySky: React.FC = () => {
+  const stars = useMemo(() => {
+    return Array.from({ length: NUM_STARS }).map((_, index) => ({
+      id: index,
+      top: Math.random() * 100,
+      left: Math.random() * 100,
+      size: Math.random() * 1.5 + 0.5,
+      duration: Math.random() * 3 + 2,
+      delay: Math.random() * 2,
+    }));
+  }, []);
+
+  return (
+    <div className="absolute inset-0 pointer-events-none">
+      {stars.map((star) => (
+        <motion.div
+          key={star.id}
+          className="absolute bg-white rounded-full"
+          style={{
+            width: star.size,
+            height: star.size,
+            top: `${star.top}%`,
+            left: `${star.left}%`,
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{
+            duration: star.duration,
+            repeat: Infinity,
+            delay: star.delay,
+            ease: 'easeInOut',
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
 
-  // Animation de flottement pour la lune et les astronautes
   const floatAnimation = {
     float: {
-      y: [0, -8, 0],
+      y: [0, -10, 0],
       transition: { duration: 4, repeat: Infinity, ease: 'easeInOut' },
     },
   };
 
-  // Variants pour les drapeaux avec effet hover (seulement pendant le hover)
   const flagVariants = {
     initial: { scale: 1, filter: 'drop-shadow(0px 0px 0px rgba(0,0,0,0))' },
     hover: {
@@ -25,7 +64,6 @@ const WelcomePage: React.FC = () => {
     },
   };
 
-  // Gestion de la sélection du pays
   const handleCountrySelect = (country: string) => {
     document.cookie = `selectedCountry=${country};path=/;max-age=${60 * 60 * 24 * 30}`;
     navigate(`/${country}`);
@@ -35,60 +73,33 @@ const WelcomePage: React.FC = () => {
     <>
       <Helmet>
         <title>Bienvenue chez Agence Orbit</title>
-        <meta
-          name="description"
-          content="Choisissez votre pays pour accéder aux services locaux d'Agence Orbit."
-        />
+        <meta name="description" content="Choisissez votre pays pour accéder aux services locaux d'Agence Orbit." />
+        <style>{`
+          html, body {
+            overflow: hidden;
+          }
+        `}</style>
       </Helmet>
-      {/* Effet espace en arrière-plan */}
-      <motion.div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Constellation 1 */}
-        <motion.img
-          src="https://i.imgur.com/constellation_example.png" // Remplacez par l'URL de votre image de constellation
-          alt="Constellation"
-          className="absolute"
-          style={{ width: '15rem', top: '10%', left: '20%', opacity: 0.5 }}
-          animate={{ x: [0, 20, 0] }}
-          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-        />
-        {/* Constellation 2 */}
-        <motion.img
-          src="https://i.imgur.com/constellation_example.png" // Remplacez par une autre image ou la même pour varier
-          alt="Constellation"
-          className="absolute"
-          style={{ width: '10rem', bottom: '15%', right: '15%', opacity: 0.4 }}
-          animate={{ x: [0, -20, 0] }}
-          transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
-        />
-        {/* Étoile filante 1 */}
-        <motion.div
-          className="absolute bg-white rounded-full"
-          style={{ width: '3px', height: '3px', top: '30%', left: '80%' }}
-          animate={{ x: [0, -100], y: [0, 50], opacity: [1, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity, delay: 2 }}
-        />
-        {/* Étoile filante 2 */}
-        <motion.div
-          className="absolute bg-white rounded-full"
-          style={{ width: '3px', height: '3px', top: '60%', left: '10%' }}
-          animate={{ x: [0, 80], y: [0, -40], opacity: [1, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, delay: 3 }}
-        />
-      </motion.div>
 
-      {/* Container principal plein écran sans scroll */}
-      <div className="relative w-screen h-screen overflow-hidden bg-dark-900 flex items-center justify-center">
-        {/* Titre et sous-titre */}
+      {/* Fond animé : ciel étoilé et étoiles filantes */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <StarrySky />
+        <ShootingStar />
+      </div>
+
+      {/* Conteneur principal */}
+      <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center">
+        {/* Titres */}
         <div className="absolute top-8 text-center z-40 px-4">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-2">
+          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-lg mb-2">
             Choisissez votre pays
           </h1>
-          <p className="text-sm md:text-base text-gray-300">
+          <p className="text-lg md:text-xl text-gray-300 drop-shadow-sm">
             Pour une expérience locale optimale, sélectionnez votre pays.
           </p>
         </div>
 
-        {/* Lune au centre */}
+        {/* Lune centrée */}
         <motion.img
           src="https://i.imgur.com/FOpAz73.png"
           alt="Lune"
@@ -98,7 +109,7 @@ const WelcomePage: React.FC = () => {
           animate="float"
         />
 
-        {/* Drapeau français, positionné sur la partie gauche de la lune, incliné */}
+        {/* Drapeau français, incliné */}
         <motion.img
           src="https://i.imgur.com/Y1Rkp0o.png"
           alt="France"
@@ -115,7 +126,7 @@ const WelcomePage: React.FC = () => {
           onClick={() => handleCountrySelect('fr')}
         />
 
-        {/* Drapeau suisse, positionné sur la partie droite de la lune, incliné */}
+        {/* Drapeau suisse, incliné */}
         <motion.img
           src="https://i.imgur.com/deWwaH2.png"
           alt="Suisse"
@@ -132,7 +143,7 @@ const WelcomePage: React.FC = () => {
           onClick={() => handleCountrySelect('ch')}
         />
 
-        {/* Astronaute 1, agrandi */}
+        {/* Astronaute 1 */}
         <motion.img
           src="https://i.imgur.com/Yw2O42F.png"
           alt="Astronaute 1"
@@ -146,7 +157,7 @@ const WelcomePage: React.FC = () => {
           animate="float"
         />
 
-        {/* Astronaute 2, agrandi */}
+        {/* Astronaute 2 */}
         <motion.img
           src="https://i.imgur.com/0bsqFHn.png"
           alt="Astronaute 2"
