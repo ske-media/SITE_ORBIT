@@ -1,3 +1,4 @@
+// src/pages/SocialMedia.tsx
 import React, { useState, useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, Link } from 'react-router-dom';
@@ -15,12 +16,34 @@ import Footer from '../components/Footer';
 
 const HERO_VIDEO_URL = "https://res.cloudinary.com/agence-orbit/video/upload/v1743362272/Fond_univers_Orbit_p7qvqe.mp4";
 
+// ------------------------------
+// FONCTIONS UTILITAIRES
+// ------------------------------
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+function getFormattedPrice(amount: number, currency: string): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
 // Variantes d'animation pour les titres et textes
 const titleVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
 };
 
+const currentYear = new Date().getFullYear();
+
+// ------------------------------
+// DONNÉES DES OFFRES
+// ------------------------------
 interface Offer {
   id: number;
   label: string;
@@ -107,17 +130,9 @@ const offers: Offer[] = [
   },
 ];
 
-// Logos des plateformes sociales pour le bandeau défilant
-const socialLogos: { name: string; logo: string }[] = [
-  { name: 'Meta', logo: 'https://upload.wikimedia.org/wikipedia/commons/0/05/Meta_Platforms_Logo.svg' },
-  { name: 'Instagram', logo: 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Instagram_icon.png' },
-  { name: 'Facebook', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/51/Facebook_f_logo_%282019%29.svg' },
-  { name: 'TikTok', logo: 'https://upload.wikimedia.org/wikipedia/en/a/a9/TikTok_logo.svg' },
-  { name: 'Pinterest', logo: 'https://upload.wikimedia.org/wikipedia/commons/3/35/Pinterest_Logo.svg' },
-  { name: 'YouTube', logo: 'https://upload.wikimedia.org/wikipedia/commons/b/b8/YouTube_Logo_2017.svg' },
-  { name: 'X', logo: 'https://upload.wikimedia.org/wikipedia/en/9/9f/X_%28logo%29.png' },
-];
-
+// ------------------------------
+// SOCIAL MEDIA PAGE COMPONENT
+// ------------------------------
 const SocialMediaPage: React.FC = () => {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showBackToTop, setShowBackToTop] = useState(false);
@@ -136,6 +151,10 @@ const SocialMediaPage: React.FC = () => {
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: 'smooth' });
   const handleStartClick = () => navigate('/contact');
+
+  // Définition de la devise : par défaut, CHF ; si le cookie "selectedCountry" vaut "fr", alors EUR.
+  const selectedCountry = getCookie('selectedCountry');
+  const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
 
   return (
     <>
@@ -216,12 +235,9 @@ const SocialMediaPage: React.FC = () => {
           </div>
         </section>
 
-
-
         {/* CHIFFRES CLÉS SUR LES RÉSEAUX SOCIAUX */}
         <SocialMediaImpact />
 
-        
         {/* OFFRES SOCIAL MEDIA */}
         <section id="offers" className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -244,6 +260,15 @@ const SocialMediaPage: React.FC = () => {
             <div className="space-y-16">
               {offers.map((offer, index) => {
                 const isEven = index % 2 === 0;
+                // Extraction et formatage du tarif s'il s'agit d'un nombre
+                const numericTarif = parseInt(offer.tarif.replace(/[^0-9]/g, ""));
+                const hasMonthly = offer.tarif.toLowerCase().includes("/mois");
+                const displayTarif =
+                  !isNaN(numericTarif)
+                    ? hasMonthly
+                      ? `${getFormattedPrice(numericTarif, currency)} / mois`
+                      : getFormattedPrice(numericTarif, currency)
+                    : offer.tarif;
                 return (
                   <motion.div
                     key={offer.id}
@@ -278,7 +303,7 @@ const SocialMediaPage: React.FC = () => {
                         ))}
                       </ul>
                       <div className="text-4xl font-extrabold text-neon-purple mb-4">
-                        {offer.tarif}
+                        {displayTarif}
                       </div>
                       {offer.note && (
                         <p className="text-sm text-gray-400 italic mb-4">{offer.note}</p>
@@ -414,8 +439,8 @@ const SocialMediaPage: React.FC = () => {
               </motion.button>
             </div>
           </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </>
   );
 };

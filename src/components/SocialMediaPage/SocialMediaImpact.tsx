@@ -17,8 +17,8 @@ const facts = [
     icon: <TrendingUp className="w-10 h-10 text-neon-purple" />,
   },
   {
-    stat: "4€",
-    label: "de revenus pour chaque euro investi en social media",
+    stat: "x4",
+    label: "de revenus pour chaque centime investi en social media",
     icon: <BarChart2 className="w-10 h-10 text-neon-purple" />,
   },
   {
