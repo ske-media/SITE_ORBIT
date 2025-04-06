@@ -56,13 +56,17 @@ const WelcomePage: React.FC = () => {
   };
 
   const flagVariants = {
-    initial: { scale: 1, filter: 'drop-shadow(0px 0px 0px rgba(0,0,0,0))' },
-    hover: {
-      scale: 1.1,
-      filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))',
-      transition: { duration: 0.3 },
-    },
-  };
+  initial: { 
+    rotate: -25,
+    scale: 1, 
+    filter: 'drop-shadow(0px 0px 0px rgba(0,0,0,0))' 
+  },
+  hover: {
+    scale: 1.1,
+    filter: 'drop-shadow(0px 0px 8px rgba(255,255,255,0.8))',
+    transition: { duration: 0.3 },
+  },
+};
 
   const handleCountrySelect = (country: string) => {
     document.cookie = `selectedCountry=${country};path=/;max-age=${60 * 60 * 24 * 30}`;
@@ -88,7 +92,7 @@ const WelcomePage: React.FC = () => {
       </div>
 
       {/* Conteneur principal */}
-      <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center">
+      <div className="relative w-screen h-screen overflow-hidden  flex items-center justify-center">
         {/* Titres */}
         <div className="absolute top-8 text-center z-40 px-4">
           <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-lg mb-2">
@@ -104,7 +108,7 @@ const WelcomePage: React.FC = () => {
           src="https://i.imgur.com/FOpAz73.png"
           alt="Lune"
           className="object-contain z-20"
-          style={{ width: '35rem', filter: 'brightness(0.8)' }}
+          style={{ width: '30rem', filter: 'brightness(1)' }}
           variants={floatAnimation}
           animate="float"
         />
@@ -115,10 +119,10 @@ const WelcomePage: React.FC = () => {
           alt="France"
           className="absolute z-30"
           style={{
-            width: '7rem',
+            width: '9rem',
             top: '50%',
-            left: '40%',
-            transform: 'translate(-50%, -50%) rotate(-15deg)',
+            left: '27%',
+            transform: 'translate(-50%, -50%)',
           }}
           initial="initial"
           variants={flagVariants}
@@ -135,7 +139,7 @@ const WelcomePage: React.FC = () => {
             width: '7.5rem',
             top: '50%',
             left: '60%',
-            transform: 'translate(-50%, -50%) rotate(15deg)',
+            transform: 'translate(-50%, -50%)',
           }}
           initial="initial"
           variants={flagVariants}
