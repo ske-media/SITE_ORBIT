@@ -1,51 +1,72 @@
+// src/components/FormulasSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
 
 // ------------------------------
-// TYPES ET DONNÉES
+// FONCTIONS UTILITAIRES
 // ------------------------------
+
+// Fonction utilitaire pour récupérer un cookie par nom
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+// Fonction pour formater le prix sans décimales
+function getFormattedPrice(amount: number, currency: string): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+// ------------------------------
+// DONNÉES (Mise à jour avec tarifs numériques)
+// ------------------------------
+
 interface BaseCommon {
   title: string;
   description: string;
   inclus: string[];
   livraison: string;
-  tarif: string;
+  tarif: number;
 }
 
 interface ModuleAdvanced {
   title: string;
   details: string[];
-  tarif: string;
+  tarif: number | string;
   note?: string;
   icon: string;
 }
 
-// Données pour la Base Commune
 const baseCommon: BaseCommon = {
   title: "Base Commune – À Partir de 9’900 CHF",
-  description: "Le socle complet qui réunit toutes les fonctionnalités essentielles pour centraliser et optimiser votre gestion.",
+  description:
+    "Le socle complet qui réunit toutes les fonctionnalités essentielles pour centraliser et optimiser votre gestion.",
   inclus: [
     "CRM (Clients/Prospects) : gestion des contacts, relances, suivi des opportunités.",
     "Planning & Gestion des Tâches : attribution, deadlines, notifications.",
     "Suivi de Facturation & Devis : création, envoi et tracking de paiement.",
     "Communication Interne : espace d’échange et documentation centralisée.",
-    "Reporting de base : vue globale de la productivité et de l’activité."
+    "Reporting de base : vue globale de la productivité et de l’activité.",
   ],
-  livraison: "Inclus : ateliers de cadrage, développement du socle, hébergement & maintenance pour la première année, formation et documentation. Livraison en 4 à 8 semaines selon complexité.",
-  tarif: "9’900 CHF",
+  livraison:
+    "Inclus : ateliers de cadrage, développement du socle, hébergement & maintenance pour la première année, formation et documentation. Livraison en 4 à 8 semaines selon complexité.",
+  tarif: 9900,
 };
 
-// Données pour les Modules Avancés
 const modulesAdvanced: ModuleAdvanced[] = [
   {
     title: "Module RH Complet",
     details: [
       "Fiches de paie exportables",
       "Suivi du temps de travail, congés, absences",
-      "Stockage sécurisé des documents RH"
+      "Stockage sécurisé des documents RH",
     ],
-    tarif: "+4’500 CHF",
+    tarif: 4500,
     icon: "https://via.placeholder.com/64?text=RH",
   },
   {
@@ -53,9 +74,9 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Tableaux de bord financiers",
       "Suivi des dépenses et recettes",
-      "Gestion de la trésorerie et intégration comptable"
+      "Gestion de la trésorerie et intégration comptable",
     ],
-    tarif: "+4’900 CHF",
+    tarif: 4900,
     icon: "https://via.placeholder.com/64?text=Finance",
   },
   {
@@ -63,9 +84,9 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Gestion des stocks et alertes de réapprovisionnement",
       "Suivi des commandes et fournisseurs",
-      "Codes-barres et QR codes pour l’inventaire"
+      "Codes-barres et QR codes pour l’inventaire",
     ],
-    tarif: "+3’500 CHF",
+    tarif: 3500,
     icon: "https://via.placeholder.com/64?text=Stock",
   },
   {
@@ -73,9 +94,9 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Outils Kanban et Gantt",
       "Suivi des temps par projet et facturation",
-      "Rapports automatisés pour clients et interne"
+      "Rapports automatisés pour clients et interne",
     ],
-    tarif: "+3’000 CHF",
+    tarif: 3000,
     icon: "https://via.placeholder.com/64?text=Projet",
   },
   {
@@ -83,9 +104,9 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Rappels automatiques et notifications",
       "Génération automatique de documents",
-      "Intégration avec Slack, Zapier, etc."
+      "Intégration avec Slack, Zapier, etc.",
     ],
-    tarif: "+2’500 CHF",
+    tarif: 2500,
     icon: "https://via.placeholder.com/64?text=Auto",
   },
   {
@@ -93,9 +114,9 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Prise de rendez-vous en ligne",
       "Paiement sécurisé intégré",
-      "Notifications de confirmation et rappels"
+      "Notifications de confirmation et rappels",
     ],
-    tarif: "+2’900 CHF",
+    tarif: 2900,
     icon: "https://via.placeholder.com/64?text=Réserv",
   },
   {
@@ -103,7 +124,7 @@ const modulesAdvanced: ModuleAdvanced[] = [
     details: [
       "Fonctionnalités spécifiques adaptées à votre secteur",
       "Intégration à vos API et logiciels internes",
-      "Workflows ultra-personnalisés"
+      "Workflows ultra-personnalisés",
     ],
     tarif: "Sur devis",
     icon: "https://via.placeholder.com/64?text=Sur-Mesure",
@@ -131,13 +152,6 @@ const cardVariants: Variants = {
   visible: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.7, ease: "easeOut" } },
 };
 
-const hoverGlow: Variants = {
-  hover: {
-    scale: 1.03,
-    transition: { duration: 0.3, ease: "easeOut" },
-  },
-};
-
 const buttonVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
@@ -147,6 +161,11 @@ const buttonVariants: Variants = {
 // COMPOSANT FORMULAS SECTION
 // ------------------------------
 const FormulasSection: React.FC = () => {
+  // Détermine la devise à utiliser
+  // Par défaut, c'est CHF. Si le cookie "selectedCountry" vaut "fr", alors on affiche EUR.
+  const selectedCountry = getCookie('selectedCountry');
+  const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
+
   return (
     <section className="relative py-24 bg-gradient-to-b from-dark-900 to-dark-800 overflow-hidden">
       <div className="container mx-auto px-4">
@@ -186,7 +205,7 @@ const FormulasSection: React.FC = () => {
           >
             {/* Étiquette d'offre */}
             <motion.div
-              className="absolute top-0 left-0 z-20 bg-neon-purple text-white px-4 py-2 rounded-br-xl uppercase tracking-wider shadow-lg"
+              className="absolute top-0 left-0 z-20 bg-neon-purple text-white text-xs font-semibold px-4 py-2 rounded-br-xl uppercase tracking-wider shadow-lg"
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.8 }}
@@ -223,7 +242,7 @@ const FormulasSection: React.FC = () => {
               variants={titleVariants}
               className="text-4xl font-extrabold text-neon-purple text-center mb-4"
             >
-              {baseCommon.tarif}
+              {getFormattedPrice(baseCommon.tarif, currency)}
             </motion.div>
           </motion.div>
         </motion.div>
@@ -268,7 +287,9 @@ const FormulasSection: React.FC = () => {
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ duration: 0.6, delay: 0.2 }}
                   >
-                    {module.tarif}
+                    {typeof module.tarif === 'number'
+                      ? `+${getFormattedPrice(module.tarif, currency)}`
+                      : module.tarif}
                   </motion.div>
                 </div>
                 <motion.h4
@@ -308,7 +329,20 @@ const FormulasSection: React.FC = () => {
             className="inline-flex items-center gap-3 bg-neon-purple px-10 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95 group"
           >
             <span>Obtenir mon devis personnalisé</span>
-            <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="ml-2 h-5 w-5 transform transition-transform group-hover:translate-x-1"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
+            </svg>
           </motion.button>
         </motion.div>
       </div>

@@ -1,19 +1,37 @@
+// src/components/AuditSection.tsx
 import React from 'react';
 import { motion, Variants } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 
-// ----------------------------------------------------------------------
+// ------------------------------
+// FONCTIONS UTILITAIRES
+// ------------------------------
+
+// Fonction utilitaire pour récupérer un cookie par nom
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+// Fonction pour formater le prix sans décimales
+function getFormattedPrice(amount: number, currency: string): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+// ------------------------------
 // VARIANTS POUR LES ANIMATIONS
-// ----------------------------------------------------------------------
+// ------------------------------
 const containerVariants: Variants = {
   hidden: { opacity: 0, scale: 0.95 },
   visible: {
     opacity: 1,
     scale: 1,
-    transition: {
-      staggerChildren: 0.25,
-      when: 'beforeChildren',
-    },
+    transition: { staggerChildren: 0.25, when: 'beforeChildren' },
   },
 };
 
@@ -44,14 +62,19 @@ const decorativeVariants: Variants = {
   },
 };
 
-// ----------------------------------------------------------------------
+// ------------------------------
 // COMPOSANT AUDIT SECTION
-// ----------------------------------------------------------------------
+// ------------------------------
 interface AuditSectionProps {
   forwardedRef?: React.RefObject<HTMLDivElement>;
 }
 
 const AuditSection: React.FC<AuditSectionProps> = ({ forwardedRef }) => {
+  // Détermine la devise : par défaut CHF, et si le cookie "selectedCountry" vaut "fr" alors EUR
+  const selectedCountry = getCookie('selectedCountry');
+  const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
+  const auditPrice = getFormattedPrice(1799, currency);
+
   return (
     <section
       ref={forwardedRef}
@@ -87,7 +110,7 @@ const AuditSection: React.FC<AuditSectionProps> = ({ forwardedRef }) => {
           className="text-center mb-12"
         >
           <motion.h2 variants={titleVariants} className="text-4xl md:text-5xl font-extrabold text-gradient-purple mb-4">
-            L’AUDIT DIGITAL ORBIT – 1’799 CHF (DÉDUCTIBLE)
+            L’AUDIT DIGITAL ORBIT – {auditPrice} (DÉDUCTIBLE)
           </motion.h2>
           <motion.p variants={textVariants} className="text-lg text-surface-300 max-w-3xl mx-auto">
             Pour une vision complète de la transformation digitale possible dans votre entreprise.
@@ -128,7 +151,7 @@ const AuditSection: React.FC<AuditSectionProps> = ({ forwardedRef }) => {
         <motion.div variants={buttonVariants} initial="hidden" whileInView="visible" className="mt-16 text-center">
           <motion.button
             onClick={() => window.location.href = '/contact'}
-            className="inline-flex items-center gap-3 bg-neon-purple px-10 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-lg active:scale-95 group"
+            className="inline-flex items-center gap-3 bg-neon-purple px-10 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95 group"
           >
             <span>Réserver mon Audit Digital</span>
             <ArrowRight className="h-5 w-5 transform transition-transform group-hover:translate-x-1" />

@@ -1,10 +1,32 @@
-import React from 'react';
+// src/components/StatsSection.tsx
+import React, { useMemo } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
 import AnimatedCounter from '../AnimatedCounter';
 import TechCircuit from '../TechCircuit';
 
-const StatsSection: React.FC<{ forwardedRef: React.RefObject<HTMLDivElement> }> = ({ forwardedRef }) => {
+// Fonction utilitaire pour récupérer un cookie par nom
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+type StatsSectionProps = {
+  forwardedRef: React.RefObject<HTMLDivElement>;
+};
+
+const StatsSection: React.FC<StatsSectionProps> = ({ forwardedRef }) => {
   const statsInView = useInView(forwardedRef, { once: true, amount: 0.3 });
+  
+  // Définir la devise : par défaut "CHF", et "EUR" si le cookie "selectedCountry" vaut "fr"
+  const selectedCountry = getCookie('selectedCountry');
+  const currencySuffix = selectedCountry === 'fr' ? ' EUR' : ' CHF';
+
+  // Tableau des statistiques avec le suffixe adapté pour la statistique liée au prix
+  const stats = [
+    { number: 98, text: "de clients satisfaits", suffix: "%" },
+    { number: 7, text: "pour la première version", suffix: " jours" },
+    { number: 1999, text: "pour votre site web", suffix: currencySuffix }
+  ];
 
   return (
     <section ref={forwardedRef} className="py-20 relative">
@@ -14,11 +36,7 @@ const StatsSection: React.FC<{ forwardedRef: React.RefObject<HTMLDivElement> }> 
       
       <div className="futuristic-container relative">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {[
-            { number: 98, text: "de clients satisfaits", suffix: "%" },
-            { number: 7, text: "pour la première version", suffix: " jours" },
-            { number: 0, text: "si vous n'êtes pas satisfait", suffix: " CHF" }
-          ].map((stat, index) => (
+          {stats.map((stat, index) => (
             <AnimatePresence key={index}>
               {statsInView && (
                 <motion.div
@@ -27,10 +45,7 @@ const StatsSection: React.FC<{ forwardedRef: React.RefObject<HTMLDivElement> }> 
                   transition={{ duration: 0.6, delay: 0.2 * index }}
                   className="futuristic-card text-center"
                 >
-                  <AnimatedCounter 
-                    end={stat.number} 
-                    suffix={stat.suffix}
-                  />
+                  <AnimatedCounter end={stat.number} suffix={stat.suffix} />
                   <div className="text-xl font-medium">{stat.text}</div>
                 </motion.div>
               )}

@@ -1,8 +1,30 @@
+// src/components/NextStepSection.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ArrowRight } from 'lucide-react';
 import Button from '../ui/Button';
+import { Link } from 'react-router-dom';
 
+// ------------------------------
+// FONCTIONS UTILITAIRES
+// ------------------------------
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+function getFormattedPrice(amount: number, currency: string): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+// ------------------------------
+// VARIANTS FRAMER MOTION
+// ------------------------------
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: { 
@@ -30,7 +52,20 @@ const decorativeCircleVariants = {
   },
 };
 
+const buttonVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.8 } },
+};
+
+// ------------------------------
+// COMPOSANT NEXT STEP SECTION
+// ------------------------------
 const NextStepSection: React.FC = () => {
+  // Détermine la devise : par défaut CHF, et en EUR si le cookie "selectedCountry" vaut "fr"
+  const selectedCountry = getCookie('selectedCountry');
+  const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
+  const auditPrice = getFormattedPrice(1799, currency);
+
   return (
     <section className="relative py-24 bg-gradient-to-b from-transparent to-neon-purple/10 overflow-hidden">
       {/* Fond décoratif animé */}
@@ -104,7 +139,7 @@ const NextStepSection: React.FC = () => {
               variants={itemVariants}
               className="text-4xl font-extrabold text-neon-purple mb-6"
             >
-              1’799 CHF
+              {auditPrice}
             </motion.div>
             <motion.button
               onClick={() => window.location.href = '/contact'}

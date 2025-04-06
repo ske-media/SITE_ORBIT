@@ -1,8 +1,33 @@
+// src/components/PricingPlanetSection.tsx
 import React from 'react';
 import { motion } from 'framer-motion';
 import { CheckCircle } from 'lucide-react';
 
-const PricingPlanetSection = () => {
+// Fonction utilitaire pour récupérer un cookie par nom
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+type PriceProps = {
+  amount: number;
+};
+
+const Price: React.FC<PriceProps> = ({ amount }) => {
+  const selectedCountry = getCookie('selectedCountry');
+  // Par défaut, la devise est CHF. Si le cookie vaut "fr", on affiche EUR.
+  const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
+  const formattedAmount = new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    minimumFractionDigits: 0,
+  maximumFractionDigits: 0,
+    currency,
+  }).format(amount);
+
+  return <span>{formattedAmount}</span>;
+};
+
+const PricingPlanetSection: React.FC = () => {
   const features = [
     "Design sur mesure",
     "Ajustements illimités",
@@ -11,6 +36,8 @@ const PricingPlanetSection = () => {
     "Accompagnement marketing",
     "Support réactif"
   ];
+
+  const price = 1999; // Le montant reste identique
 
   return (
     <section className="relative py-20 overflow-hidden bg-dark-950">
@@ -25,7 +52,7 @@ const PricingPlanetSection = () => {
 
       <div className="relative z-10 container mx-auto px-4 text-center">
         <h2 className="text-4xl font-bold text-white mb-6">
-          Votre site web <span className="text-purple-400">1999 CHF</span>
+          Votre site web <span className="text-purple-400"><Price amount={price} /></span>
         </h2>
         <p className="text-xl text-purple-200 mb-10">Livraison en 7 jours - Satisfait ou Gratuit</p>
 

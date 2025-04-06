@@ -26,6 +26,20 @@ function WebsiteCreation() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const navigate = useNavigate();
 
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
+
+function getFormattedPrice(amount: number, currency: string): string {
+  return new Intl.NumberFormat('fr-FR', {
+    style: 'currency',
+    currency,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+  
   // Suivi du scroll pour la barre de progression et le bouton "Back to Top"
   useEffect(() => {
     const handleScroll = () => {
@@ -605,74 +619,82 @@ function WebsiteCreation() {
         </div>
       </section>
 
-      {/* ADVANCED SERVICES SECTION */}
-      <section className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <motion.div
-              variants={titleVariants}
-              initial="hidden"
-              whileInView="visible"
-              className="text-center mb-6"
-            >
-              <h2 className="text-4xl font-bold gradient-text">Solutions Avancées</h2>
-            </motion.div>
-            <motion.div
-              variants={titleVariants}
-              initial="hidden"
-              whileInView="visible"
-              className="text-center mb-8 max-w-2xl mx-auto text-gray-300"
-            >
-              <p>
-                Besoin d'une solution plus complexe ? Nous créons des plateformes web sur-mesure pour répondre à vos besoins spécifiques à partir de <span className="text-neon-purple font-bold stats-glow">2'999 CHF</span>.
-              </p>
-            </motion.div>
-          </div>
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {[
-              {
-                title: "E-commerce",
-                description: "Plateforme de vente en ligne complète avec gestion des stocks et paiements sécurisés"
-              },
-              {
-                title: "Réservation",
-                description: "Système de réservation automatisé avec gestion des disponibilités en temps réel"
-              },
-              {
-                title: "Espace Membres",
-                description: "Plateforme communautaire avec authentification et contenus exclusifs"
-              }
-            ].map((service, index) => (
-              <motion.div
-                key={index}
-                variants={titleVariants}
-                initial="hidden"
-                whileInView="visible"
-                className="bg-white/5 p-8 rounded-2xl gradient-border hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1"
-              >
-                <h3 className="text-2xl font-semibold mb-4 text-neon-purple">{service.title}</h3>
-                <p className="text-gray-400 mb-6">{service.description}</p>
-                <Link
-                  to="/contact-complex"
-                  className="inline-flex items-center text-white hover:text-neon-purple transition-colors"
-                >
-                  En savoir plus
-                  <ArrowRight className="h-4 w-4 ml-2" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-          <div className="text-center">
-            <Link
-              to="/contact-complex"
-              className="inline-flex items-center gap-2 bg-neon-purple px-8 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95"
-            >
-              Démarrer un projet complexe
-              <Rocket className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
+     
+{/* ADVANCED SERVICES SECTION */}
+<section className="py-20 bg-gradient-to-b from-neon-purple/10 to-transparent">
+  <div className="max-w-7xl mx-auto px-4">
+    <div className="max-w-4xl mx-auto text-center mb-12">
+      <motion.div
+        variants={titleVariants}
+        initial="hidden"
+        whileInView="visible"
+        className="text-center mb-6"
+      >
+        <h2 className="text-4xl font-bold gradient-text">Solutions Avancées</h2>
+      </motion.div>
+      <motion.div
+        variants={titleVariants}
+        initial="hidden"
+        whileInView="visible"
+        className="text-center mb-8 max-w-2xl mx-auto text-gray-300"
+      >
+        {(() => {
+          const selectedCountry = getCookie('selectedCountry');
+          const currency = selectedCountry === 'fr' ? 'EUR' : 'CHF';
+          const advancedPrice = getFormattedPrice(2999, currency);
+          return (
+            <p>
+              Besoin d'une solution plus complexe ? Nous créons des plateformes web sur-mesure pour répondre à vos besoins spécifiques à partir de <span className="text-neon-purple font-bold stats-glow">{advancedPrice}</span>.
+            </p>
+          );
+        })()}
+      </motion.div>
+    </div>
+    <div className="grid md:grid-cols-3 gap-8 mb-12">
+      {[
+        {
+          title: "E-commerce",
+          description: "Plateforme de vente en ligne complète avec gestion des stocks et paiements sécurisés"
+        },
+        {
+          title: "Réservation",
+          description: "Système de réservation automatisé avec gestion des disponibilités en temps réel"
+        },
+        {
+          title: "Espace Membres",
+          description: "Plateforme communautaire avec authentification et contenus exclusifs"
+        }
+      ].map((service, index) => (
+        <motion.div
+          key={index}
+          variants={titleVariants}
+          initial="hidden"
+          whileInView="visible"
+          className="bg-white/5 p-8 rounded-2xl gradient-border hover:bg-white/10 transition-all duration-300 transform hover:-translate-y-1"
+        >
+          <h3 className="text-2xl font-semibold mb-4 text-neon-purple">{service.title}</h3>
+          <p className="text-gray-400 mb-6">{service.description}</p>
+          <Link
+            to="/contact-complex"
+            className="inline-flex items-center text-white hover:text-neon-purple transition-colors"
+          >
+            En savoir plus
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Link>
+        </motion.div>
+      ))}
+    </div>
+    <div className="text-center">
+      <Link
+        to="/contact-complex"
+        className="inline-flex items-center gap-2 bg-neon-purple px-8 py-4 rounded-full text-lg font-medium hover:bg-neon-purple/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95"
+      >
+        Démarrer un projet complexe
+        <Rocket className="h-5 w-5" />
+      </Link>
+    </div>
+  </div>
+</section>
 
      
     </div>

@@ -1,8 +1,15 @@
+// src/components/Footer.tsx
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Send, ExternalLink } from 'lucide-react';
 import { motion } from 'framer-motion';
 import Button from './ui/Button';
+
+// Fonction utilitaire pour récupérer un cookie par nom
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+  return match ? match[2] : null;
+}
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -19,10 +26,16 @@ function Footer() {
     { icon: <Instagram className="h-5 w-5" />, url: 'https://instagram.com', label: 'Instagram' },
     { icon: <Linkedin className="h-5 w-5" />, url: 'https://linkedin.com', label: 'LinkedIn' },
   ];
-  
+
+  // Lecture du cookie "selectedCountry"
+  const selectedCountry = getCookie('selectedCountry');
+  // Par défaut, le numéro est celui que vous aviez. Si le cookie vaut "fr", on affiche le numéro français.
+  const phoneContent = selectedCountry === 'fr' ? '+33 6 06 44 88 37' : '022 886 00 69';
+  const phoneUrl = selectedCountry === 'fr' ? 'tel:+336060448837' : 'tel:+41228860069';
+
   const contactInfo = [
     { icon: <MapPin className="h-5 w-5 text-neon-purple" />, content: 'Genève', label: 'Adresse' },
-    { icon: <Phone className="h-5 w-5 text-neon-purple" />, content: '022 886 00 69', url: 'tel:+41228860069', label: 'Téléphone' },
+    { icon: <Phone className="h-5 w-5 text-neon-purple" />, content: phoneContent, url: phoneUrl, label: 'Téléphone' },
     { icon: <Mail className="h-5 w-5 text-neon-purple" />, content: 'info@agence-orbit.ch', url: 'mailto:info@agence-orbit.ch', label: 'Email' },
   ];
 
@@ -205,8 +218,7 @@ function Footer() {
 
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.3 }}
           className="mt-16 pt-8 border-t border-neon-purple/20 text-center"
         >
