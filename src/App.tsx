@@ -9,26 +9,9 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 import WelcomePage from './pages/WelcomePage';
-
-// Loader pour le chargement initial
-const InitialLoader = () => (
-  <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50">
-    <div className="loader"></div>
-  </div>
-);
-
-// Loader pour le code-splitting (fallback)
-const PageLoader = () => (
-  <div className="min-h-screen flex items-center justify-center bg-dark-900">
-    <div className="flex flex-col items-center">
-      <div className="h-16 w-16 mb-6 flex items-center justify-center">
-        <div className="loader"></div>
-      </div>
-    </div>
-  </div>
-);
-
-// Chargement lazy des autres pages
+import StrapiArticlePage from './pages/StrapiArticle'; // articles destin (votre blog principal)
+import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage'; // ARTICLES SEO
+// Autres pages en lazy loading :
 const Homepage = React.lazy(() => import('./pages/Homepage'));
 const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
 const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
@@ -41,7 +24,6 @@ const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Partnership = React.lazy(() => import('./pages/Partnership'));
 const PartnershipForm = React.lazy(() => import('./pages/PartnershipForm'));
 const StrapiBlog = React.lazy(() => import('./pages/StrapiBlog'));
-const StrapiArticlePage = React.lazy(() => import('./pages/StrapiArticle'));
 const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
@@ -61,7 +43,7 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [appLoaded, setAppLoaded] = useState(false);
 
-  // Effet de chargement initial
+  // Loader initial
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppLoaded(true);
@@ -75,17 +57,17 @@ function App() {
     if (!selectedCountry && location.pathname !== '/welcome') {
       navigate('/welcome', { replace: true });
     } else if (selectedCountry && location.pathname === '/welcome') {
-      // Si le cookie existe et qu'on est sur la page de bienvenue, on redirige vers la page d'accueil
+      // Si un cookie existe et qu'on est sur Welcome, rediriger vers la page d'accueil.
       navigate('/', { replace: true });
     }
   }, [location, navigate]);
 
-  // Scroll to top lors du changement de route
+  // Scroll vers le haut à chaque changement de route
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Suivi des vues de page (pour analytics)
+  // Suivi des vues de page pour analytics
   useEffect(() => {
     if (window.gtag) {
       window.gtag('event', 'page_view', {
@@ -112,27 +94,24 @@ function App() {
   };
 
   if (!appLoaded) {
-    return <InitialLoader />;
+    return <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50"><div className="loader"></div></div>;
   }
 
   return (
     <HelmetProvider>
       <AnalyticsProvider>
         <Helmet>
-          {/* Ici, on force le domaine canonique à agence-orbit.com pour le SEO */}
+          {/* On force l'URL canonique sur le domaine .com pour centraliser l'autorité SEO */}
           <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
         </Helmet>
 
         {/* Barre de progression */}
-        <div
-          className="scroll-progress"
-          style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties}
-        />
+        <div className="scroll-progress" style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties} />
 
         {/* Arrière-plans globaux */}
-        <div className="fixed inset-0 bg-dark-900 -z-50"></div>
-        <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
-        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
+        <div className="fixed inset-0 bg-dark-900 -z-50" />
+        <div className="fixed inset-0 grid-background opacity-15 -z-40" />
+        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30" />
 
         {/* Bouton "Back to Top" */}
         <button
@@ -144,14 +123,18 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Header et Footer s'affichent sur toutes les pages sauf Welcome */}
+          {/* Header et Footer affichés sur toutes les pages sauf Welcome */}
           {location.pathname !== '/welcome' && <Header />}
           <main className="flex-grow relative">
-            <Suspense fallback={<PageLoader />}>
+            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-dark-900"><div className="flex flex-col items-center"><div className="h-16 w-16 mb-6 flex items-center justify-center"><div className="loader"></div></div></div></div>}>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
                   {/* Page de bienvenue / sélection du pays */}
                   <Route path="/welcome" element={<WelcomePage />} />
+                  {/* Route pour l'article "Destin d’entrepreneur" */}
+                  <Route path="/blog/:slug" element={<StrapiArticlePage />} />
+                  {/* Nouvelle route pour les articles SEO */}
+                  <Route path="/seo-blog/:slug" element={<StrapiSeoArticlePage />} />
                   {/* Autres pages */}
                   <Route path="/" element={<Homepage />} />
                   <Route path="/creation-site-web" element={<WebsiteCreation />} />
@@ -165,7 +148,6 @@ function App() {
                   <Route path="/devenir-partenaire" element={<Partnership />} />
                   <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
                   <Route path="/blog" element={<StrapiBlog />} />
-                  <Route path="/blog/:slug" element={<StrapiArticlePage />} />
                   <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                   <Route path="/success/:formType" element={<FormSuccess />} />
                   <Route path="*" element={<NotFound />} />
