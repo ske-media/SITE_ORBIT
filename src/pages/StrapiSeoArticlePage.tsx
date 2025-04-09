@@ -1,32 +1,20 @@
 // src/pages/StrapiSeoArticlePage.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import ReactMarkdown from 'react-markdown';
 import Footer from '../components/Footer';
-
-// Fonction qui récupère un article SEO par slug depuis l'API Strapi
-async function getSeoArticleBySlug(slug: string) {
-  const STRAPI_API_URL = 'https://siteorbit-cms-production.up.railway.app';
-  // Le query string filtre par slug et populate les champs liés
-  const query = `?filters[slug][$eq]=${slug}&populate=seo,author,image`;
-  const response = await fetch(`${STRAPI_API_URL}/api/seos${query}`);
-  if (!response.ok) {
-    throw new Error('Erreur lors de la récupération de l’article SEO');
-  }
-  const result = await response.json();
-  // Strapi renvoie les données dans result.data
-  return result.data[0]?.attributes;
-}
+import { getSeoArticleBySlug } from '../lib/strapi';
 
 function StrapiSeoArticlePage() {
   const { slug } = useParams<{ slug: string }>();
   const [article, setArticle] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchArticle = async () => {
@@ -46,8 +34,8 @@ function StrapiSeoArticlePage() {
     fetchArticle();
   }, [slug]);
 
-  const calculateReadingTime = (content: string) => {
-    const wordCount = content.split(/\s+/).length;
+  const calculateReadingTime = (contenu: string) => {
+    const wordCount = contenu?.split(/\s+/).length || 0;
     const readingTime = Math.ceil(wordCount / 200);
     return readingTime > 0 ? readingTime : 1;
   };
@@ -77,13 +65,8 @@ function StrapiSeoArticlePage() {
   return (
     <>
       <Helmet>
-        <title>{article.title} | Agence Orbit SEO</title>
-        <meta name="description" content={article.seo?.meta_description || article.excerpt} />
-        <meta property="og:title" content={article.seo?.meta_title || article.title} />
-        <meta property="og:description" content={article.seo?.meta_description || article.excerpt} />
-        {article.seo?.meta_image && (
-          <meta property="og:image" content={`https://siteorbit-cms-production.up.railway.app${article.seo.meta_image.data.attributes.url}`} />
-        )}
+        <title>{article.Titre} | Agence Orbit SEO</title>
+        <meta name="description" content={article.excerpt} />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -96,38 +79,42 @@ function StrapiSeoArticlePage() {
           {/* Header */}
           <header className="mb-12">
             <h1 className="text-4xl font-bold mb-6 gradient-text">
-              {article.title}
+              {article.Titre}
             </h1>
 
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 mb-8">
-              {article.author && typeof article.author === 'string' && (
+              {article.Auteur && (
                 <div className="flex items-center gap-2">
                   <User className="h-4 w-4" />
-                  {article.author}
+                  {article.Auteur}
                 </div>
               )}
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
-                {format(new Date(article.publishedAt), 'dd MMMM yyyy', { locale: fr })}
+                {article.publishedAt
+                  ? format(new Date(article.publishedAt), 'dd MMMM yyyy', { locale: fr })
+                  : article.Date
+                  ? format(new Date(article.Date), 'dd MMMM yyyy', { locale: fr })
+                  : 'N/A'}
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
-                {calculateReadingTime(article.content)} min de lecture
+                {calculateReadingTime(article.Contenu)} min de lecture
               </div>
             </div>
 
             {article.image && article.image.length > 0 && (
               <img
                 src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
-                alt={article.title}
+                alt={article.Titre}
                 className="w-full aspect-video object-cover rounded-2xl mb-8"
               />
             )}
           </header>
 
-          {/* Content */}
+          {/* Contenu */}
           <div className="prose prose-invert prose-purple max-w-none mb-12">
-            <ReactMarkdown>{article.content}</ReactMarkdown>
+            <ReactMarkdown>{article.Contenu}</ReactMarkdown>
           </div>
         </article>
       </div>

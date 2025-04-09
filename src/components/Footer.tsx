@@ -22,8 +22,8 @@ function Footer() {
   ];
   
   const socialLinks = [
-    { icon: <Facebook className="h-5 w-5" />, url: 'https://facebook.com', label: 'Facebook' },
-    { icon: <Instagram className="h-5 w-5" />, url: 'https://instagram.com', label: 'Instagram' },
+    { icon: <Facebook className="h-5 w-5" />, url: 'https://www.facebook.com/profile.php?id=61572616630632', label: 'Facebook' },
+    { icon: <Instagram className="h-5 w-5" />, url: 'https://www.instagram.com/agenceorbit.ch/', label: 'Instagram' },
     { icon: <Linkedin className="h-5 w-5" />, url: 'https://linkedin.com', label: 'LinkedIn' },
   ];
 

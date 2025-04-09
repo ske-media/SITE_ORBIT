@@ -1,6 +1,14 @@
+// src/lib/strapi.ts
 import axios from 'axios';
-import type { StrapiResponse, StrapiSingleResponse, StrapiArticle, StrapiPortfolioSiteWeb } from '../types/strapi';
+import type { 
+  StrapiResponse, 
+  StrapiSingleResponse, 
+  StrapiArticle, 
+  StrapiPortfolioSiteWeb, 
+  StrapiSeoArticle 
+} from '../types/strapi';
 
+// URL de base de l'API Strapi (définie via l'environnement ou valeur par défaut)
 const STRAPI_API_URL = import.meta.env.VITE_STRAPI_API_URL || 'https://siteorbit-cms-production.up.railway.app/api';
 
 // Crée une instance axios pour Strapi
@@ -13,9 +21,9 @@ const strapiClient = axios.create({
   timeout: 10000, // 10 secondes de timeout
 });
 
-/* ========== BLOG ========== */
+/* ========== BLOG (Articles Destin) ========== */
 
-// Récupère tous les articles (Blog)
+// Récupère tous les articles (Blog destin)
 export const getArticles = async () => {
   try {
     const response = await strapiClient.get<StrapiResponse<StrapiArticle>>(
@@ -32,11 +40,11 @@ export const getArticles = async () => {
   }
 };
 
-// Récupère un article unique par slug (Blog)
+// Récupère un article unique par slug (Blog destin)
 export const getArticleBySlug = async (slug: string) => {
   try {
     const response = await strapiClient.get<StrapiResponse<StrapiArticle>>(
-      `/articles?filters[slug][$eq]=${slug}&populate=*`
+      `/articles?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`
     );
     if (!response.data.data || response.data.data.length === 0) {
       throw new Error('Article not found');
@@ -44,6 +52,43 @@ export const getArticleBySlug = async (slug: string) => {
     return response.data.data[0];
   } catch (error) {
     console.error(`Error fetching article with slug ${slug}:`, error);
+    throw error;
+  }
+};
+
+/* ========== BLOG SEO ========== */
+
+// Récupère tous les articles SEO de la même manière que pour getArticles
+export const getSeoArticles = async () => {
+  try {
+    const response = await strapiClient.get<StrapiResponse<StrapiSeoArticle>>(
+      '/seos?populate=*&sort=publishedAt:desc'
+    );
+    console.log('Strapi response (SEO articles):', response.data);
+    if (!response.data || !response.data.data || !Array.isArray(response.data.data)) {
+      throw new Error("La réponse de l'API n'est pas au format attendu pour les articles SEO");
+    }
+    // Retourne la réponse complète (comme getArticles)
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching SEO articles from Strapi:', error);
+    throw error;
+  }
+};
+
+// Récupère un article SEO unique par slug
+export const getSeoArticleBySlug = async (slug: string) => {
+  try {
+    const response = await strapiClient.get<StrapiResponse<StrapiSeoArticle>>(
+      `/seos?filters[slug][$eq]=${encodeURIComponent(slug)}&populate=*`
+    );
+    if (!response.data.data || response.data.data.length === 0) {
+      throw new Error('SEO Article not found');
+    }
+    // Retourne le premier article SEO trouvé, au même format que celui pour les articles destin
+    return response.data.data[0];
+  } catch (error) {
+    console.error(`Error fetching SEO article with slug ${slug}:`, error);
     throw error;
   }
 };
@@ -71,7 +116,7 @@ export const getPortfolioSites = async () => {
 export const getPortfolioSiteBySlug = async (slug: string) => {
   try {
     const response = await strapiClient.get(
-      `/portfolio-site-webs?filters[Slug][$eq]=${slug}&populate=%2A`
+      `/portfolio-site-webs?filters[Slug][$eq]=${encodeURIComponent(slug)}&populate=%2A`
     );
     if (!response.data.data || response.data.data.length === 0) {
       throw new Error('Portfolio site not found');
@@ -94,7 +139,7 @@ export const getStrapiMediaUrl = (url: string | null) => {
     return url;
   }
   
-  // Si c'est une URL relative, on la préfixe avec l'URL de base
+  // Si c'est une URL relative, on la préfixe avec l'URL de base (sans le suffixe /api)
   const baseUrl = STRAPI_API_URL.endsWith('/api')
     ? STRAPI_API_URL.slice(0, -4)
     : STRAPI_API_URL;

@@ -8,22 +8,26 @@ import Footer from './components/Footer';
 import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
+
+// Pages principales
 import WelcomePage from './pages/WelcomePage';
-import StrapiArticlePage from './pages/StrapiArticle'; // articles destin (votre blog principal)
-import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage'; // ARTICLES SEO
-// Autres pages en lazy loading :
+import StrapiArticlePage from './pages/StrapiArticle'; // Articles destin (blog principal)
+import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage'; // Article SEO individuel
+import StrapiSeoBlog from './pages/StrapiSeoBlog'; // Catalogue des articles SEO
+import StrapiBlog from './pages/StrapiBlog'; // Blog destin
+
+// Page de contact d'orientation (qui présente les 4 choix)
+import ContactChoicesPage from './pages/contact/ContactChoicesPage';
+
+// Autres pages en lazy loading
 const Homepage = React.lazy(() => import('./pages/Homepage'));
 const WebsiteCreation = React.lazy(() => import('./pages/WebsiteCreation'));
 const SocialMedia = React.lazy(() => import('./pages/SocialMedia'));
 const AppCreation = React.lazy(() => import('./pages/AppCreation'));
-const FirstContactForm = React.lazy(() => import('./pages/FirstContactForm'));
-const FirstContactFormComplexSite = React.lazy(() => import('./pages/FirstContactFormComplexSite'));
-const OrderForm = React.lazy(() => import('./pages/OrderForm'));
 const LegalNotice = React.lazy(() => import('./pages/LegalNotice'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Partnership = React.lazy(() => import('./pages/Partnership'));
 const PartnershipForm = React.lazy(() => import('./pages/PartnershipForm'));
-const StrapiBlog = React.lazy(() => import('./pages/StrapiBlog'));
 const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
@@ -57,7 +61,6 @@ function App() {
     if (!selectedCountry && location.pathname !== '/welcome') {
       navigate('/welcome', { replace: true });
     } else if (selectedCountry && location.pathname === '/welcome') {
-      // Si un cookie existe et qu'on est sur Welcome, rediriger vers la page d'accueil.
       navigate('/', { replace: true });
     }
   }, [location, navigate]);
@@ -67,7 +70,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Suivi des vues de page pour analytics
+  // Suivi des vues de page (analytics)
   useEffect(() => {
     if (window.gtag) {
       window.gtag('event', 'page_view', {
@@ -76,7 +79,7 @@ function App() {
     }
   }, [location]);
 
-  // Gestion du scroll pour la barre de progression et le bouton "Back to Top"
+  // Gestion de la barre de progression et du bouton "Back to Top"
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -94,14 +97,18 @@ function App() {
   };
 
   if (!appLoaded) {
-    return <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50"><div className="loader"></div></div>;
+    return (
+      <div className="fixed inset-0 bg-dark-900 flex items-center justify-center z-50">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   return (
     <HelmetProvider>
       <AnalyticsProvider>
         <Helmet>
-          {/* On force l'URL canonique sur le domaine .com pour centraliser l'autorité SEO */}
+          {/* Forcer le domaine canonique sur agence-orbit.com pour le SEO */}
           <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
         </Helmet>
 
@@ -109,9 +116,9 @@ function App() {
         <div className="scroll-progress" style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties} />
 
         {/* Arrière-plans globaux */}
-        <div className="fixed inset-0 bg-dark-900 -z-50" />
-        <div className="fixed inset-0 grid-background opacity-15 -z-40" />
-        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30" />
+        <div className="fixed inset-0 bg-dark-900 -z-50"></div>
+        <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
+        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
 
         {/* Bouton "Back to Top" */}
         <button
@@ -123,31 +130,39 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Header et Footer affichés sur toutes les pages sauf Welcome */}
+          {/* Header et Footer sur toutes les pages sauf Welcome */}
           {location.pathname !== '/welcome' && <Header />}
           <main className="flex-grow relative">
-            <Suspense fallback={<div className="min-h-screen flex items-center justify-center bg-dark-900"><div className="flex flex-col items-center"><div className="h-16 w-16 mb-6 flex items-center justify-center"><div className="loader"></div></div></div></div>}>
+            <Suspense fallback={
+              <div className="min-h-screen flex items-center justify-center bg-dark-900">
+                <div className="flex flex-col items-center">
+                  <div className="h-16 w-16 mb-6 flex items-center justify-center">
+                    <div className="loader"></div>
+                  </div>
+                </div>
+              </div>
+            }>
               <AnimatePresence mode="wait">
                 <Routes location={location} key={location.pathname}>
-                  {/* Page de bienvenue / sélection du pays */}
+                  {/* Page de bienvenue */}
                   <Route path="/welcome" element={<WelcomePage />} />
-                  {/* Route pour l'article "Destin d’entrepreneur" */}
+                  {/* Page de contact d'orientation */}
+                  <Route path="/contact" element={<ContactChoicesPage />} />
+                  {/* Articles destin */}
                   <Route path="/blog/:slug" element={<StrapiArticlePage />} />
-                  {/* Nouvelle route pour les articles SEO */}
+                  <Route path="/blog" element={<StrapiBlog />} />
+                  {/* Articles SEO */}
                   <Route path="/seo-blog/:slug" element={<StrapiSeoArticlePage />} />
+                  <Route path="/seo-blog" element={<StrapiSeoBlog />} />
                   {/* Autres pages */}
                   <Route path="/" element={<Homepage />} />
                   <Route path="/creation-site-web" element={<WebsiteCreation />} />
                   <Route path="/reseaux-sociaux" element={<SocialMedia />} />
                   <Route path="/creation-application" element={<AppCreation />} />
-                  <Route path="/contact" element={<FirstContactForm />} />
-                  <Route path="/contact-complex" element={<FirstContactFormComplexSite />} />
-                  <Route path="/order" element={<OrderForm />} />
                   <Route path="/mentions-legales" element={<LegalNotice />} />
                   <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
                   <Route path="/devenir-partenaire" element={<Partnership />} />
                   <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
-                  <Route path="/blog" element={<StrapiBlog />} />
                   <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                   <Route path="/success/:formType" element={<FormSuccess />} />
                   <Route path="*" element={<NotFound />} />
