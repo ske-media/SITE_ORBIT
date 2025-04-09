@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import Button from '../ui/Button';
-import ParticleBackground from '../ParticleBackground';
 
 interface HeroSectionProps {
   onScrollNext: () => void;
@@ -98,8 +97,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({ onScrollNext }) => {
         <div className="absolute inset-0 bg-[#1a1a1a]/40 backdrop-blur-sm"></div>
       </div>
       
-      {/* Particle effect */}
-      <ParticleBackground className="absolute inset-0 z-1" />
+      
       
       {/* Grid background and scanning effect */}
       <div className="absolute inset-0 grid-background opacity-10"></div>

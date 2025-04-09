@@ -9,15 +9,19 @@ import { AnalyticsProvider } from './components/AnalyticsProvider';
 import { ArrowUp } from 'lucide-react';
 import { smoothScrollTo } from './lib/utils';
 
-// Pages principales
+// Pages principales et blog
 import WelcomePage from './pages/WelcomePage';
 import StrapiArticlePage from './pages/StrapiArticle'; // Articles destin (blog principal)
 import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage'; // Article SEO individuel
 import StrapiSeoBlog from './pages/StrapiSeoBlog'; // Catalogue des articles SEO
 import StrapiBlog from './pages/StrapiBlog'; // Blog destin
 
-// Page de contact d'orientation (qui présente les 4 choix)
+// Pages de contact (répertoire "src/pages/contact")
 import ContactChoicesPage from './pages/contact/ContactChoicesPage';
+import ContactSiteVitrine from './pages/contact/ContactSiteVitrine';
+import ContactSiteComplexe from './pages/contact/ContactSiteComplexe';
+import ContactReseauxSociaux from './pages/contact/ContactReseauxSociaux';
+import ContactApplication from './pages/contact/ContactApplication';
 
 // Autres pages en lazy loading
 const Homepage = React.lazy(() => import('./pages/Homepage'));
@@ -27,7 +31,6 @@ const AppCreation = React.lazy(() => import('./pages/AppCreation'));
 const LegalNotice = React.lazy(() => import('./pages/LegalNotice'));
 const PrivacyPolicy = React.lazy(() => import('./pages/PrivacyPolicy'));
 const Partnership = React.lazy(() => import('./pages/Partnership'));
-const PartnershipForm = React.lazy(() => import('./pages/PartnershipForm'));
 const PortfolioDetail = React.lazy(() => import('./pages/PortfolioDetail'));
 const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
@@ -70,7 +73,7 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-  // Suivi des vues de page (analytics)
+  // Suivi des vues de page (pour analytics)
   useEffect(() => {
     if (window.gtag) {
       window.gtag('event', 'page_view', {
@@ -79,7 +82,7 @@ function App() {
     }
   }, [location]);
 
-  // Gestion de la barre de progression et du bouton "Back to Top"
+  // Gestion du scroll pour la barre de progression et le bouton "Back to Top"
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -113,7 +116,10 @@ function App() {
         </Helmet>
 
         {/* Barre de progression */}
-        <div className="scroll-progress" style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties} />
+        <div
+          className="scroll-progress"
+          style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties}
+        />
 
         {/* Arrière-plans globaux */}
         <div className="fixed inset-0 bg-dark-900 -z-50"></div>
@@ -130,7 +136,7 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Header et Footer sur toutes les pages sauf Welcome */}
+          {/* Header et Footer affichés sur toutes les pages sauf Welcome */}
           {location.pathname !== '/welcome' && <Header />}
           <main className="flex-grow relative">
             <Suspense fallback={
@@ -146,14 +152,22 @@ function App() {
                 <Routes location={location} key={location.pathname}>
                   {/* Page de bienvenue */}
                   <Route path="/welcome" element={<WelcomePage />} />
-                  {/* Page de contact d'orientation */}
+
+                  {/* Pages de contact */}
                   <Route path="/contact" element={<ContactChoicesPage />} />
-                  {/* Articles destin */}
+                  <Route path="/contact/site-vitrine" element={<ContactSiteVitrine />} />
+                  <Route path="/contact/site-complexe" element={<ContactSiteComplexe />} />
+                  <Route path="/contact/reseaux-sociaux" element={<ContactReseauxSociaux />} />
+                  <Route path="/contact/application" element={<ContactApplication />} />
+
+                  {/* Articles destin (blog principal) */}
                   <Route path="/blog/:slug" element={<StrapiArticlePage />} />
                   <Route path="/blog" element={<StrapiBlog />} />
+
                   {/* Articles SEO */}
                   <Route path="/seo-blog/:slug" element={<StrapiSeoArticlePage />} />
                   <Route path="/seo-blog" element={<StrapiSeoBlog />} />
+
                   {/* Autres pages */}
                   <Route path="/" element={<Homepage />} />
                   <Route path="/creation-site-web" element={<WebsiteCreation />} />
@@ -162,9 +176,9 @@ function App() {
                   <Route path="/mentions-legales" element={<LegalNotice />} />
                   <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
                   <Route path="/devenir-partenaire" element={<Partnership />} />
-                  <Route path="/devenir-partenaire/formulaire" element={<PartnershipForm />} />
                   <Route path="/portfolio/:slug" element={<PortfolioDetail />} />
                   <Route path="/success/:formType" element={<FormSuccess />} />
+
                   <Route path="*" element={<NotFound />} />
                 </Routes>
               </AnimatePresence>
