@@ -3,189 +3,173 @@ import { useNavigate } from 'react-router-dom';
 import { Send, ArrowRight, ArrowLeft, Phone, Mail, MapPin, Check } from 'lucide-react';
 import emailjs from '@emailjs/browser';
 
+emailjs.init("10GrUKNFZHhGzb83j");
+
+type Question = {
+  key: string;
+  question: string;
+  placeholder?: string;
+  type: 'text' | 'email' | 'tel' | 'url' | 'select' | 'textarea';
+  required: boolean;
+  options?: string[];
+  validate?: (value: string) => boolean;
+  errorMessage?: string;
+};
+
+const questions: Question[] = [
+  {
+    key: 'name',
+    question: 'Comment puis-je vous appeler ?',
+    placeholder: 'Votre nom',
+    type: 'text',
+    required: true,
+  },
+  {
+    key: 'email',
+    question: 'Quelle est votre adresse email ?',
+    placeholder: 'exemple@domaine.ch',
+    type: 'email',
+    required: true,
+    validate: (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email),
+    errorMessage: 'Veuillez entrer une adresse email valide',
+  },
+  {
+    key: 'phone',
+    question: 'Et votre numéro de téléphone ?',
+    placeholder: 'Votre numéro de téléphone',
+    type: 'tel',
+    required: true,
+  },
+  {
+    key: 'company',
+    question: 'Quel est le nom de votre entreprise ?',
+    placeholder: 'Nom de votre entreprise',
+    type: 'text',
+    required: true,
+  },
+  {
+    key: 'website',
+    question: 'Avez-vous déjà un site web ?',
+    placeholder: 'www.votresite.com (optionnel)',
+    type: 'url',
+    required: false,
+  },
+  {
+    key: 'projectType',
+    question: 'Quel type de site souhaitez-vous ?',
+    type: 'select',
+    options: [
+      'Site vitrine classique',
+      'Site avec blog',
+      'Site avec portfolio',
+      'Site avec réservation',
+      'Autre',
+    ],
+    required: true,
+  },
+  {
+    key: 'timeline',
+    question: 'Quand souhaitez-vous commencer ?',
+    type: 'select',
+    options: [
+      'Immédiatement',
+      'Dans les 2 semaines',
+      'Dans le mois',
+      'Dans les 3 mois',
+      'Pas encore décidé',
+    ],
+    required: true,
+  },
+  {
+    key: 'availability',
+    question: 'Quelles sont vos disponibilités pour échanger sur votre projet ?',
+    type: 'select',
+    options: [
+      'En matinée (9h-12h)',
+      'En après-midi (14h-17h)',
+      'En soirée (17h-19h)',
+      'Flexible',
+    ],
+    required: true,
+  },
+  {
+    key: 'wantsBranding',
+    question: 'Souhaitez-vous également une charte graphique complète pour votre marque ? (799 CHF)',
+    type: 'select',
+    options: [
+      'Oui, je suis intéressé(e)',
+      'Non merci'
+    ],
+    required: true,
+  },
+  {
+    key: 'message',
+    question: 'Avez-vous des détails supplémentaires à partager ?',
+    placeholder: 'Parlez-nous de votre projet...',
+    type: 'textarea',
+    required: false,
+  },
+];
+
+type FormData = { [key: string]: string };
+
 const Contact: React.FC = () => {
   const navigate = useNavigate();
+  const formRef = useRef<HTMLFormElement>(null);
   const [step, setStep] = useState(0);
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     phone: '',
-    availability: '',
     company: '',
     website: '',
     projectType: '',
     timeline: '',
+    availability: '',
     wantsBranding: '',
-    budget: '',
     message: '',
-    provenance: 'Suisse'
+    provenance: 'Suisse',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
-  const formRef = useRef<HTMLFormElement>(null);
+  const [emailError, setEmailError] = useState('');
 
-  const validateEmail = (email: string) => {
-    const re = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    return re.test(email);
-  };
-
-  const questions = [
-    {
-      key: 'name',
-      question: 'Comment puis-je vous appeler ?',
-      placeholder: 'Votre nom',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'email',
-      question: 'Quelle est votre adresse email ?',
-      placeholder: 'exemple@domaine.ch',
-      type: 'email',
-      required: true,
-      validate: validateEmail,
-      errorMessage: 'Veuillez entrer une adresse email valide'
-    },
-    {
-      key: 'phone',
-      question: 'Et votre numéro de téléphone ?',
-      placeholder: 'Votre numéro de téléphone',
-      type: 'tel',
-      required: true,
-    },
-    {
-      key: 'company',
-      question: 'Quel est le nom de votre entreprise ?',
-      placeholder: 'Nom de votre entreprise',
-      type: 'text',
-      required: true,
-    },
-    {
-      key: 'website',
-      question: 'Avez-vous déjà un site web ?',
-      placeholder: 'www.votresite.com (optionnel)',
-      type: 'url',
-      required: false,
-    },
-    {
-      key: 'projectType',
-      question: 'Quel type de site souhaitez-vous ?',
-      type: 'select',
-      options: [
-        'Site vitrine classique',
-        'Site avec blog',
-        'Site avec portfolio',
-        'Site avec réservation',
-        'Autre',
-      ],
-      required: true,
-    },
-    {
-      key: 'timeline',
-      question: 'Quand souhaitez-vous commencer ?',
-      type: 'select',
-      options: [
-        'Immédiatement',
-        'Dans les 2 semaines',
-        'Dans le mois',
-        'Dans les 3 mois',
-        'Pas encore décidé',
-      ],
-      required: true,
-    },
-    {
-      key: 'availability',
-      question: 'Quelles sont vos disponibilités pour échanger sur votre projet ?',
-      type: 'select',
-      options: [
-        'En matinée (9h-12h)',
-        'En après-midi (14h-17h)',
-        'En soirée (17h-19h)',
-        'Flexible',
-      ],
-      required: true,
-    },
-    {
-      key: 'wantsBranding',
-      question: 'Souhaitez-vous également une charte graphique complète pour votre marque ? (799 CHF)',
-      type: 'select',
-      options: [
-        'Oui, je suis intéressé(e)',
-        'Non merci'
-      ],
-      required: true,
-    },
-    {
-      key: 'message',
-      question: 'Avez-vous des détails supplémentaires à partager ?',
-      placeholder: 'Parlez-nous de votre projet...',
-      type: 'textarea',
-      required: false,
-    },
-  ];
-
-  const handleKeyPress = (e: KeyboardEvent) => {
+  // Gestion individuelle du onKeyDown sur les champs (pour éviter de soumettre sur le dernier champ)
+  const handleFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      e.preventDefault();
-      // Only proceed if we're not on the last step
-      if (step === questions.length - 1) {
-        return;
+      // Si ce n'est pas le dernier champ, on passe à l'étape suivante
+      if (step < questions.length - 1) {
+        e.preventDefault();
+        const currentQ = questions[step];
+        const value = formData[currentQ.key];
+        if (currentQ.required && !value) return;
+        if (currentQ.validate && !currentQ.validate(value)) return;
+        handleNext();
       }
-      
-      const currentQuestion = questions[step];
-      const value = formData[currentQuestion.key as keyof typeof formData];
-      
-      if (currentQuestion.required && !value) {
-        return;
-      }
-      
-      if (currentQuestion.validate && !currentQuestion.validate(value as string)) {
-        return;
-      }
-
-      handleNext();
+      // Sinon, laissez Enter pour permettre une nouvelle ligne dans textarea si besoin
     }
   };
 
-  useEffect(() => {
-    window.addEventListener('keypress', handleKeyPress);
-    return () => window.removeEventListener('keypress', handleKeyPress);
-  }, [step]);
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleNext = () => {
-    const currentQuestion = questions[step];
-    const value = formData[currentQuestion.key as keyof typeof formData];
-    
-    if (currentQuestion.required && !value) {
-      return;
-    }
-    
-    if (currentQuestion.validate && !currentQuestion.validate(value as string)) {
-      return;
-    }
-    
-    if (step < questions.length - 1) {
-      setStep(step + 1);
-    }
+    const currentQ = questions[step];
+    const value = formData[currentQ.key];
+    if (currentQ.required && !value) return;
+    if (currentQ.validate && !currentQ.validate(value)) return;
+    if (step < questions.length - 1) setStep(step + 1);
   };
 
   const handleBack = () => {
-    if (step > 0) {
-      setStep(step - 1);
-    }
+    if (step > 0) setStep(step - 1);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-
     try {
       await emailjs.sendForm(
         'service_5dmv8dr',
@@ -201,15 +185,13 @@ const Contact: React.FC = () => {
     }
   };
 
+  const currentQuestion = questions[step];
+
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-black">
       {/* Form Section */}
       <div className="flex-1 flex items-center justify-center p-4 pt-20 lg:pt-4">
-        <form
-          ref={formRef}
-          onSubmit={handleSubmit}
-          className="max-w-xl w-full space-y-4 sm:space-y-8"
-        >
+        <form ref={formRef} onSubmit={handleSubmit} className="max-w-xl w-full space-y-4 sm:space-y-8">
           <div className="bg-white/5 p-4 sm:p-6 md:p-8 rounded-2xl backdrop-blur-sm">
             <div className="mb-8">
               <div className="flex items-center justify-between mb-2">
@@ -231,36 +213,30 @@ const Contact: React.FC = () => {
                 />
               </div>
             </div>
-
+  
             <div className="space-y-6">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">{questions[step].question}</h2>
-              <p className="hidden md:block text-sm text-gray-400 mb-6">
-                Appuyez sur <kbd className="px-2 py-1 bg-white/10 rounded-md">Entrée ↵</kbd> pour continuer
-              </p>
-              
-              {questions[step].errorMessage && questions[step].validate && formData[questions[step].key] && 
-               !questions[step].validate(formData[questions[step].key]) && (
-                <div className="text-red-500 mb-4">{questions[step].errorMessage}</div>
+              <h2 className="text-xl sm:text-2xl font-bold mb-4">{currentQuestion.question}</h2>
+  
+              {currentQuestion.errorMessage &&
+                currentQuestion.validate &&
+                formData[currentQuestion.key] &&
+                !currentQuestion.validate(formData[currentQuestion.key]) && (
+                  <div className="text-red-500 mb-4">{currentQuestion.errorMessage}</div>
               )}
-              
-              {questions[step].type === 'select' ? (
+  
+              {currentQuestion.type === 'select' ? (
                 <div className="grid gap-3">
-                  {questions[step].options!.map((option) => (
+                  {currentQuestion.options!.map((option) => (
                     <button
                       key={option}
                       type="button"
-                      className={`text-left p-4 rounded-xl border transition-all ${
-                        formData[questions[step].key as keyof typeof formData] === option
+                      className={`text-left p-4 rounded-xl border transition-all text-sm sm:text-base ${
+                        formData[currentQuestion.key] === option
                           ? 'border-[#B026FF] bg-[#B026FF]/10'
                           : 'border-white/10 hover:border-white/30'
-                      } text-sm sm:text-base`}
+                      }`}
                       onClick={() => {
-                        handleInputChange({
-                          target: {
-                            name: questions[step].key,
-                            value: option,
-                          },
-                        } as React.ChangeEvent<HTMLInputElement>);
+                        setFormData({ ...formData, [currentQuestion.key]: option });
                         setTimeout(handleNext, 300);
                       }}
                     >
@@ -268,47 +244,54 @@ const Contact: React.FC = () => {
                     </button>
                   ))}
                 </div>
-              ) : questions[step].type === 'textarea' ? (
+              ) : currentQuestion.type === 'textarea' ? (
                 <textarea
-                  name={questions[step].key}
-                  value={formData[questions[step].key as keyof typeof formData]}
+                  name={currentQuestion.key}
+                  value={formData[currentQuestion.key]}
                   onChange={handleInputChange}
-                  placeholder={questions[step].placeholder}
+                  onKeyDown={handleFieldKeyDown}
+                  placeholder={currentQuestion.placeholder}
                   className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors min-h-[120px] sm:min-h-[150px] text-sm sm:text-base"
-                  required={questions[step].required}
+                  required={currentQuestion.required}
                 />
               ) : (
                 <input
-                  type={questions[step].type}
-                  name={questions[step].key}
-                  value={formData[questions[step].key as keyof typeof formData]}
+                  type={currentQuestion.type}
+                  name={currentQuestion.key}
+                  value={formData[currentQuestion.key]}
                   onChange={handleInputChange}
-                  placeholder={questions[step].placeholder}
+                  onKeyDown={handleFieldKeyDown}
+                  placeholder={currentQuestion.placeholder}
                   className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors text-sm sm:text-base"
-                  required={questions[step].required}
-                  pattern={questions[step].type === 'email' ? '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$' : undefined}
+                  required={currentQuestion.required}
+                  pattern={currentQuestion.type === 'email' ? '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$' : undefined}
                 />
               )}
-
-              <input 
-                type="hidden" 
-                name="provenance" 
-                value={formData.provenance} 
-              />
-
+  
+              {/* Inputs cachés pour envoyer toutes les valeurs avec emailjs */}
+              {Object.keys(formData).map((key) => (
+                !questions.find((q) => q.key === key) && (
+                  <input key={key} type="hidden" name={key} value={formData[key]} />
+                )
+              ))}
+              {/* Pour être sûr d'envoyer tous les champs, on va insérer aussi chaque champ même s'il n'est pas affiché */}
+              {Object.entries(formData).map(([key, value]) => (
+                <input key={key} type="hidden" name={key} value={value} />
+              ))}
+  
               {step < questions.length - 1 ? (
                 <button
                   type="button"
                   onClick={handleNext}
                   className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    (questions[step].required && !formData[questions[step].key as keyof typeof formData]) ||
-                    (questions[step].validate && !questions[step].validate(formData[questions[step].key])) 
-                      ? 'opacity-50 cursor-not-allowed' 
+                    (currentQuestion.required && !formData[currentQuestion.key]) ||
+                    (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]))
+                      ? 'opacity-50 cursor-not-allowed'
                       : ''
                   }`}
                   disabled={
-                    (questions[step].required && !formData[questions[step].key as keyof typeof formData]) ||
-                    (questions[step].validate && !questions[step].validate(formData[questions[step].key]))
+                    (currentQuestion.required && !formData[currentQuestion.key]) ||
+                    (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]))
                   }
                 >
                   Continuer
@@ -318,9 +301,9 @@ const Contact: React.FC = () => {
                 <button
                   type="submit"
                   className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    isSubmitting || !formData[questions[step].key as keyof typeof formData] ? 'opacity-50 cursor-not-allowed' : ''
+                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
-                  disabled={isSubmitting || !formData[questions[step].key as keyof typeof formData]}
+                  disabled={isSubmitting}
                 >
                   {isSubmitting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
@@ -336,16 +319,18 @@ const Contact: React.FC = () => {
           </div>
         </form>
       </div>
-
+  
       {/* Info Section */}
       <div className="w-full lg:w-96 bg-[#B026FF]/5 p-4 sm:p-6 lg:p-12">
         <div className="sticky top-20 lg:top-24">
           <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Votre site web sur mesure</h2>
           <div className="space-y-6 text-gray-300">
             <p className="text-sm sm:text-base">
-              Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité. 
+              Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité.
               {formData.wantsBranding === 'Oui, je suis intéressé(e)' && (
-                <span className="block mt-2 text-[#B026FF]">+ 799 CHF pour votre charte graphique personnalisée</span>
+                <span className="block mt-2 text-[#B026FF]">
+                  + 799 CHF pour votre charte graphique personnalisée
+                </span>
               )}
             </p>
             <ul className="space-y-3 sm:space-y-4">
@@ -362,7 +347,7 @@ const Contact: React.FC = () => {
                 <span className="text-sm sm:text-base">Paiement uniquement si satisfait</span>
               </li>
             </ul>
-
+  
             <div className="border-t border-white/10 pt-4 sm:pt-6 mt-6 sm:mt-8">
               <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Contactez-nous directement</h3>
               <div className="space-y-3 sm:space-y-4">
