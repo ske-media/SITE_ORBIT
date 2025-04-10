@@ -8,6 +8,7 @@ import Home from './pages/Home';
 import Contact from './pages/Contact';
 import LegalNotice from './pages/LegalNotice';
 import PrivacyPolicy from './pages/PrivacyPolicy';
+import Success from './pages/Success';
 import Partnership from './pages/Partnership';
 import StrapiBlog from './pages/StrapiBlog';
 import StrapiArticlePage from './pages/StrapiArticlePage';
@@ -197,6 +198,7 @@ function App() {
             <Route path="/mentions-legales" element={<LegalNotice />} />
             <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
             <Route path="/devenir-partenaire" element={<Partnership />} />
+            <Route path="/success" element={<Success />} />
             <Route path="/blog" element={<StrapiBlog />} />
             <Route path="/blog/:slug" element={<StrapiArticlePage />} />
             <Route path="*" element={<Home />} />

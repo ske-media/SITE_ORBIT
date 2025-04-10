@@ -12,6 +12,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.39.7",
     "axios": "^1.8.4",
+    "@emailjs/browser": "^4.3.3",
     "date-fns": "^4.1.0",
     "lucide-react": "^0.344.0",
     "react": "^18.3.1",
