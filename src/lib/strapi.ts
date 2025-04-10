@@ -90,39 +90,49 @@ export const getPortfolioSiteBySlug = async (slug: string) => {
 
 /* ========== HELPERS ========== */
 
-// Construit l'URL complète d'un média
-export const getStrapiMediaUrl = (url: string | null) => {
-  if (!url) return null;
+export const getStrapiMediaUrl = (url: string | null): string | null => {
+  if (!url || typeof url !== 'string') {
+    console.warn('getStrapiMediaUrl: URL is null or not a string:', url);
+    return null;
+  }
   
-  // Si l'URL est absolue, la renvoyer telle quelle
-  if (url.startsWith('http://') || url.startsWith('https://')) {
+  // Si l'URL est absolue, la retourner directement
+  if (/^https?:\/\//i.test(url)) {
     return url;
   }
   
-  // Pour une URL relative, on la préfixe avec l'URL de base (sans le suffixe /api)
-  const baseUrl = STRAPI_API_URL.endsWith('/api')
-    ? STRAPI_API_URL.slice(0, -4)
-    : STRAPI_API_URL;
+  // Déterminer la base URL en supprimant le suffixe /api si présent et en supprimant le slash final
+  let baseUrl = STRAPI_API_URL;
+  if (baseUrl.endsWith('/api')) {
+    baseUrl = baseUrl.slice(0, -4);
+  }
+  if (baseUrl.endsWith('/')) {
+    baseUrl = baseUrl.slice(0, -1);
+  }
   
-  console.log('Image URL constructed:', `${baseUrl}${url}`);
-  return `${baseUrl}${url}`;
+  // S'assurer que l'URL relative commence par un slash
+  const relativeUrl = url.startsWith('/') ? url : '/' + url;
+  
+  const fullUrl = baseUrl + relativeUrl;
+  console.log('Image URL constructed:', fullUrl);
+  return fullUrl;
 };
 
-// Fonction de test pour vérifier la connexion à Strapi
-export const testStrapiConnection = async () => {
+export const testStrapiConnection = async (): Promise<{ success: boolean; message: string; data?: any; error?: any }> => {
   try {
     const response = await strapiClient.get('/articles?pagination[pageSize]=1');
+    console.log('testStrapiConnection: Connection successful');
     return {
       success: true,
       message: 'Connection successful',
       data: response.data,
     };
-  } catch (error) {
+  } catch (error: any) {
     console.error('Strapi connection test failed:', error);
     return {
       success: false,
-      message: error instanceof Error ? error.message : 'Unknown error',
-      error,
+      message: error?.message || 'Unknown error',
+      error: error,
     };
   }
 };

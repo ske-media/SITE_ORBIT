@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Rocket, Check, Globe2, Zap, Shield, Clock, Mail, ChevronDown, ArrowRight, Monitor, Smartphone, Settings, Users, ArrowUp, Timer, CreditCard, Pencil } from 'lucide-react';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
-import Footer from '../components/Footer';
+import Portfolio from '../components/Portfolio';
 
 function Home() {
   const [email, setEmail] = useState('');

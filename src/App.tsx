@@ -18,6 +18,25 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // Fonction pour scroller vers une ancre sur la homepage
+  const scrollToAnchor = (anchor: string) => {
+    // Si l'utilisateur n'est pas sur la homepage, on y navigue d'abord
+    if (location.pathname !== '/') {
+      navigate('/', { replace: true });
+      setTimeout(() => {
+        const element = document.getElementById(anchor);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 200);
+    } else {
+      const element = document.getElementById(anchor);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+  };
+
   // Redirige vers la page Contact lors du clic sur "Décoller"
   const handleStartClick = () => {
     navigate('/contact');
@@ -39,24 +58,62 @@ function App() {
                 </Link>
               </div>
               <div className="hidden md:flex items-center space-x-8">
-                <a href="#why-choose-us" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <a
+                  href="#why-choose-us"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('why-choose-us');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   Pourquoi Nous
                 </a>
-                <a href="#process" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <a
+                  href="#process"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('process');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   Processus
                 </a>
-                <a href="#pricing" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <a
+                  href="#pricing"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('pricing');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   Tarifs
                 </a>
-                <a href="#team" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <a
+                  href="#team"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('team');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   L'Équipe
                 </a>
-                <Link to="/blog" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <Link
+                  to="/blog"
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   Blog
                 </Link>
-                <Link to="/portfolio" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                <a
+                  href="#portfolio"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('portfolio');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
                   Portfolio
-                </Link>
+                </a>
                 <button className="cta-button" onClick={handleStartClick}>
                   <span className="uppercase tracking-wider text-sm font-medium text-white">Décoller</span>
                 </button>
@@ -72,24 +129,62 @@ function App() {
           {/* Menu mobile */}
           <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
             <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-sm">
-              <a href="#why-choose-us" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <a
+                href="#why-choose-us"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('why-choose-us');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 Pourquoi Nous
               </a>
-              <a href="#process" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <a
+                href="#process"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('process');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 Processus
               </a>
-              <a href="#pricing" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <a
+                href="#pricing"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('pricing');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 Tarifs
               </a>
-              <a href="#team" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <a
+                href="#team"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('team');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 L'Équipe
               </a>
-              <Link to="/blog" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <Link
+                to="/blog"
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 Blog
               </Link>
-              <Link to="/portfolio" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+              <a
+                href="#portfolio"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('portfolio');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
                 Portfolio
-              </Link>
+              </a>
             </div>
           </div>
         </nav>

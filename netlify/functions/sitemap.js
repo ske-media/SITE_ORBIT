@@ -9,9 +9,11 @@ exports.handler = async (event, context) => {
     const blogResponse = await axios.get('https://siteorbit-cms-production.up.railway.app/api/articles?populate=*');
     const blogArticles = blogResponse.data.data;
 
+   /*
     // Requête pour récupérer les articles SEO
     const seoResponse = await axios.get('https://siteorbit-cms-production.up.railway.app/api/seos?populate=*');
     const seoArticles = seoResponse.data.data;
+                                                */
     
     // Début de la construction du sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
@@ -26,11 +28,12 @@ exports.handler = async (event, context) => {
       xml += `  <url>\n    <loc>${baseUrl}/blog/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
     });
     
+    /*
     // Ajout des articles SEO
     seoArticles.forEach(article => {
       const slug = article.attributes.slug;
       xml += `  <url>\n    <loc>${baseUrl}/seo-blog/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
-    });
+    }); */
     
     xml += '</urlset>';
     
