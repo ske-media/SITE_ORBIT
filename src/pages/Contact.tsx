@@ -127,11 +127,23 @@ const Contact: React.FC = () => {
   const handleKeyPress = (e: KeyboardEvent) => {
     if (e.key === 'Enter') {
       e.preventDefault();
+      // Only proceed if we're not on the last step
       if (step === questions.length - 1) {
-        formRef.current?.requestSubmit();
-      } else {
-        handleNext();
+        return;
       }
+      
+      const currentQuestion = questions[step];
+      const value = formData[currentQuestion.key as keyof typeof formData];
+      
+      if (currentQuestion.required && !value) {
+        return;
+      }
+      
+      if (currentQuestion.validate && !currentQuestion.validate(value as string)) {
+        return;
+      }
+
+      handleNext();
     }
   };
 
@@ -222,7 +234,7 @@ const Contact: React.FC = () => {
 
             <div className="space-y-6">
               <h2 className="text-xl sm:text-2xl font-bold mb-4">{questions[step].question}</h2>
-              <p className="text-sm text-gray-400 mb-6">
+              <p className="hidden md:block text-sm text-gray-400 mb-6">
                 Appuyez sur <kbd className="px-2 py-1 bg-white/10 rounded-md">Entrée ↵</kbd> pour continuer
               </p>
               
@@ -306,9 +318,9 @@ const Contact: React.FC = () => {
                 <button
                   type="submit"
                   className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+                    isSubmitting || !formData[questions[step].key as keyof typeof formData] ? 'opacity-50 cursor-not-allowed' : ''
                   }`}
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || !formData[questions[step].key as keyof typeof formData]}
                 >
                   {isSubmitting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
