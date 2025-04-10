@@ -3,7 +3,7 @@ const axios = require('axios');
 exports.handler = async (event, context) => {
   try {
     // URL de base du site
-    const baseUrl = 'https://agence-orbit.com';
+    const baseUrl = 'https://agence-orbit.com/';
     
     // Requête pour récupérer les articles destin
     const blogResponse = await axios.get('https://siteorbit-cms-production.up.railway.app/api/articles?populate=*');
