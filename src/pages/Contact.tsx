@@ -109,6 +109,19 @@ const questions: Question[] = [
     type: 'textarea',
     required: false,
   },
+  {
+    key: 'source',
+    question: 'Comment avez-vous entendu parler de nous ?',
+    type: 'select',
+    options: [
+      'Recherche Google',
+      'Réseaux sociaux',
+      'Bouche à oreille',
+      'Recommandation',
+      'Autre'
+    ],
+    required: true,
+  },
 ];
 
 type FormData = { [key: string]: string };
@@ -129,6 +142,7 @@ const Contact: React.FC = () => {
     wantsBranding: '',
     message: '',
     provenance: 'Suisse',
+    source: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [emailError, setEmailError] = useState('');
@@ -169,6 +183,32 @@ const Contact: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Vérifier que tous les champs requis sont remplis
+    const hasEmptyRequiredFields = questions
+      .filter(q => q.required)
+      .some(q => !formData[q.key]);
+
+    if (hasEmptyRequiredFields) {
+      console.log('Des champs requis sont manquants');
+      return;
+    }
+
+    // Vérifier si nous sommes bien sur le dernier champ
+    if (step !== questions.length - 1) {
+      console.log('Tentative de soumission avant le dernier champ');
+      return;
+    }
+
+    // Vérifier spécifiquement le dernier champ
+    const lastQuestion = questions[questions.length - 1];
+    for (const question of questions) {
+      if (question.required && !formData[question.key]) {
+        console.log(`Champ requis manquant: ${question.key}`);
+        return;
+      }
+    }
+
     setIsSubmitting(true);
     try {
       await emailjs.sendForm(
@@ -186,6 +226,17 @@ const Contact: React.FC = () => {
   };
 
   const currentQuestion = questions[step];
+
+  // Calculer si le bouton doit être désactivé
+  const isButtonDisabled = 
+    (currentQuestion.required && !formData[currentQuestion.key]) ||
+    (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]));
+
+  // Désactiver le bouton d'envoi si tous les champs requis ne sont pas remplis
+  const isSubmitDisabled = step === questions.length - 1 && (
+    questions.some(q => q.required && !formData[q.key]) ||
+    isSubmitting
+  );
 
   return (
     <div className="min-h-screen flex flex-col lg:flex-row bg-black">
@@ -283,16 +334,8 @@ const Contact: React.FC = () => {
                 <button
                   type="button"
                   onClick={handleNext}
-                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    (currentQuestion.required && !formData[currentQuestion.key]) ||
-                    (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]))
-                      ? 'opacity-50 cursor-not-allowed'
-                      : ''
-                  }`}
-                  disabled={
-                    (currentQuestion.required && !formData[currentQuestion.key]) ||
-                    (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]))
-                  }
+                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isButtonDisabled}
                 >
                   Continuer
                   <ArrowRight className="w-5 h-5" />
@@ -300,10 +343,8 @@ const Contact: React.FC = () => {
               ) : (
                 <button
                   type="submit"
-                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    isSubmitting ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                  disabled={isSubmitting}
+                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  disabled={isSubmitDisabled}
                 >
                   {isSubmitting ? (
                     <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
@@ -367,8 +408,7 @@ const Contact: React.FC = () => {
                 </a>
                 <div className="flex items-center gap-3 text-gray-400">
                   <MapPin className="w-5 h-5" />
-                  420 Route de Saint-Julien, 74520 Valleiry
-                </div>
+Genève                </div>
               </div>
             </div>
           </div>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Rocket, Check, Globe2, Zap, Shield, Clock, Mail, ChevronDown, ArrowRight, Monitor, Smartphone, Settings, Users, ArrowUp, Timer, CreditCard, Pencil } from 'lucide-react';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
-import Portfolio from '../components/Portfolio';
+import PortfolioSection from '../components/PortfolioSection';
 
 function Home() {
   const [email, setEmail] = useState('');
@@ -273,6 +273,8 @@ function Home() {
           </p>
         </div>
       </section>
+      
+      <PortfolioSection />
       
       {/* Services */}
       <section id="services" className="py-20">
@@ -759,7 +761,7 @@ function Home() {
                 <h3 className="text-2xl font-semibold mb-4 text-[#B026FF]">{service.title}</h3>
                 <p className="text-gray-400 mb-6">{service.description}</p>
                 <Link 
-                  to="/contact-complex"
+                  to="/contact"
                   className="inline-flex items-center text-white hover:text-[#B026FF] transition-colors"
                 >
                   En savoir plus
@@ -771,10 +773,10 @@ function Home() {
 
           <div className="text-center">
             <Link
-              to="/contact-complex"
+              to="/contact"
               className="inline-flex items-center gap-2 bg-[#B026FF] px-8 py-4 rounded-full text-lg font-medium hover:bg-[#B026FF]/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95"
             >
-              Démarrer un projet complexe
+              Démarrer votre projet
               <Rocket className="h-5 w-5" />
             </Link>
           </div>
