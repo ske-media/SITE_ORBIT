@@ -780,84 +780,7 @@ function Home() {
         </div>
       </section>
 
-      {/* Latest Blog Posts
-      <section className="py-20 bg-gradient-to-b from-transparent to-[#B026FF]/5">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="max-w-4xl mx-auto text-center mb-12">
-            <h2 className="text-4xl font-bold gradient-text mb-6">Derniers Articles</h2>
-            <p className="text-xl text-gray-300">
-              Découvrez nos derniers articles sur le web design, le marketing digital et les tendances du numérique
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {[
-              {
-                title: "Comment créer un site web qui convertit ?",
-                excerpt: "Découvrez les éléments clés pour transformer vos visiteurs en clients grâce à un design stratégique et une expérience utilisateur optimisée.",
-                image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop",
-                category: "Design Web",
-                readingTime: "5"
-              },
-              {
-                title: "Les tendances du web design en 2024",
-                excerpt: "Explorez les dernières innovations en matière de design web : minimalisme, animations subtiles, et expériences immersives.",
-                image: "https://images.unsplash.com/photo-1547658719-da2b51169166?q=80&w=2264&auto=format&fit=crop",
-                category: "Tendances",
-                readingTime: "4"
-              },
-              {
-                title: "SEO : les bonnes pratiques pour être visible",
-                excerpt: "Guide complet pour améliorer votre référencement naturel et augmenter votre visibilité sur les moteurs de recherche.",
-                image: "https://images.unsplash.com/photo-1432888622747-4eb9a8f1fadc?q=80&w=2274&auto=format&fit=crop",
-                category: "SEO",
-                readingTime: "6"
-              }
-            ].map((post, index) => (
-              <Link
-                key={index}
-                to="/blog"
-                className="bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
-              >
-                <div className="relative aspect-video overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt={post.title}
-                    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-                  />
-                  <div className="absolute top-4 left-4 bg-[#B026FF] text-white px-3 py-1 rounded-full text-sm">
-                    {post.category}
-                  </div>
-                </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">
-                    {post.title}
-                  </h3>
-                  <p className="text-gray-400 mb-4 line-clamp-2">
-                    {post.excerpt}
-                  </p>
-                  <div className="flex items-center text-sm text-gray-400">
-                    <Clock className="h-4 w-4 mr-1" />
-                    {post.readingTime} min de lecture
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
-
-          <div className="text-center">
-            <Link
-              to="/blog"
-              className="inline-flex items-center gap-2 bg-[#B026FF] px-8 py-4 rounded-full text-lg font-medium hover:bg-[#B026FF]/80 transition-all transform hover:scale-105 hover:shadow-[0_0_20px_rgba(176,38,255,0.4)] active:scale-95"
-            >
-              Voir tous les articles
-              <ArrowRight className="h-5 w-5" />
-            </Link>
-          </div>
-        </div>
-      </section>*/}
-
-      {/* Footer */}
+           {/* Footer */}
       <footer className="relative overflow-hidden border-t border-[#B026FF]/20 bg-gradient-to-b from-black to-[#B026FF]/10">
         <div className="max-w-7xl mx-auto px-4 py-16">
           {/* Animated Background with lower z-index */}
@@ -969,19 +892,7 @@ function Home() {
                 >
                   Politique de confidentialité
                 </Link>
-                <Link 
-                  to="/intranet" 
-                  className="text-gray-400 hover:text-white text-sm transition"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                    setTimeout(() => {
-                      navigate('/intranet');
-                    }, 500);
-                  }}
-                >
-                  Intranet
-                </Link>
+               
                 <Link 
                   to="/devenir-partenaire" 
                   className="text-gray-400 hover:text-white text-sm transition"
