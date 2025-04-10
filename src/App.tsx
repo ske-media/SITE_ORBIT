@@ -3,19 +3,22 @@ import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// Importation des pages essentielles
+// Import des pages
 import Home from './pages/Home';
+import Contact from './pages/Contact';
 import LegalNotice from './pages/LegalNotice';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import Partnership from './pages/Partnership';
-import Contact from './pages/Contact';
+import StrapiBlog from './pages/StrapiBlog';
+import StrapiArticlePage from './pages/StrapiArticlePage';
+import Footer from './components/Footer';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Lorsque le bouton "Décoller" est cliqué, on redirige vers la page Contact
+  // Redirige vers la page Contact lors du clic sur "Décoller"
   const handleStartClick = () => {
     navigate('/contact');
   };
@@ -42,15 +45,18 @@ function App() {
                 <a href="#process" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                   Processus
                 </a>
-                <a href="#portfolio" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
-                  Avant/Après
-                </a>
                 <a href="#pricing" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                   Tarifs
                 </a>
                 <a href="#team" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                   L'Équipe
                 </a>
+                <Link to="/blog" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                  Blog
+                </Link>
+                <Link to="/portfolio" className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                  Portfolio
+                </Link>
                 <button className="cta-button" onClick={handleStartClick}>
                   <span className="uppercase tracking-wider text-sm font-medium text-white">Décoller</span>
                 </button>
@@ -72,28 +78,38 @@ function App() {
               <a href="#process" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                 Processus
               </a>
-              <a href="#portfolio" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
-                Avant/Après
-              </a>
               <a href="#pricing" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                 Tarifs
               </a>
               <a href="#team" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
                 L'Équipe
               </a>
+              <Link to="/blog" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                Blog
+              </Link>
+              <Link to="/portfolio" className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition">
+                Portfolio
+              </Link>
             </div>
           </div>
         </nav>
 
-        {/* Routes */}
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/mentions-legales" element={<LegalNotice />} />
-          <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
-          <Route path="/devenir-partenaire" element={<Partnership />} />
-          <Route path="*" element={<Home />} />
-        </Routes>
+        {/* Contenu principal */}
+        <div className="pt-16">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/mentions-legales" element={<LegalNotice />} />
+            <Route path="/politique-de-confidentialite" element={<PrivacyPolicy />} />
+            <Route path="/devenir-partenaire" element={<Partnership />} />
+            <Route path="/blog" element={<StrapiBlog />} />
+            <Route path="/blog/:slug" element={<StrapiArticlePage />} />
+            <Route path="*" element={<Home />} />
+          </Routes>
+        </div>
+
+        {/* Footer toujours affiché */}
+        <Footer />
       </div>
     </HelmetProvider>
   );

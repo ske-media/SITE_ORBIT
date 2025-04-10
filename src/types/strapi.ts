@@ -28,7 +28,7 @@ export interface StrapiMeta {
 }
 
 // ------------------------------
-// TYPES POUR LES IMAGES
+// TYPE POUR LES IMAGES
 // ------------------------------
 export interface StrapiImage {
   data: {
@@ -49,7 +49,7 @@ export interface StrapiImage {
 }
 
 // ------------------------------
-// TYPES POUR LES AUTEURS (DANS LE BLOG DESTIN)
+// TYPES POUR LES AUTEURS (Blog Destin d'entrepreneur)
 // ------------------------------
 export interface StrapiAuthor {
   name: string;
@@ -61,7 +61,7 @@ export interface StrapiAuthor {
 }
 
 // ------------------------------
-// TYPES POUR LES ARTICLES DE BLOG (Destin d'entrepreneur)
+// TYPE POUR LES ARTICLES DE BLOG (Destin d'entrepreneur)
 // ------------------------------
 export interface StrapiArticle {
   title: string;
@@ -78,25 +78,7 @@ export interface StrapiArticle {
 }
 
 // ------------------------------
-// TYPES POUR LES ARTICLES SEO
-// (Structure basée sur votre table "seos" dans Supabase)
-// ------------------------------
-export interface StrapiSeoArticle {
-  Titre: string;         // Titre de l'article SEO
-  slug: string;
-  Contenu: string;       // Le contenu complet
-  excerpt: string;       // Un résumé ou extrait
-  image?: StrapiImage[]; // Si vous gérez une ou plusieurs images (optionnel)
-  Auteur: string;        // Auteur (format texte)
-  Date?: string;         // Date, si vous l'utilisez pour une date alternative
-  publishedAt?: string;  // Date de publication (remarque : Strapi renvoie souvent "publishedAt")
-  createdAt: string;
-  updatedAt: string;
-  Categorie?: string;    // Champ permettant de trier (catégorie)
-}
-
-// ------------------------------
-// TYPES POUR LE PORTFOLIO – SITE WEB
+// TYPE POUR LE PORTFOLIO – SITE WEB
 // ------------------------------
 export interface StrapiPortfolioSiteWeb {
   titre: string;
@@ -110,32 +92,6 @@ export interface StrapiPortfolioSiteWeb {
       };
     }>;
   };
-  client: string;
-  annee: string;
-  lien_projet: string;
-  description?: string;
-}
-
-// ------------------------------
-// TYPES POUR LE PORTFOLIO – APPLICATION
-// ------------------------------
-export interface StrapiPortfolioApp {
-  titre: string;
-  slug: string;
-  image_vedette: StrapiImage;
-  client: string;
-  annee: string;
-  lien_projet: string;
-  description?: string;
-}
-
-// ------------------------------
-// TYPES POUR LE PORTFOLIO – RÉSEAUX SOCIAUX
-// ------------------------------
-export interface StrapiPortfolioSocial {
-  titre: string;
-  slug: string;
-  image_vedette: StrapiImage;
   client: string;
   annee: string;
   lien_projet: string;

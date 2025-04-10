@@ -141,7 +141,6 @@ function StrapiBlog() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }
