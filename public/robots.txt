@@ -1,0 +1,9 @@
+User-agent: *
+# Empêcher l'indexation de la page Welcome (utilisée pour le choix du pays)
+Disallow: /welcome
+
+# Autoriser l'exploration de toutes les autres pages du site
+Allow: /
+
+# Indiquer l'URL du sitemap pour faciliter l'indexation par les moteurs de recherche
+Sitemap: https://agence-orbit.com/sitemap.xml

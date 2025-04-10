@@ -16,7 +16,7 @@ import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage'; // Article SEO 
 import StrapiSeoBlog from './pages/StrapiSeoBlog'; // Catalogue des articles SEO
 import StrapiBlog from './pages/StrapiBlog'; // Blog destin
 
-// Pages de contact (répertoire "src/pages/contact")
+// Pages de contact (dans le dossier "src/pages/contact")
 import ContactChoicesPage from './pages/contact/ContactChoicesPage';
 import ContactSiteVitrine from './pages/contact/ContactSiteVitrine';
 import ContactSiteComplexe from './pages/contact/ContactSiteComplexe';
@@ -36,7 +36,7 @@ const FormSuccess = React.lazy(() => import('./pages/FormSuccess'));
 const NotFound = React.lazy(() => import('./pages/NotFound'));
 
 /**
- * Fonction utilitaire pour récupérer la valeur d'un cookie par son nom
+ * Fonction utilitaire pour récupérer la valeur d'un cookie par son nom.
  */
 function getCookie(name: string): string | null {
   const match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -50,7 +50,7 @@ function App() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [appLoaded, setAppLoaded] = useState(false);
 
-  // Loader initial
+  // Loader initial (500ms)
   useEffect(() => {
     const timer = setTimeout(() => {
       setAppLoaded(true);
@@ -58,13 +58,19 @@ function App() {
     return () => clearTimeout(timer);
   }, []);
 
-  // Gestion du cookie "selectedCountry" et redirection initiale
+  // Gestion du cookie "selectedCountry" et redirection conditionnelle
   useEffect(() => {
     const selectedCountry = getCookie('selectedCountry');
-    if (!selectedCountry && location.pathname !== '/welcome') {
-      navigate('/welcome', { replace: true });
-    } else if (selectedCountry && location.pathname === '/welcome') {
-      navigate('/', { replace: true });
+    const currentPath = location.pathname;
+    // On n'applique la redirection que si le chemin ne commence pas par "/welcome" ni par "/seo-blog"
+    if (!selectedCountry && !currentPath.startsWith('/welcome') && !currentPath.startsWith('/seo-blog')) {
+      // Stocker l'URL d'origine dans la query string "redirect"
+      navigate(`/welcome?redirect=${encodeURIComponent(currentPath)}`, { replace: true });
+    } else if (selectedCountry && currentPath === '/welcome') {
+      // Si le cookie existe et l'utilisateur est sur /welcome, récupérer le paramètre "redirect" (s'il existe)
+      const params = new URLSearchParams(location.search);
+      const redirectTo = params.get('redirect') || '/';
+      navigate(redirectTo, { replace: true });
     }
   }, [location, navigate]);
 
@@ -82,7 +88,7 @@ function App() {
     }
   }, [location]);
 
-  // Gestion du scroll pour la barre de progression et le bouton "Back to Top"
+  // Gestion du scroll (barre de progression et bouton "Back to Top")
   useEffect(() => {
     const handleScroll = () => {
       const scrolled = window.scrollY;
@@ -116,15 +122,12 @@ function App() {
         </Helmet>
 
         {/* Barre de progression */}
-        <div
-          className="scroll-progress"
-          style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties}
-        />
+        <div className="scroll-progress" style={{ '--scroll': `${scrollProgress}%` } as React.CSSProperties} />
 
         {/* Arrière-plans globaux */}
-        <div className="fixed inset-0 bg-dark-900 -z-50"></div>
-        <div className="fixed inset-0 grid-background opacity-15 -z-40"></div>
-        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30"></div>
+        <div className="fixed inset-0 bg-dark-900 -z-50" />
+        <div className="fixed inset-0 grid-background opacity-15 -z-40" />
+        <div className="fixed inset-0 bg-noise opacity-[0.02] mix-blend-overlay -z-30" />
 
         {/* Bouton "Back to Top" */}
         <button
@@ -136,8 +139,8 @@ function App() {
         </button>
 
         <div className="flex flex-col min-h-screen">
-          {/* Header et Footer affichés sur toutes les pages sauf Welcome */}
-          {location.pathname !== '/welcome' && <Header />}
+          {/* Afficher Header et Footer sur toutes les pages sauf Welcome */}
+          { !location.pathname.startsWith('/welcome') && <Header /> }
           <main className="flex-grow relative">
             <Suspense fallback={
               <div className="min-h-screen flex items-center justify-center bg-dark-900">
@@ -184,7 +187,7 @@ function App() {
               </AnimatePresence>
             </Suspense>
           </main>
-          {location.pathname !== '/welcome' && <Footer />}
+          { !location.pathname.startsWith('/welcome') && <Footer /> }
         </div>
       </AnalyticsProvider>
     </HelmetProvider>

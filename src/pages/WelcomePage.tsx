@@ -2,8 +2,8 @@
 import React, { useMemo } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import ShootingStar from '../components/ShootingStarManager'; // Vérifiez que le chemin est correct
+import { useNavigate, useLocation } from 'react-router-dom';
+import ShootingStar from '../components/ShootingStarManager';
 
 const NUM_STARS = 400;
 
@@ -67,17 +67,12 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
         className="object-contain w-full"
         style={{ filter: 'brightness(1)' }}
       />
-
       {/* Drapeau français (à gauche) */}
       <motion.img
         src="https://i.imgur.com/Y1Rkp0o.png"
         alt="France"
         className="absolute"
-        style={{
-          width: '9rem',
-          top: '-20%',
-          left: '1%',
-        }}
+        style={{ width: '9rem', top: '-20%', left: '1%' }}
         initial={{ rotate: -15, scale: 1 }}
         whileHover={{
           scale: 1.1,
@@ -85,17 +80,12 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
         }}
         onClick={() => handleCountrySelect('fr')}
       />
-
       {/* Drapeau suisse (à droite) */}
       <motion.img
         src="https://i.imgur.com/deWwaH2.png"
         alt="Suisse"
         className="absolute"
-        style={{
-          width: '10rem',
-          top: '-20%',
-          right: '-20%',
-        }}
+        style={{ width: '10rem', top: '-20%', right: '-20%' }}
         initial={{ rotate: 15, scale: 1 }}
         whileHover={{
           scale: 1.1,
@@ -109,12 +99,15 @@ const MoonAndFlags: React.FC<{ handleCountrySelect: (country: string) => void }>
 
 const WelcomePage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  // Récupère l'URL d'origine via le paramètre "redirect", ou "/" par défaut.
+  const params = new URLSearchParams(location.search);
+  const redirectTo = params.get('redirect') || '/';
 
-  // Modification : on redirige vers la page d'accueil ("/") après avoir enregistré le cookie
+  // Lorsqu’un utilisateur choisit son pays, on enregistre le cookie et on redirige vers l'URL d'origine.
   const handleCountrySelect = (country: string) => {
     document.cookie = `selectedCountry=${country};path=/;max-age=${60 * 60 * 24 * 30}`;
-    // Rediriger vers la page d'accueil plutôt que vers /fr ou /ch
-    navigate(`/`);
+    navigate(redirectTo, { replace: true });
   };
 
   return (
@@ -122,44 +115,50 @@ const WelcomePage: React.FC = () => {
       <Helmet>
         <title>Bienvenue chez Agence Orbit</title>
         <meta name="description" content="Choisissez votre pays pour accéder aux services locaux d'Agence Orbit." />
-        <style>{`
-          html, body {
-            overflow: hidden;
-          }
-        `}</style>
+        {/* Empêcher l'indexation par les moteurs de recherche */}
+        <meta name="robots" content="noindex, nofollow" />
+        <style>{`html, body { overflow: hidden; }`}</style>
       </Helmet>
 
-      {/* Fond animé */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
+      {/* Fond animé avec étoiles et effet de scanning (via ShootingStar) */}
+      <div className="absolute inset-0 pointer-events-none">
         <StarrySky />
         <ShootingStar />
       </div>
 
-      {/* Conteneur principal */}
-      <div className="relative w-screen h-screen overflow-hidden flex items-center justify-center">
-        {/* Titres */}
+      {/* Conteneur principal en plein écran, sans header ni footer */}
+      <div className="relative w-screen h-screen overflow-hidden flex flex-col items-center justify-center">
+        {/* Titres du Hero */}
         <div className="absolute top-8 text-center z-40 px-4">
-          <h1 className="text-4xl md:text-5xl font-extrabold bg-gradient-to-r from-purple-500 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-lg mb-2">
-            Choisissez votre pays
-          </h1>
-          <p className="text-lg md:text-xl text-gray-300 drop-shadow-sm">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+            className="text-4xl md:text-6xl font-extrabold leading-tight tracking-tight mb-4"
+          >
+            <span className="bg-gradient-to-r from-[#B026FF] via-fuchsia-400 to-[#B026FF] bg-clip-text text-transparent drop-shadow-[0_0_10px_rgba(176,38,255,0.6)]">
+              Choisissez votre pays
+            </span>
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.2 }}
+            className="text-lg md:text-2xl text-gray-300"
+          >
             Pour une expérience locale optimale, sélectionnez votre pays.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Lune et drapeaux flottants */}
+        {/* Composant affichant la Lune et les drapeaux */}
         <MoonAndFlags handleCountrySelect={handleCountrySelect} />
 
-        {/* Astronautes */}
+        {/* Éléments décoratifs optionnels (astronautes) */}
         <motion.img
           src="https://i.imgur.com/Yw2O42F.png"
           alt="Astronaute 1"
           className="absolute z-10"
-          style={{
-            width: '11rem',
-            top: '30%',
-            left: '10%',
-          }}
+          style={{ width: '11rem', top: '30%', left: '10%' }}
           variants={floatAnimation}
           animate="float"
         />
@@ -167,11 +166,7 @@ const WelcomePage: React.FC = () => {
           src="https://i.imgur.com/0bsqFHn.png"
           alt="Astronaute 2"
           className="absolute z-10"
-          style={{
-            width: '9.5rem',
-            bottom: '20%',
-            right: '10%',
-          }}
+          style={{ width: '9.5rem', bottom: '20%', right: '10%' }}
           variants={floatAnimation}
           animate="float"
         />
