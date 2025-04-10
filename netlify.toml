@@ -1,8 +1,12 @@
 [build]
-  publish = "dist"
-  command = "npm run build"
+  publish = "dist"         # ou le dossier généré par votre build (par ex. "build")
+  command = "npm run build"  # votre commande de build
+
+[functions]
+  directory = "netlify/functions"
 
 [[redirects]]
-  from = "/*"
-  to = "/index.html"
+  from = "/sitemap.xml"
+  to = "/.netlify/functions/sitemap"
   status = 200
+  force = true
