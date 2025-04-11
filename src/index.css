@@ -580,3 +580,253 @@ footer a {
 .footer-background {
   z-index: 1;
 }
+
+/* Hide reCAPTCHA badge */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}
+
+
+
+
+  /*TRUSTED BY SECTION*/
+
+ /* Variables essentielles */
+:root {
+  --text-gradient-purple: linear-gradient(90deg, #b026ff, #2f73ff);
+}
+
+/* Conteneur futuriste (pour centrer le contenu TrustedBySection) */
+.futuristic-container {
+  position: relative;
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  z-index: 10;
+}
+
+/* Texte avec dégradé (titres de TrustedBySection) */
+.text-gradient-purple {
+  background: var(--text-gradient-purple);
+  background-size: 200% auto;
+  color: transparent;
+  -webkit-background-clip: text;
+  background-clip: text;
+  animation: gradientText 8s ease infinite;
+}
+
+@keyframes gradientText {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Couleur pour textes secondaires */
+.text-surface-300 {
+  color: #b3b3b3;
+}
+
+/* Effets d'arrière-plan pour TrustedBySection */
+
+/* Star field (pour le fond étoilé) */
+.stars-small {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(1px 1px at 20px 30px, white, transparent),
+                    radial-gradient(1px 1px at 40px 70px, white, transparent),
+                    radial-gradient(1px 1px at 50px 160px, white, transparent),
+                    radial-gradient(1px 1px at 90px 40px, white, transparent),
+                    radial-gradient(1px 1px at 130px 80px, white, transparent),
+                    radial-gradient(1px 1px at 160px 120px, white, transparent);
+  background-repeat: repeat;
+  background-size: 200px 200px;
+}
+
+.stars-medium {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(1.5px 1.5px at 150px 150px, white, transparent),
+                    radial-gradient(1.5px 1.5px at 200px 220px, white, transparent),
+                    radial-gradient(1.5px 1.5px at 180px 250px, white, transparent);
+  background-repeat: repeat;
+  background-size: 300px 300px;
+}
+
+.stars-large {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(2px 2px at 300px 300px, white, transparent),
+                    radial-gradient(2px 2px at 400px 400px, white, transparent);
+  background-repeat: repeat;
+  background-size: 500px 500px;
+}
+
+/* Effet de "scanning line" */
+.scanning-line {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.scanning-line::after {
+  content: '';
+  position: absolute;
+  inset-x: 0;
+  height: 150px; /* ou utilisez une variable si souhaité */
+  background: linear-gradient(to bottom, transparent, rgba(176,38,255,0.2), transparent);
+  filter: blur(5px);
+  opacity: 0.3;
+  animation: scanning 3s linear infinite;
+}
+
+@keyframes scanning {
+  from { transform: translateY(-100%); }
+  to { transform: translateY(100%); }
+}
+
+/* Slider (carousel) pour les logos clients */
+.slider-container {
+  overflow: hidden;
+  padding: 1rem 0;
+  margin: 0 auto;
+}
+
+.slider {
+  display: flex;
+  align-items: center;
+  animation: scroll 20s linear infinite;
+  width: fit-content;
+}
+
+/* Double the content for seamless loop */
+.testimonial-track {
+  display: flex;
+  gap: 2rem;
+  padding: 0.5rem;
+  animation: scrollTestimonials 60s linear infinite;
+  width: max-content;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+.testimonial-track-reverse {
+  display: flex;
+  gap: 2rem;
+  padding: 0.5rem;
+  animation: scrollTestimonialsReverse 60s linear infinite;
+  width: max-content;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes scrollTestimonials {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+@keyframes scrollTestimonialsReverse {
+  from { transform: translateX(-50%); }
+  to { transform: translateX(0); }
+}
+
+.testimonial-container {
+  overflow: hidden;
+  position: relative;
+  padding: 1rem 0;
+  max-width: 95%;
+  margin: 0 auto;
+}
+
+/* Ajustements mobiles */
+@media (max-width: 768px) {
+  .testimonial-container {
+    padding: 0.5rem 0;
+  }
+  
+  .testimonial-track {
+    animation: scrollTestimonials 30s linear infinite;
+  }
+}
+
+.testimonial-container::before,
+.testimonial-container::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50px;
+  @media (min-width: 768px) {
+    width: 100px;
+  }
+  z-index: 2;
+  pointer-events: none;
+}
+
+.testimonial-container::before {
+  left: 0;
+  background: linear-gradient(to right, black, transparent);
+}
+
+.testimonial-container::after {
+  right: 0;
+  background: linear-gradient(to left, black, transparent);
+}
+@keyframes slideLeft {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(calc(-100% - 2rem)); }
+}
+
+@keyframes slideRight {
+  0% { transform: translateX(calc(-100% - 2rem)); }
+  100% { transform: translateX(0); }
+}
+
+.animate-slide-left {
+  animation: slideLeft 20s linear infinite;
+}
+
+.animate-slide-right {
+  animation: slideRight 20s linear infinite;
+}
+
+.animate-slide-left:hover,
+.animate-slide-right:hover {
+  animation-play-state: paused;
+}
+
+.slide {
+  flex: 0 0 auto;
+  width: 140px;
+  margin: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    /* Ajustez selon le nombre de slides et l'espacement */
+    transform: translateX(calc(-140px * 7 - 7 * 80px));
+  }
+}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Rocket, Check, Globe2, Zap, Shield, Clock, Mail, ChevronDown, ArrowRight, Monitor, Smartphone, Settings, Users, ArrowUp, Timer, CreditCard, Pencil } from 'lucide-react';
+import TrustedBySection from '../components/TrustedBySection';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import PortfolioSection from '../components/PortfolioSection';
 
@@ -94,6 +95,10 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* TrustedBy Section */}
+        <TrustedBySection />
+
       
       <section id="orbit-effect" className="py-20">
         <div className="max-w-4xl mx-auto px-4 text-center">
@@ -124,6 +129,8 @@ function Home() {
         </div>
       </section>
 
+      
+      
       {/* Why Choose Us */}
       <section id="why-choose-us" className="py-20 bg-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

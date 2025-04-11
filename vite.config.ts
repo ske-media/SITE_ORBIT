@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import { compression } from 'vite-plugin-compression2';
 
-// https://vitejs.dev/config/
+
 export default defineConfig({
   plugins: [
     react(),
@@ -28,7 +28,7 @@ export default defineConfig({
     },
     rollupOptions: {
       output: {
-        manualChunks(id) {
+        /*manualChunks(id) {
           if (id.includes('node_modules/react')) {
             return 'vendor-react';
           }
@@ -38,7 +38,7 @@ export default defineConfig({
           if (id.includes('node_modules')) {
             return 'vendor';
           }
-        },
+        }, */
         assetFileNames: (assetInfo) => {
           let extType = assetInfo.name.split('.').at(1);
           if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {

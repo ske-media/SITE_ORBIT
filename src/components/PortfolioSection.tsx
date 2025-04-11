@@ -91,6 +91,11 @@ const PortfolioSection: React.FC = () => {
             const baseUrl = apiUrl.replace('/api', '');
             const imageUrl = imagePath.startsWith('/') ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
             
+            const portfolioLink = `/portfolio/${project.Slug}`;
+
+            // L'extraction des informations "Client" et "Date" est supprimée pour ne pas les afficher.
+            // Vous pouvez conserver ces données en interne si besoin, mais elles ne seront pas rendues.
+
             let externalHostname: string | null = null;
             try {
               if (project.url) {
@@ -155,18 +160,7 @@ const PortfolioSection: React.FC = () => {
                     ))}
                   </div>
 
-                  <div className="flex items-center justify-between pt-4 border-t border-[#B026FF]/20">
-                    <div className="flex items-center gap-4 text-sm text-gray-400">
-                      <div className="flex items-center gap-2">
-                        <User className="w-4 h-4" />
-                        <span>{project.Client}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Calendar className="w-4 h-4" />
-                        <span>{new Date(project.Date).getFullYear()}</span>
-                      </div>
-                    </div>
-                    
+                  <div className="flex items-center justify-end pt-4 border-t border-[#B026FF]/20">
                     <motion.a
                       href={project.url}
                       target="_blank"

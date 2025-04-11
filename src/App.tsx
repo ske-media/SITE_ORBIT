@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useEffect } from 'react';
 
 // Import des pages
 import Home from './pages/Home';
@@ -18,6 +19,11 @@ function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Scroll to top on route change
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
   // Fonction pour scroller vers une ancre sur la homepage
   const scrollToAnchor = (anchor: string) => {
@@ -46,7 +52,22 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
+        <html lang="fr-CH" />
         <link rel="canonical" href={`https://agence-orbit.ch${location.pathname}`} />
+        <meta name="description" content={
+          location.pathname === "/" 
+            ? "Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait."
+            : location.pathname === "/contact"
+            ? "Contactez l'Agence Orbit pour votre projet de site web sur mesure. Devis gratuit et sans engagement."
+            : "Agence Orbit - Votre partenaire web à Genève"
+        } />
+        <title>
+          {location.pathname === "/"
+            ? "Agence Orbit | Votre site web sur mesure"
+            : location.pathname === "/contact"
+            ? "Contact | Agence Orbit"
+            : "Agence Orbit"}
+        </title>
       </Helmet>
       <div className="bg-black text-white min-h-screen relative">
         {/* Navigation */}
@@ -60,7 +81,7 @@ function App() {
               </div>
               <div className="hidden md:flex items-center space-x-8">
                 <a
-                  href="#why-choose-us"
+                  href="#why-choose-us" 
                   onClick={(e) => {
                     e.preventDefault();
                     scrollToAnchor('why-choose-us');
@@ -70,7 +91,7 @@ function App() {
                   Pourquoi Nous
                 </a>
                 <a
-                  href="#process"
+                  href="#process" 
                   onClick={(e) => {
                     e.preventDefault();
                     scrollToAnchor('process');
@@ -78,6 +99,16 @@ function App() {
                   className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
                 >
                   Processus
+                </a>
+                <a
+                  href="#portfolio"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    scrollToAnchor('portfolio');
+                  }}
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
+                  Portfolio
                 </a>
                 <a
                   href="#pricing"
@@ -105,16 +136,6 @@ function App() {
                 >
                   Blog
                 </Link>
-                <a
-                  href="#portfolio"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToAnchor('portfolio');
-                  }}
-                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
-                >
-                  Portfolio
-                </a>
                 <button className="cta-button" onClick={handleStartClick}>
                   <span className="uppercase tracking-wider text-sm font-medium text-white">Décoller</span>
                 </button>
@@ -131,7 +152,7 @@ function App() {
           <div className={`md:hidden ${isMenuOpen ? 'block' : 'hidden'}`}>
             <div className="px-2 pt-2 pb-3 space-y-1 bg-black/90 backdrop-blur-sm">
               <a
-                href="#why-choose-us"
+                href="#why-choose-us" 
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToAnchor('why-choose-us');
@@ -141,7 +162,7 @@ function App() {
                 Pourquoi Nous
               </a>
               <a
-                href="#process"
+                href="#process" 
                 onClick={(e) => {
                   e.preventDefault();
                   scrollToAnchor('process');
@@ -149,6 +170,16 @@ function App() {
                 className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
               >
                 Processus
+              </a>
+              <a
+                href="#portfolio"
+                onClick={(e) => {
+                  e.preventDefault();
+                  scrollToAnchor('portfolio');
+                }}
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
+                Portfolio
               </a>
               <a
                 href="#pricing"
@@ -176,16 +207,6 @@ function App() {
               >
                 Blog
               </Link>
-              <a
-                href="#portfolio"
-                onClick={(e) => {
-                  e.preventDefault();
-                  scrollToAnchor('portfolio');
-                }}
-                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
-              >
-                Portfolio
-              </a>
             </div>
           </div>
         </nav>
