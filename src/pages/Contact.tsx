@@ -19,99 +19,100 @@ type Question = {
 const questions: Question[] = [
   {
     key: 'name',
-    question: 'Comment puis-je vous appeler ?',
-    placeholder: 'Votre nom',
+    question: '1. Votre prénom et nom',
+    placeholder: '📝 Pour savoir à qui on s’adresse',
     type: 'text',
     required: true,
   },
   {
+    key: 'phone',
+    question: '2. Votre numéro de téléphone',
+    placeholder: '📞 Entrez votre numéro',
+    type: 'tel',
+    required: true,
+  },
+  {
     key: 'email',
-    question: 'Quelle est votre adresse email ?',
-    placeholder: 'exemple@domaine.ch',
+    question: '3. Votre adresse email',
+    placeholder: '✉️ exemple@domaine.com',
     type: 'email',
     required: true,
     validate: (email) => /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email),
     errorMessage: 'Veuillez entrer une adresse email valide',
   },
   {
-    key: 'phone',
-    question: 'Et votre numéro de téléphone ?',
-    placeholder: 'Votre numéro de téléphone',
-    type: 'tel',
-    required: true,
-  },
-  {
-    key: 'company',
-    question: 'Quel est le nom de votre entreprise ?',
-    placeholder: 'Nom de votre entreprise',
+    key: 'activity',
+    question: '4. Que faites-vous ?',
+    placeholder: '🛠 Dites-nous en quelques mots votre activité ou métier',
     type: 'text',
     required: true,
   },
   {
-    key: 'website',
-    question: 'Avez-vous déjà un site web ?',
-    placeholder: 'www.votresite.com (optionnel)',
-    type: 'url',
-    required: false,
+    key: 'company',
+    question: '5. Le nom de votre entreprise ou activité',
+    placeholder: '🏢 Si vous en avez un',
+    type: 'text',
+    required: true,
   },
   {
-    key: 'projectType',
-    question: 'Quel type de site souhaitez-vous ?',
+    key: 'contactPreference',
+    question: "6. Comment préférez-vous qu'on vous contacte ?",
     type: 'select',
     options: [
-      'Site vitrine classique',
-      'Site avec blog',
-      'Site avec portfolio',
-      'Site avec réservation',
-      'Autre',
+      'Téléphone – Appel',
+      'Téléphone – SMS',
+      'WhatsApp',
+      'Email',
+      'Visio rapide (Google Meet)'
     ],
     required: true,
   },
   {
-    key: 'timeline',
-    question: 'Quand souhaitez-vous commencer ?',
+    key: 'contactTiming',
+    question: '7. Quand souhaitez-vous être recontacté ?',
     type: 'select',
     options: [
-      'Immédiatement',
-      'Dans les 2 semaines',
-      'Dans le mois',
-      'Dans les 3 mois',
-      'Pas encore décidé',
+      'Dès que possible',
+      'Cette semaine',
+      'Semaine prochaine',
+      'Je suis flexible'
     ],
     required: true,
   },
   {
     key: 'availability',
-    question: 'Quelles sont vos disponibilités pour échanger sur votre projet ?',
+    question: '8. À quels moments êtes-vous le plus disponible ?',
     type: 'select',
     options: [
-      'En matinée (9h-12h)',
-      'En après-midi (14h-17h)',
-      'En soirée (17h-19h)',
-      'Flexible',
+      'Matin (8h–12h)',
+      'Après-midi (12h–18h)',
+      'Soirée (après 18h)',
+      'Je suis flexible'
     ],
     required: true,
   },
   {
-    key: 'wantsBranding',
-    question: 'Souhaitez-vous également une charte graphique complète pour votre marque ? (799 CHF)',
+    key: 'websiteStatus',
+    question: '9. Avez-vous déjà un site web ?',
     type: 'select',
     options: [
-      'Oui, je suis intéressé(e)',
-      'Non merci'
+      'Non, jamais eu',
+      'Oui, mais il ne me convient plus',
+      "Il existe, mais je ne sais pas trop ce qu'il devient",
+      "Aucune idée si j'en ai besoin ou pas"
     ],
     required: true,
   },
   {
-    key: 'message',
-    question: 'Avez-vous des détails supplémentaires à partager ?',
-    placeholder: 'Parlez-nous de votre projet...',
+    key: 'additionalInfo',
+    question: '10. Un point important à nous signaler ?',
+    placeholder: '✏ (Optionnel – objectif, contrainte, question...)',
     type: 'textarea',
     required: false,
   },
   {
     key: 'source',
-    question: 'Comment avez-vous entendu parler de nous ?',
+    question: '11. Comment avez-vous entendu parler de nous ?',
     type: 'select',
     options: [
       'Recherche Google',
@@ -132,22 +133,20 @@ const Contact: React.FC = () => {
   const [step, setStep] = useState(0);
   const [formData, setFormData] = useState<FormData>({
     name: '',
-    email: '',
     phone: '',
+    email: '',
+    activity: '',
     company: '',
-    website: '',
-    projectType: '',
-    timeline: '',
+    contactPreference: '',
+    contactTiming: '',
     availability: '',
-    wantsBranding: '',
-    message: '',
+    websiteStatus: '',
+    additionalInfo: '',
     provenance: 'Suisse',
     source: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [emailError, setEmailError] = useState('');
 
-  // Gestion individuelle du onKeyDown sur les champs (pour éviter de soumettre sur le dernier champ)
   const handleFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       // Si ce n'est pas le dernier champ, on passe à l'étape suivante
@@ -159,7 +158,6 @@ const Contact: React.FC = () => {
         if (currentQ.validate && !currentQ.validate(value)) return;
         handleNext();
       }
-      // Sinon, laissez Enter pour permettre une nouvelle ligne dans textarea si besoin
     }
   };
 
@@ -185,29 +183,8 @@ const Contact: React.FC = () => {
     e.preventDefault();
 
     // Vérifier que tous les champs requis sont remplis
-    const hasEmptyRequiredFields = questions
-      .filter(q => q.required)
-      .some(q => !formData[q.key]);
-
-    if (hasEmptyRequiredFields) {
-      console.log('Des champs requis sont manquants');
-      return;
-    }
-
-    // Vérifier si nous sommes bien sur le dernier champ
-    if (step !== questions.length - 1) {
-      console.log('Tentative de soumission avant le dernier champ');
-      return;
-    }
-
-    // Vérifier spécifiquement le dernier champ
-    const lastQuestion = questions[questions.length - 1];
-    for (const question of questions) {
-      if (question.required && !formData[question.key]) {
-        console.log(`Champ requis manquant: ${question.key}`);
-        return;
-      }
-    }
+    const hasEmptyRequiredFields = questions.filter(q => q.required).some(q => !formData[q.key]);
+    if (hasEmptyRequiredFields || step !== questions.length - 1) return;
 
     setIsSubmitting(true);
     try {
@@ -227,15 +204,12 @@ const Contact: React.FC = () => {
 
   const currentQuestion = questions[step];
 
-  // Calculer si le bouton doit être désactivé
   const isButtonDisabled = 
     (currentQuestion.required && !formData[currentQuestion.key]) ||
     (currentQuestion.validate && !currentQuestion.validate(formData[currentQuestion.key]));
 
-  // Désactiver le bouton d'envoi si tous les champs requis ne sont pas remplis
   const isSubmitDisabled = step === questions.length - 1 && (
-    questions.some(q => q.required && !formData[q.key]) ||
-    isSubmitting
+    questions.some(q => q.required && !formData[q.key]) || isSubmitting
   );
 
   return (
@@ -244,6 +218,15 @@ const Contact: React.FC = () => {
       <div className="flex-1 flex items-center justify-center p-4 pt-20 lg:pt-4">
         <form ref={formRef} onSubmit={handleSubmit} className="max-w-xl w-full space-y-4 sm:space-y-8">
           <div className="bg-white/5 p-4 sm:p-6 md:p-8 rounded-2xl backdrop-blur-sm">
+            <div className="mb-8 text-center">
+              <h1 className="text-2xl sm:text-3xl font-bold mb-4">🚀 On fait connaissance ?</h1>
+              <p className="text-gray-400">
+                Vous avez un projet (ou juste une idée) ? On vous propose un rendez-vous de 30 minutes pour en discuter.
+              </p>
+              <p className="text-gray-400 mt-2">
+                Pas de jargon, pas d'engagement. Juste une première étape vers un site qui vous ressemble.
+              </p>
+            </div>
             <div className="mb-8">
               <div className="flex items-center justify-between mb-2">
                 <button
@@ -318,18 +301,12 @@ const Contact: React.FC = () => {
                   pattern={currentQuestion.type === 'email' ? '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$' : undefined}
                 />
               )}
-  
-              {/* Inputs cachés pour envoyer toutes les valeurs avec emailjs */}
-              {Object.keys(formData).map((key) => (
-                !questions.find((q) => q.key === key) && (
-                  <input key={key} type="hidden" name={key} value={formData[key]} />
-                )
-              ))}
-              {/* Pour être sûr d'envoyer tous les champs, on va insérer aussi chaque champ même s'il n'est pas affiché */}
+
+              {/* Insertion d'inputs cachés pour l'envoi de tous les champs */}
               {Object.entries(formData).map(([key, value]) => (
                 <input key={key} type="hidden" name={key} value={value} />
               ))}
-  
+
               {step < questions.length - 1 ? (
                 <button
                   type="button"
@@ -343,7 +320,9 @@ const Contact: React.FC = () => {
               ) : (
                 <button
                   type="submit"
-                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
+                    isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                  }`}
                   disabled={isSubmitDisabled}
                 >
                   {isSubmitting ? (
@@ -364,28 +343,27 @@ const Contact: React.FC = () => {
       {/* Info Section */}
       <div className="w-full lg:w-96 bg-[#B026FF]/5 p-4 sm:p-6 lg:p-12">
         <div className="sticky top-20 lg:top-24">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Votre site web sur mesure</h2>
+          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Votre site web personnalisé</h2>
           <div className="space-y-6 text-gray-300">
             <p className="text-sm sm:text-base">
-              Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité.
-              {formData.wantsBranding === 'Oui, je suis intéressé(e)' && (
-                <span className="block mt-2 text-[#B026FF]">
-                  + 799 CHF pour votre charte graphique personnalisée
-                </span>
-              )}
+              Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité et vos valeurs.
             </p>
             <ul className="space-y-3 sm:space-y-4">
+              <li className="flex items-start gap-3">
+                <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
+                <span className="text-sm sm:text-base">Rendez-vous découverte gratuit</span>
+              </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
                 <span className="text-sm sm:text-base">Première version en 7 jours</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Modifications illimitées</span>
+                <span className="text-sm sm:text-base">Paiement uniquement si satisfait</span>
               </li>
               <li className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Paiement uniquement si satisfait</span>
+                <span className="text-sm sm:text-base">Modifications illimitées</span>
               </li>
             </ul>
   
@@ -408,7 +386,8 @@ const Contact: React.FC = () => {
                 </a>
                 <div className="flex items-center gap-3 text-gray-400">
                   <MapPin className="w-5 h-5" />
-Genève                </div>
+                  Genève
+                </div>
               </div>
             </div>
           </div>
