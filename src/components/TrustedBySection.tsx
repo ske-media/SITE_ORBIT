@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Star, Quote } from 'lucide-react';
 
 interface TrustedBySectionProps {
   forwardedRef?: React.RefObject<HTMLDivElement>;
@@ -23,71 +22,25 @@ const TrustedBySection: React.FC<TrustedBySectionProps> = ({ forwardedRef }) => 
     { name: 'Vuache Pizza', logo: 'https://i.imgur.com/PU0psWu.png' }, 
   ];
 
-  // First row testimonials
-const testimonialsRow1 = [
+ // Testimonials data
+const testimonials = [
   {
     quote: "J'aurai aimé connaître une agence aussi pro et réactive bien plus tôt pour éviter le stress que cela peut engendrer. Vous pouvez leur faire confiance les yeux fermés !",
-    name: "Flora L.",
-    position: "Cliente satisfaite",
-    rating: 5
+    name: "F",
+    fullName: "Flora L.",
+    position: "Cliente satisfaite"
   },
   {
-    quote: "Super expérience avec Orbit ! L'équipe a été ultra pro, réactive et à l'écoute de mes besoins. Le site livré est moderne, rapide et parfaitement optimisé. Un service au top, je recommande sans hésiter !",
-    name: "Loryana C.",
-    position: "Cliente satisfaite",
-    rating: 5
+    quote: "Super agence à l’écoute du début à la fin, un grand merci à Océane pour son temps et ses précieux conseils ! Ils m’ont fait un site digne de se nom et ajoute une belle plus value à mon entreprise !! Merci beaucoup !",
+    name: "Y",
+    fullName: "Yanis B.",
+    position: "Cliente satisfaite"
   },
   {
     quote: "Orbit a réalisé le site de notre entreprise et nous sommes très satisfaites. Le travail fut rapide et nos envies ont été correctement ciblées et réalisées. Je recommande vivement !",
-    name: "Carole H.",
-    position: "Cliente satisfaite",
-    rating: 5
-  },
-  {
-    quote: "Une équipe professionnelle qui a su transformer notre vision en réalité. Le résultat est au-delà de nos attentes !",
-    name: "Thomas R.",
-    position: "Client satisfait",
-    rating: 5
-  },
-  {
-    quote: "Service client exceptionnel et résultat impeccable. Je recommande vivement !",
-    name: "Marie P.",
-    position: "Cliente satisfaite",
-    rating: 5
-  }
-];
-
-// Second row testimonials
-const testimonialsRow2 = [
-  {
-    quote: "Une équipe à l'écoute qui a su parfaitement comprendre nos besoins. Le résultat dépasse nos attentes !",
-    name: "Marc D.",
-    position: "Client satisfait",
-    rating: 5
-  },
-  {
-    quote: "Professionnalisme, créativité et réactivité. Orbit a donné vie à notre vision exactement comme nous le souhaitions.",
-    name: "Sophie M.",
-    position: "Cliente satisfaite",
-    rating: 5
-  },
-  {
-    quote: "Un grand merci à toute l'équipe pour leur patience et leur expertise. Notre nouveau site est magnifique !",
-    name: "Pierre L.",
-    position: "Client satisfait",
-    rating: 5
-  },
-  {
-    quote: "Délais respectés et communication parfaite tout au long du projet. Un vrai plaisir de travailler avec Orbit !",
-    name: "Julie B.",
-    position: "Cliente satisfaite",
-    rating: 5
-  },
-  {
-    quote: "Notre site web est devenu un véritable atout pour notre entreprise grâce à Orbit. Merci !",
-    name: "David M.",
-    position: "Client satisfait",
-    rating: 5
+    name: "C",
+    fullName: "Carole H.",
+    position: "Cliente satisfaite"
   }
 ];
 
@@ -114,22 +67,22 @@ const testimonialsRow2 = [
       <div className="futuristic-container relative z-10">
         
         {/* Section title */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.8 }}
-          className="text-center mb-8 md:mb-16"
+          className="text-center mb-16"
         >
           <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gradient-purple">
             Ils nous ont confié leur univers digital
           </h2>
-          <p className="text-base md:text-lg text-surface-300 max-w-3xl mx-auto px-4">
+          <p className="text-lg text-surface-300 max-w-3xl mx-auto">
             Découvrez pourquoi nos clients recommandent Orbit
           </p>
         </motion.div>
         
         {/* Clients logo carousel - Infinite rotation */}
-        <div className="mb-8 md:mb-16 relative">
+        <div className="mb-16 relative">
           {/* Carousel container */}
           <div className="relative mx-auto max-w-5xl overflow-hidden">
             {/* Gradient fade edges */}
@@ -145,7 +98,7 @@ const testimonialsRow2 = [
                     <img 
                       src={client.logo} 
                       alt={client.name} 
-                      className="max-h-10 md:max-h-14 object-contain"
+                      className="max-h-14 object-contain"
                     />
                   </div>
                 ))}
@@ -155,7 +108,7 @@ const testimonialsRow2 = [
                     <img 
                       src={client.logo} 
                       alt={client.name} 
-                      className="max-h-10 md:max-h-14 object-contain"
+                      className="max-h-14 object-contain"
                     />
                   </div>
                 ))}
@@ -165,110 +118,43 @@ const testimonialsRow2 = [
         </div>
         
         {/* Testimonials */}
-        <div className="hidden md:block space-y-12">
-          {/* First row - sliding left to right */}
-          <div 
-            className="testimonial-container"
-          >
-            <div className="testimonial-track">
-              {[...testimonialsRow1, ...testimonialsRow1].map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="w-[320px] p-4 md:p-6 bg-gradient-to-br from-[#B026FF]/10 to-transparent backdrop-blur-sm rounded-2xl border border-[#B026FF]/20 hover:border-[#B026FF]/40 transition-all duration-300 group"
-                >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 md:w-4 md:h-4 text-[#B026FF] fill-[#B026FF]" />
-                  ))}
-                </div>
-                <Quote className="w-6 h-6 md:w-8 md:h-8 text-[#B026FF]/40 mb-3 md:mb-4" />
-                <p className="text-sm md:text-base text-gray-300 mb-4 md:mb-6 leading-relaxed line-clamp-4 md:line-clamp-none">
-                  {testimonial.quote}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#B026FF]/20 flex items-center justify-center text-[#B026FF] text-sm md:text-base font-bold group-hover:bg-[#B026FF]/30 transition-colors">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-sm md:text-base">{testimonial.name}</h4>
-                    <p className="text-xs md:text-sm text-[#B026FF]">
-                      {testimonial.position}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            </div>
+<div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+  {testimonials.map((testimonial, index) => (
+    <motion.div
+      key={index}
+      initial={{ opacity: 0, y: 20 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.6, delay: index * 0.15 }}
+      className="p-8 rounded-2xl border border-[#B026FF]/20 bg-gradient-to-br from-[#B026FF]/10 to-transparent backdrop-blur-sm hover:border-[#B026FF]/40 transition-all duration-300 relative overflow-hidden group"
+    >
+      {/* Decorative elements */}
+      <div className="absolute top-0 right-0 w-32 h-32 bg-[#B026FF] rounded-full blur-[100px] opacity-20 group-hover:opacity-30 transition-opacity"></div>
+      <div className="absolute -bottom-16 -left-16 w-32 h-32 bg-[#B026FF] rounded-full blur-[100px] opacity-10 group-hover:opacity-20 transition-opacity"></div>
+      
+      <div className="relative z-10">
+        <div className="mb-6">
+          <span className="text-6xl text-[#B026FF]/20 select-none leading-none">"</span>
+        </div>
+        <p className="text-gray-300 text-lg mb-8 leading-relaxed">
+          {testimonial.quote}
+        </p>
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-full bg-[#B026FF]/20 border border-[#B026FF]/30 flex items-center justify-center text-[#B026FF] font-bold text-lg shadow-[0_0_15px_rgba(176,38,255,0.2)] group-hover:shadow-[0_0_20px_rgba(176,38,255,0.3)] transition-all">
+            {testimonial.name}
           </div>
-
-          {/* Second row - sliding right to left */}
-          <div 
-            className="testimonial-container"
-          >
-            <div className="testimonial-track-reverse">
-              {[...testimonialsRow2, ...testimonialsRow2].map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="w-[320px] p-4 md:p-6 bg-gradient-to-br from-[#B026FF]/10 to-transparent backdrop-blur-sm rounded-2xl border border-[#B026FF]/20 hover:border-[#B026FF]/40 transition-all duration-300 group"
-                >
-                <div className="flex gap-1 mb-4">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-3 h-3 md:w-4 md:h-4 text-[#B026FF] fill-[#B026FF]" />
-                  ))}
-                </div>
-                <Quote className="w-6 h-6 md:w-8 md:h-8 text-[#B026FF]/40 mb-3 md:mb-4" />
-                <p className="text-sm md:text-base text-gray-300 mb-4 md:mb-6 leading-relaxed line-clamp-4 md:line-clamp-none">
-                  {testimonial.quote}
-                </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-[#B026FF]/20 flex items-center justify-center text-[#B026FF] text-sm md:text-base font-bold group-hover:bg-[#B026FF]/30 transition-colors">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-white text-sm md:text-base">{testimonial.name}</h4>
-                    <p className="text-xs md:text-sm text-[#B026FF]">
-                      {testimonial.position}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            ))}
-            </div>
+          <div>
+            <h4 className="font-bold text-white group-hover:text-[#B026FF] transition-colors">
+              {testimonial.fullName}
+            </h4>
+            <p className="text-sm text-[#B026FF]/70">
+              {testimonial.position}
+            </p>
           </div>
         </div>
-
-        {/* Mobile Testimonials - Single Row */}
-        <div className="md:hidden">
-          <div className="testimonial-container">
-            <div className="testimonial-track">
-              {[...testimonialsRow1].map((testimonial, index) => (
-                <div
-                  key={index}
-                  className="w-[300px] p-4 bg-gradient-to-br from-[#B026FF]/10 to-transparent backdrop-blur-sm rounded-2xl border border-[#B026FF]/20 hover:border-[#B026FF]/40 transition-all duration-300 group"
-                >
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(testimonial.rating)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-[#B026FF] fill-[#B026FF]" />
-                    ))}
-                  </div>
-                  <Quote className="w-6 h-6 text-[#B026FF]/40 mb-3" />
-                  <p className="text-sm text-gray-300 mb-4 leading-relaxed">
-                    {testimonial.quote}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-[#B026FF]/20 flex items-center justify-center text-[#B026FF] text-sm font-bold group-hover:bg-[#B026FF]/30 transition-colors">
-                      {testimonial.name.charAt(0)}
-                    </div>
-                    <div>
-                      <h4 className="font-bold text-white text-sm">{testimonial.name}</h4>
-                      <p className="text-xs text-[#B026FF]">{testimonial.position}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      </div>
+    </motion.div>
+  ))}
+</div>
       </div>
     </section>
   );

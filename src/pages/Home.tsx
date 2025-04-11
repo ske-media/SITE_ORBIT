@@ -404,7 +404,7 @@ function Home() {
                   "Mise en ligne optimisée",
                   "Conformité légale et sécurité",
                   "Des photos libre de droit pour votre site",
-                  "Gestion premium au prix du pack Essentiel"
+                  "Gestion premium au prix du pack Essentiel pendant 12 mois"
                 ].map((feature, index) => (
                   <li key={index} className="flex items-center gap-2">
                     <Check className="h-5 w-5 text-[#B026FF] flex-shrink-0" />
@@ -426,63 +426,99 @@ function Home() {
             </div>
 
             <div className="grid lg:grid-cols-2 gap-8 max-w-4xl mx-auto w-full">
-              {/* Gestion Essentielle */}
-              <div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
-                <h3 className="text-2xl font-bold mb-4">Pack Essentiel</h3>
-                <div className="flex items-end gap-2 mb-6">
-                  <span className="text-4xl font-bold">50 CHF</span>
-                  <span className="text-gray-400">/mois</span>
-                </div>
-                <ul className="space-y-4 mb-8">
-                  {[
-                    "Nom de domaine (votrenom.com/ch)",
-                    "Hébergement (espace en ligne)",
-                    "Lien en httpS",
-                    "Sauvegardes régulières",
-                    "Mises à jour de sécurité & techniques"
-                  ].map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <Check className="h-5 w-5 text-[#B026FF] flex-shrink-0" />
-                      <span className="text-gray-300">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button 
-                  onClick={handleStartClick}
-                  className="w-full bg-[#B026FF] py-3 rounded-full hover:bg-[#B026FF]/80 transition"
-                >
-                  Choisir
-                </button>
-              </div>
+             {/* Gestion Essentielle */}
+<div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
+  <h3 className="text-2xl font-bold mb-4">Pack Essentiel</h3>
+  <div className="flex items-end gap-2 mb-6">
+    <span className="text-4xl font-bold">50 CHF</span>
+    <span className="text-gray-400">/mois</span>
+  </div>
+  <ul className="space-y-4 mb-8">
+    {[
+      {
+        title: "Nom de domaine (votrenom.com/ch)",
+        description: "Obtenez une adresse web unique et professionnelle pour votre entreprise."
+      },
+      {
+        title: "Hébergement (espace en ligne)",
+        description: "Votre site est hébergé sur des serveurs sécurisés et disponibles 24/7."
+      },
+      {
+        title: "Lien en httpS",
+        description: "Profitez d'une connexion sécurisée pour renforcer la confiance de vos visiteurs."
+      },
+      {
+        title: "Sauvegardes régulières",
+        description: "Des sauvegardes automatiques garantissent la protection de vos données."
+      },
+      {
+        title: "Mises à jour de sécurité & techniques",
+        description: "Nous mettons à jour régulièrement votre site pour optimiser ses performances et sa sécurité."
+      }
+    ].map((feature, index) => (
+      <li key={index} className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <Check className="h-5 w-5 text-[#B026FF] flex-shrink-0" />
+          <span className="text-gray-300">{feature.title}</span>
+        </div>
+        <p className="text-xs text-gray-400 ml-7">{feature.description}</p>
+      </li>
+    ))}
+  </ul>
+  <button 
+    onClick={handleStartClick}
+    className="w-full bg-[#B026FF] py-3 rounded-full hover:bg-[#B026FF]/80 transition"
+  >
+    Choisir
+  </button>
+</div>
 
-              {/* Gestion Premium */}
-              <div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
-                <h3 className="text-2xl font-bold mb-4">Gestion Premium</h3>
-                <div className="flex items-end gap-2 mb-6">
-                  <span className="text-4xl font-bold">100 CHF</span>
-                  <span className="text-gray-400">/mois</span>
-                </div>
-                <ul className="space-y-4 mb-8">
-                  {[
-                    "Tout du pack Essentiel plus...",
-                    "Rapports mensuels",
-                    "Maintenance",
-                    "Support prioritaire",
-                    "Modifications mineures incluses"
-                  ].map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <Check className="h-5 w-5 text-[#B026FF] flex-shrink-0" />
-                      <span className="text-gray-300">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-                <button 
-                  onClick={handleStartClick}
-                  className="w-full bg-[#B026FF] py-3 rounded-full hover:bg-[#B026FF]/80 transition"
-                >
-                  Choisir
-                </button>
-              </div>
+{/* Gestion Premium */}
+<div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
+  <h3 className="text-2xl font-bold mb-4">Gestion Premium</h3>
+  <div className="flex items-end gap-2 mb-6">
+    <span className="text-4xl font-bold">100 CHF</span>
+    <span className="text-gray-400">/mois</span>
+  </div>
+  <ul className="space-y-4 mb-8">
+    {[
+      {
+        title: "Tout du pack Essentiel plus...",
+        description: "Inclut toutes les fonctionnalités du Pack Essentiel, avec des options supplémentaires pour une gestion optimale."
+      },
+      {
+        title: "Rapports mensuels",
+        description: "Recevez un compte-rendu détaillé de l'activité de votre site et des recommandations."
+      },
+      {
+        title: "Maintenance",
+        description: "Des interventions régulières pour assurer le bon fonctionnement et la performance de votre site."
+      },
+      {
+        title: "Support prioritaire",
+        description: "Obtenez une assistance rapide et dédiée pour toute question ou problème."
+      },
+      {
+        title: "Modifications mineures incluses (3/mois)",
+        description: "Profitez de jusqu'à trois ajustements ou mises à jour de contenu chaque mois pour garder votre site à jour."
+      }
+    ].map((feature, index) => (
+      <li key={index} className="flex flex-col gap-1">
+        <div className="flex items-center gap-2">
+          <Check className="h-5 w-5 text-[#B026FF] flex-shrink-0" />
+          <span className="text-gray-300">{feature.title}</span>
+        </div>
+        <p className="text-xs text-gray-400 ml-7">{feature.description}</p>
+      </li>
+    ))}
+  </ul>
+  <button 
+    onClick={handleStartClick}
+    className="w-full bg-[#B026FF] py-3 rounded-full hover:bg-[#B026FF]/80 transition"
+  >
+    Choisir
+  </button>
+</div>
             </div>
           </div>
         </div>

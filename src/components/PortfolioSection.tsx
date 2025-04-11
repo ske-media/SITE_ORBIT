@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ExternalLink, Globe, Calendar, User, Tag, ArrowRight } from 'lucide-react';
+import { ExternalLink, Globe, ArrowRight } from 'lucide-react';
 
 interface PortfolioProject {
   id: number;
@@ -24,7 +24,9 @@ const PortfolioSection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const apiUrl = import.meta.env.VITE_STRAPI_API_URL || 'https://siteorbit-cms-production.up.railway.app/api';
+  const apiUrl =
+    import.meta.env.VITE_STRAPI_API_URL ||
+    'https://siteorbit-cms-production.up.railway.app/api';
 
   useEffect(() => {
     const fetchProjects = async () => {
@@ -39,10 +41,10 @@ const PortfolioSection: React.FC = () => {
         if (json.data && Array.isArray(json.data)) {
           setProjects(json.data);
         } else {
-          console.warn("Réponse inattendue :", json);
+          console.warn('Réponse inattendue :', json);
         }
       } catch (err: any) {
-        console.error("Error fetching portfolio projects:", err);
+        console.error('Error fetching portfolio projects:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -53,7 +55,7 @@ const PortfolioSection: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[400px]">
+      <div className="flex justify-center items-center min-h-[400px] text-white">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B026FF]"></div>
       </div>
     );
@@ -67,8 +69,10 @@ const PortfolioSection: React.FC = () => {
     );
   }
 
-  const validProjects = projects.filter((project) => project.Titre && project.Titre.trim() !== "");
-  
+  const validProjects = projects.filter(
+    (project) => project.Titre && project.Titre.trim() !== ""
+  );
+
   if (validProjects.length === 0) {
     return (
       <div className="text-center text-gray-400 py-12">
@@ -84,17 +88,16 @@ const PortfolioSection: React.FC = () => {
         <p className="text-gray-400 text-center mb-12 max-w-2xl mx-auto">
           Découvrez quelques-uns des sites web que nous avons créés pour nos clients
         </p>
-        
+
         <div className="grid md:grid-cols-2 gap-8">
           {validProjects.map((project) => {
             const imagePath = project.Main_image?.url || '/default-image.png';
             const baseUrl = apiUrl.replace('/api', '');
-            const imageUrl = imagePath.startsWith('/') ? `${baseUrl}${imagePath}` : `${baseUrl}/${imagePath}`;
-            
-            const portfolioLink = `/portfolio/${project.Slug}`;
+            const imageUrl = imagePath.startsWith('/')
+              ? `${baseUrl}${imagePath}`
+              : `${baseUrl}/${imagePath}`;
 
-            // L'extraction des informations "Client" et "Date" est supprimée pour ne pas les afficher.
-            // Vous pouvez conserver ces données en interne si besoin, mais elles ne seront pas rendues.
+            const portfolioLink = `/portfolio/${project.Slug}`;
 
             let externalHostname: string | null = null;
             try {
@@ -121,10 +124,6 @@ const PortfolioSection: React.FC = () => {
                     alt={project.Titre}
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
-                  {/* Project Type Badge */}
-                  <div className="absolute top-4 left-4 z-20 bg-[#B026FF]/90 backdrop-blur-sm px-3 py-1 rounded-full">
-                    <span className="text-sm font-medium">{project.Site_type}</span>
-                  </div>
                   {/* External Link Badge */}
                   {externalHostname && (
                     <a
@@ -144,7 +143,7 @@ const PortfolioSection: React.FC = () => {
                   <h3 className="text-2xl font-bold group-hover:text-[#B026FF] transition-colors">
                     {project.Titre}
                   </h3>
-                  
+
                   <p className="text-gray-400 line-clamp-2">
                     {project.Short_description}
                   </p>
