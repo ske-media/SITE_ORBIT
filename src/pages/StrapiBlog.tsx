@@ -20,7 +20,13 @@ function StrapiBlog() {
         setIsLoading(true);
         const response = await getArticles();
         console.log('✅ Strapi response:', response);
-        setArticles(response.data);
+        // Trie les articles par "petitedate" (du plus récent au plus ancien)
+        const sortedArticles = response.data.sort((a, b) => {
+          const dateA = a.petitedate ? new Date(a.petitedate) : new Date(0);
+          const dateB = b.petitedate ? new Date(b.petitedate) : new Date(0);
+          return dateB.getTime() - dateA.getTime();
+        });
+        setArticles(sortedArticles);
       } catch (error) {
         console.error('❌ Failed to fetch articles:', error);
         setError('Impossible de charger les articles. Veuillez réessayer plus tard.');
@@ -46,19 +52,26 @@ function StrapiBlog() {
   return (
     <>
       <Helmet>
-        <title>Blog | Agence Orbit</title>
+        <title>Destins | Agence Orbit</title>
         <meta
           name="description"
-          content="Découvrez nos articles sur le web design, le marketing digital et les dernières tendances du numérique"
+          content="Chaque histoire est un témoignage
+précieux qui rappelle qu’entreprendre, c’est avant tout croire en
+son projet et oser faire le premier pas."
         />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4 gradient-text">Blog Orbit</h1>
+            <h1 className="text-4xl font-bold mb-4 gradient-text">Destins - Le Blog des Entrepreneurs</h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Découvrez nos articles sur le web design, le marketing digital et les dernières tendances du numérique.
+              Que vous soyez artisan passionné, dirigeant d’une PME ou
+entrepreneur d’envergure, ce blog vous invite à découvrir des
+trajectoires inspirantes, portées par la persévérance, l’audace
+et l’envie de se réaliser. Chaque histoire est un témoignage
+précieux qui rappelle qu’entreprendre, c’est avant tout croire en
+son projet et oser faire le premier pas.
             </p>
           </div>
 
@@ -97,15 +110,14 @@ function StrapiBlog() {
                   <Link to={`/blog/${article.slug}`}>
                     <div className="relative aspect-video overflow-hidden">
                       {article.image && article.image.length > 0 ? (
-  <img
-    src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
-    alt={article.title || "Image de l’article"}
-    className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
-  />
-) : (
-  <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40"></div>
-)}
-
+                        <img
+                          src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
+                          alt={article.title || "Image de l’article"}
+                          className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40"></div>
+                      )}
                     </div>
                     <div className="p-6">
                       <h2 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">
@@ -120,10 +132,12 @@ function StrapiBlog() {
                             <Clock className="h-4 w-4" />
                             {calculateReadingTime(article.content)} min
                           </span>
-                          <span className="flex items-center gap-1">
-                            <Calendar className="h-4 w-4" />
-                            {format(new Date(article.publishedAt), 'dd MMM yyyy', { locale: fr })}
-                          </span>
+                          {article.petitedate && (
+                            <span className="flex items-center gap-1">
+                              <Calendar className="h-4 w-4" />
+                              {format(new Date(article.petitedate), 'dd MMM yyyy', { locale: fr })}
+                            </span>
+                          )}
                         </div>
                         {article.author && typeof article.author === 'string' && (
                           <span className="flex items-center gap-1">
@@ -140,7 +154,6 @@ function StrapiBlog() {
           )}
         </div>
       </div>
-
     </>
   );
 }

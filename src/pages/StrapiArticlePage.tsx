@@ -6,7 +6,6 @@ import { StrapiArticle } from '../types/strapi';
 import { ArrowLeft, Calendar, User, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
-import ReactMarkdown from 'react-markdown';
 import Footer from '../components/Footer';
 
 function StrapiArticlePage() {
@@ -19,7 +18,6 @@ function StrapiArticlePage() {
   useEffect(() => {
     const fetchArticle = async () => {
       if (!slug) return;
-
       try {
         setIsLoading(true);
         const data = await getArticleBySlug(slug);
@@ -32,7 +30,6 @@ function StrapiArticlePage() {
         setIsLoading(false);
       }
     };
-
     fetchArticle();
   }, [slug]);
 
@@ -72,14 +69,15 @@ function StrapiArticlePage() {
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
-        <article className="max-w-4xl mx-auto px-4">
+        <article className="max-w-4xl mx-auto px-4 relative">
+          <div className="absolute inset-0 bg-gradient-to-b from-black via-[#B026FF]/5 to-black pointer-events-none" />
           <Link to="/blog" className="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition">
             <ArrowLeft className="h-5 w-5" />
             Retour au blog
           </Link>
 
           {/* Header */}
-          <header className="mb-12">
+          <header className="mb-12 relative">
             <h1 className="text-4xl font-bold mb-6 gradient-text">
               {article.title}
             </h1>
@@ -95,6 +93,12 @@ function StrapiArticlePage() {
                 <Calendar className="h-4 w-4" />
                 {format(new Date(article.publishedAt), 'dd MMMM yyyy', { locale: fr })}
               </div>
+              {article.petitedate && (
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-4 w-4" />
+                  {format(new Date(article.petitedate), 'dd MMMM yyyy', { locale: fr })}
+                </div>
+              )}
               <div className="flex items-center gap-2">
                 <Clock className="h-4 w-4" />
                 {calculateReadingTime(article.content)} min de lecture
@@ -102,22 +106,23 @@ function StrapiArticlePage() {
             </div>
 
             {article.image && article.image.length > 0 && (
-  <img
-    src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
-    alt={article.title}
-    className="w-full aspect-video object-cover rounded-2xl mb-8"
-  />
-)}
-
+              <img
+                src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
+                alt={article.title}
+                className="w-full aspect-video object-cover rounded-2xl mb-8"
+              />
+            )}
           </header>
 
           {/* Content */}
-          <div className="prose prose-invert prose-purple max-w-none mb-12">
-            <ReactMarkdown>{article.content}</ReactMarkdown>
+          <div className="relative">
+            <div className="absolute inset-0 bg-white/95 dark:bg-white/98 rounded-2xl shadow-[0_0_50px_rgba(176,38,255,0.1)] backdrop-blur-sm" />
+            <div className="relative p-8 md:p-12 rounded-2xl prose max-w-none mb-12 text-gray-800">
+              <div dangerouslySetInnerHTML={{ __html: article.content }} />
+            </div>
           </div>
         </article>
       </div>
-      
     </>
   );
 }

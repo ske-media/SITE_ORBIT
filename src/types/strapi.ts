@@ -72,6 +72,7 @@ export interface StrapiArticle {
   author: {
     data: StrapiData<StrapiAuthor> | null;
   };
+  petitedate: string;
   publishedAt: string;
   createdAt: string;
   updatedAt: string;

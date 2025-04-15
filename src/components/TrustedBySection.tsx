@@ -34,7 +34,7 @@ const testimonials = [
     quote: "Super agence à l’écoute du début à la fin, un grand merci à Océane pour son temps et ses précieux conseils ! Ils m’ont fait un site digne de se nom et ajoute une belle plus value à mon entreprise !! Merci beaucoup !",
     name: "Y",
     fullName: "Yanis B.",
-    position: "Cliente satisfaite"
+    position: "Client satisfait"
   },
   {
     quote: "Orbit a réalisé le site de notre entreprise et nous sommes très satisfaites. Le travail fut rapide et nos envies ont été correctement ciblées et réalisées. Je recommande vivement !",
