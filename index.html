@@ -1,30 +1,42 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr-CH">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/Favicon/ORBIT - Favicon.svg" />
     <meta name="description" content="Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait. Première version en 7 jours. Devis gratuit." />
-    <meta name="keywords" content="création site web, agence web genève, site internet suisse, développement web, site vitrine, site sur mesure" />
+    <meta name="keywords" content="création site web, agence web Genève, site internet suisse, développement web, site vitrine, site sur mesure" />
     <meta name="author" content="Agence Orbit" />
     <meta name="robots" content="index, follow" />
+
+    <!-- Open Graph -->
     <meta property="og:title" content="Agence Orbit | Votre site web sur mesure" />
     <meta property="og:description" content="Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait." />
     <meta property="og:image" content="https://i.imgur.com/aM3st2Q.png" />
     <meta property="og:url" content="https://agence-orbit.ch" />
     <meta property="og:type" content="website" />
+
+    <!-- Twitter Cards -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Agence Orbit | Votre site web sur mesure" />
     <meta name="twitter:description" content="Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait." />
     <meta name="twitter:image" content="https://i.imgur.com/aM3st2Q.png" />
+
+    <!-- Balise alternate (si nécessaire, ici pour les marchés Suisse) -->
     <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.ch" />
+    
+    <!-- Canonical -->
     <link rel="canonical" href="https://agence-orbit.ch" />
+
     <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WQ7W56G7');</script>
+    <script>
+      (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start': new Date().getTime(), event:'gtm.js'});
+      var f=d.getElementsByTagName(s)[0], j=d.createElement(s), dl=l!='dataLayer'?'&l='+l:'';
+      j.async=true; j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;
+      f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-WQ7W56G7');
+    </script>
     <!-- End Google Tag Manager -->
+
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -34,23 +46,22 @@
       onload="this.onload=null;this.media='all'"
     />
     <link rel="preload" as="video" href="/videos/hero-background.mp4" type="video/mp4" fetchpriority="high" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- reCAPTCHA -->
     <script src="https://www.google.com/recaptcha/api.js?render=6Ldrk8cqAAAAAJLHHiXXkO1JA-xetF6KvT9o6_PB" async defer></script>
-    <!-- Google tag (gtag.js) -->
+
+    <!-- Google Tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=AW-16846343648"></script>
     <script defer>
       window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
+      function gtag(){ dataLayer.push(arguments); }
       gtag('js', new Date());
       gtag('config', 'AW-16846343648');
     </script>
-    <!-- Google tag event -->
-    <script>
-      gtag('event', 'ads_conversion_Envoi_de_formulaire_pou_1', {
-        // event parameters if needed
-      });
-    </script>
-    <title>Agence Orbit | Votre site web sur mesure en 7j</title>
+
+    <!-- Données structurées Schema.org -->
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -71,11 +82,15 @@
         "sameAs": ["https://agence-orbit.ch"]
       }
     </script>
+
+    <title>Agence Orbit | Votre site web sur mesure en 7j</title>
   </head>
   <body>
     <!-- Google Tag Manager (noscript) -->
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQ7W56G7"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <noscript>
+      <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-WQ7W56G7"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe>
+    </noscript>
     <!-- End Google Tag Manager (noscript) -->
     <div id="root"></div>
     <script type="module" src="/src/main.tsx" async></script>

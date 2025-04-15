@@ -9,4 +9,4 @@ Disallow: /login/
 Disallow: /dashboard/
 Allow: /
 
-Sitemap: https://agence-orbit.ch/sitemap.xml
+Sitemap: https://agence-orbit.com/sitemap.xml
