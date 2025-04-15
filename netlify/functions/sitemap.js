@@ -8,14 +8,17 @@ exports.handler = async (event, context) => {
     // Requête pour récupérer les articles destin
     const blogResponse = await axios.get('https://siteorbit-cms-production.up.railway.app/api/articles?populate=*');
     
-    // Vérifier que la réponse contient bien des données
+    // Vérifier la réponse de l'API
+    console.log("Réponse de l'API articles:", JSON.stringify(blogResponse.data));
+    
     if (!blogResponse.data || !blogResponse.data.data || !Array.isArray(blogResponse.data.data)) {
       throw new Error("La réponse de l'API ne contient pas de données d'articles attendues.");
     }
     
     const blogArticles = blogResponse.data.data;
+    console.log("Nombre d'articles :", blogArticles.length);
 
-    // Début de la construction du sitemap XML
+    // Construction du sitemap XML
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
     
@@ -28,7 +31,7 @@ exports.handler = async (event, context) => {
         const slug = article.attributes.slug;
         xml += `  <url>\n    <loc>${baseUrl}/blog/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
       } else {
-        console.warn("Article sans slug trouvé :", article);
+        console.warn("Article sans slug:", article);
       }
     });
     
