@@ -66,6 +66,8 @@ function StrapiArticlePage() {
       <Helmet>
         <title>{article.title} | Agence Orbit</title>
         <meta name="description" content={article.excerpt} />
+        {/* La canonical utilise le slug pour construire l'URL officielle de l'article */}
+        <link rel="canonical" href={`https://agence-orbit.com/blog/${article.slug}`} />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -76,12 +78,9 @@ function StrapiArticlePage() {
             Retour au blog
           </Link>
 
-          {/* Header */}
+          {/* Header de l'article */}
           <header className="mb-12 relative">
-            <h1 className="text-4xl font-bold mb-6 gradient-text">
-              {article.title}
-            </h1>
-
+            <h1 className="text-4xl font-bold mb-6 gradient-text">{article.title}</h1>
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 mb-8">
               {article.author && typeof article.author === 'string' && (
                 <div className="flex items-center gap-2">
@@ -89,10 +88,6 @@ function StrapiArticlePage() {
                   {article.author}
                 </div>
               )}
-              <div className="flex items-center gap-2">
-                <Calendar className="h-4 w-4" />
-                {format(new Date(article.publishedAt), 'dd MMMM yyyy', { locale: fr })}
-              </div>
               {article.petitedate && (
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4" />
@@ -104,7 +99,6 @@ function StrapiArticlePage() {
                 {calculateReadingTime(article.content)} min de lecture
               </div>
             </div>
-
             {article.image && article.image.length > 0 && (
               <img
                 src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
@@ -114,7 +108,7 @@ function StrapiArticlePage() {
             )}
           </header>
 
-          {/* Content */}
+          {/* Contenu de l'article */}
           <div className="relative">
             <div className="absolute inset-0 bg-white/95 dark:bg-white/98 rounded-2xl shadow-[0_0_50px_rgba(176,38,255,0.1)] backdrop-blur-sm" />
             <div className="relative p-8 md:p-12 rounded-2xl prose max-w-none mb-12 text-gray-800">

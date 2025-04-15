@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
+import { Helmet } from 'react-helmet-async';
 import { useNavigate, Link } from 'react-router-dom';
-import { Rocket, Check, Globe2, Zap, Shield, Clock, Mail, ChevronDown, ArrowRight, Monitor, Smartphone, Settings, Users, ArrowUp, Timer, CreditCard, Pencil } from 'lucide-react';
+import {
+  Rocket, Check, Globe2, Zap, Shield, Clock, Mail, ChevronDown, ArrowRight, Monitor, Smartphone, Settings, Users, ArrowUp, Timer, CreditCard, Pencil} from 'lucide-react';
 import TrustedBySection from '../components/TrustedBySection';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import PortfolioSection from '../components/PortfolioSection';
@@ -55,6 +57,16 @@ function Home() {
       >
         <ArrowUp className="h-6 w-6 text-white" />
       </button>
+
+      {/* Ajout du bloc Helmet pour définir les métadonnées de la homepage */}
+      <Helmet>
+        <title>Agence Orbit | Votre site web sur mesure</title>
+        <link rel="canonical" href="https://agence-orbit.com/" />
+        <meta 
+          name="description" 
+          content="Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait. Première version en 7 jours. Devis gratuit." 
+        />
+      </Helmet>
 
       {/* Hero Section */}
       <section className="relative overflow-hidden">

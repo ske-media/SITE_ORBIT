@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom';
 import { ChevronDown } from 'lucide-react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-import { useEffect } from 'react';
 
 // Import des pages
 import Home from './pages/Home';
@@ -27,7 +26,6 @@ function App() {
 
   // Fonction pour scroller vers une ancre sur la homepage
   const scrollToAnchor = (anchor: string) => {
-    // Si l'utilisateur n'est pas sur la homepage, on y navigue d'abord
     if (location.pathname !== '/') {
       navigate('/', { replace: true });
       setTimeout(() => {
@@ -52,17 +50,21 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
+        {/* Définition globale des balises pour toutes les pages */}
         <html lang="fr-CH" />
-        <link rel="canonical" href={`https://agence-orbit.ch${location.pathname}`} />
-        <meta name="description" content={
-          location.pathname === "/" 
-            ? "Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait."
-            : location.pathname === "/contact"
-            ? "Contactez l'Agence Orbit pour votre projet de site web sur mesure. Devis gratuit et sans engagement."
-            : "Agence Orbit - Votre partenaire web à Genève"
-        } />
+        <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
+        <meta 
+          name="description" 
+          content={
+            location.pathname === "/" 
+              ? "Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait."
+              : location.pathname === "/contact"
+              ? "Contactez l'Agence Orbit pour votre projet de site web sur mesure. Devis gratuit et sans engagement."
+              : "Agence Orbit - Votre partenaire web à Genève"
+          } 
+        />
         <title>
-          {location.pathname === "/"
+          {location.pathname === "/" 
             ? "Agence Orbit | Votre site web sur mesure"
             : location.pathname === "/contact"
             ? "Contact | Agence Orbit"

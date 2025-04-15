@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Send, ArrowRight, ArrowLeft, Phone, Mail, MapPin, Check } from 'lucide-react';
 import emailjs from '@emailjs/browser';
+import { Helmet } from 'react-helmet-async';
 
 emailjs.init("10GrUKNFZHhGzb83j");
 
@@ -149,7 +150,6 @@ const Contact: React.FC = () => {
 
   const handleFieldKeyDown = (e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
-      // Si ce n'est pas le dernier champ, on passe à l'étape suivante
       if (step < questions.length - 1) {
         e.preventDefault();
         const currentQ = questions[step];
@@ -213,187 +213,196 @@ const Contact: React.FC = () => {
   );
 
   return (
-    <div className="min-h-screen flex flex-col lg:flex-row bg-black">
-      {/* Form Section */}
-      <div className="flex-1 flex items-center justify-center p-4 pt-20 lg:pt-4">
-        <form ref={formRef} onSubmit={handleSubmit} className="max-w-xl w-full space-y-4 sm:space-y-8">
-          <div className="bg-white/5 p-4 sm:p-6 md:p-8 rounded-2xl backdrop-blur-sm">
-            <div className="mb-8 text-center">
-              <h1 className="text-2xl sm:text-3xl font-bold mb-4">🚀 On fait connaissance ?</h1>
-              <p className="text-gray-400">
-                Vous avez un projet (ou juste une idée) ? On vous propose un rendez-vous de 30 minutes pour en discuter.
-              </p>
-              <p className="text-gray-400 mt-2">
-                Pas de jargon, pas d'engagement. Juste une première étape vers un site qui vous ressemble.
-              </p>
-            </div>
-            <div className="mb-8">
-              <div className="flex items-center justify-between mb-2">
-                <button
-                  type="button"
-                  onClick={handleBack}
-                  className={`text-gray-400 hover:text-white transition ${step === 0 ? 'invisible' : ''}`}
-                >
-                  <ArrowLeft className="w-5 h-5" />
-                </button>
-                <span className="text-sm text-gray-400">
-                  Question {step + 1} sur {questions.length}
-                </span>
+    <>
+      <Helmet>
+        <title>Contact | Agence Orbit</title>
+        <link rel="canonical" href="https://agence-orbit.com/contact" />
+        <meta
+          name="description"
+          content="Contactez l'Agence Orbit pour discuter de votre projet web sur mesure. Devis gratuit et sans engagement."
+        />
+      </Helmet>
+      <div className="min-h-screen flex flex-col lg:flex-row bg-black">
+        {/* Form Section */}
+        <div className="flex-1 flex items-center justify-center p-4 pt-20 lg:pt-4">
+          <form ref={formRef} onSubmit={handleSubmit} className="max-w-xl w-full space-y-4 sm:space-y-8">
+            <div className="bg-white/5 p-4 sm:p-6 md:p-8 rounded-2xl backdrop-blur-sm">
+              <div className="mb-8 text-center">
+                <h1 className="text-2xl sm:text-3xl font-bold mb-4">🚀 On fait connaissance ?</h1>
+                <p className="text-gray-400">
+                  Vous avez un projet (ou juste une idée) ? On vous propose un rendez-vous de 30 minutes pour en discuter.
+                </p>
+                <p className="text-gray-400 mt-2">
+                  Pas de jargon, pas d'engagement. Juste une première étape vers un site qui vous ressemble.
+                </p>
               </div>
-              <div className="w-full bg-white/10 h-1 rounded-full">
-                <div
-                  className="bg-[#B026FF] h-1 rounded-full transition-all duration-300"
-                  style={{ width: `${((step + 1) / questions.length) * 100}%` }}
-                />
-              </div>
-            </div>
-  
-            <div className="space-y-6">
-              <h2 className="text-xl sm:text-2xl font-bold mb-4">{currentQuestion.question}</h2>
-  
-              {currentQuestion.errorMessage &&
-                currentQuestion.validate &&
-                formData[currentQuestion.key] &&
-                !currentQuestion.validate(formData[currentQuestion.key]) && (
-                  <div className="text-red-500 mb-4">{currentQuestion.errorMessage}</div>
-              )}
-  
-              {currentQuestion.type === 'select' ? (
-                <div className="grid gap-3">
-                  {currentQuestion.options!.map((option) => (
-                    <button
-                      key={option}
-                      type="button"
-                      className={`text-left p-4 rounded-xl border transition-all text-sm sm:text-base ${
-                        formData[currentQuestion.key] === option
-                          ? 'border-[#B026FF] bg-[#B026FF]/10'
-                          : 'border-white/10 hover:border-white/30'
-                      }`}
-                      onClick={() => {
-                        setFormData({ ...formData, [currentQuestion.key]: option });
-                        setTimeout(handleNext, 300);
-                      }}
-                    >
-                      {option}
-                    </button>
-                  ))}
+              <div className="mb-8">
+                <div className="flex items-center justify-between mb-2">
+                  <button
+                    type="button"
+                    onClick={handleBack}
+                    className={`text-gray-400 hover:text-white transition ${step === 0 ? 'invisible' : ''}`}
+                  >
+                    <ArrowLeft className="w-5 h-5" />
+                  </button>
+                  <span className="text-sm text-gray-400">
+                    Question {step + 1} sur {questions.length}
+                  </span>
                 </div>
-              ) : currentQuestion.type === 'textarea' ? (
-                <textarea
-                  name={currentQuestion.key}
-                  value={formData[currentQuestion.key]}
-                  onChange={handleInputChange}
-                  onKeyDown={handleFieldKeyDown}
-                  placeholder={currentQuestion.placeholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors min-h-[120px] sm:min-h-[150px] text-sm sm:text-base"
-                  required={currentQuestion.required}
-                />
-              ) : (
-                <input
-                  type={currentQuestion.type}
-                  name={currentQuestion.key}
-                  value={formData[currentQuestion.key]}
-                  onChange={handleInputChange}
-                  onKeyDown={handleFieldKeyDown}
-                  placeholder={currentQuestion.placeholder}
-                  className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors text-sm sm:text-base"
-                  required={currentQuestion.required}
-                  pattern={currentQuestion.type === 'email' ? '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$' : undefined}
-                />
-              )}
-
-              {/* Insertion d'inputs cachés pour l'envoi de tous les champs */}
-              {Object.entries(formData).map(([key, value]) => (
-                <input key={key} type="hidden" name={key} value={value} />
-              ))}
-
-              {step < questions.length - 1 ? (
-                <button
-                  type="button"
-                  onClick={handleNext}
-                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
-                  disabled={isButtonDisabled}
-                >
-                  Continuer
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              ) : (
-                <button
-                  type="submit"
-                  className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
-                    isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''
-                  }`}
-                  disabled={isSubmitDisabled}
-                >
-                  {isSubmitting ? (
-                    <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
-                  ) : (
-                    <>
-                      Envoyer
-                      <Send className="w-5 h-5" />
-                    </>
-                  )}
-                </button>
-              )}
+                <div className="w-full bg-white/10 h-1 rounded-full">
+                  <div
+                    className="bg-[#B026FF] h-1 rounded-full transition-all duration-300"
+                    style={{ width: `${((step + 1) / questions.length) * 100}%` }}
+                  />
+                </div>
+              </div>
+    
+              <div className="space-y-6">
+                <h2 className="text-xl sm:text-2xl font-bold mb-4">{currentQuestion.question}</h2>
+    
+                {currentQuestion.errorMessage &&
+                  currentQuestion.validate &&
+                  formData[currentQuestion.key] &&
+                  !currentQuestion.validate(formData[currentQuestion.key]) && (
+                    <div className="text-red-500 mb-4">{currentQuestion.errorMessage}</div>
+                )}
+    
+                {currentQuestion.type === 'select' ? (
+                  <div className="grid gap-3">
+                    {currentQuestion.options!.map((option) => (
+                      <button
+                        key={option}
+                        type="button"
+                        className={`text-left p-4 rounded-xl border transition-all text-sm sm:text-base ${
+                          formData[currentQuestion.key] === option
+                            ? 'border-[#B026FF] bg-[#B026FF]/10'
+                            : 'border-white/10 hover:border-white/30'
+                        }`}
+                        onClick={() => {
+                          setFormData({ ...formData, [currentQuestion.key]: option });
+                          setTimeout(handleNext, 300);
+                        }}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                ) : currentQuestion.type === 'textarea' ? (
+                  <textarea
+                    name={currentQuestion.key}
+                    value={formData[currentQuestion.key]}
+                    onChange={handleInputChange}
+                    onKeyDown={handleFieldKeyDown}
+                    placeholder={currentQuestion.placeholder}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors min-h-[120px] sm:min-h-[150px] text-sm sm:text-base"
+                    required={currentQuestion.required}
+                  />
+                ) : (
+                  <input
+                    type={currentQuestion.type}
+                    name={currentQuestion.key}
+                    value={formData[currentQuestion.key]}
+                    onChange={handleInputChange}
+                    onKeyDown={handleFieldKeyDown}
+                    placeholder={currentQuestion.placeholder}
+                    className="w-full bg-white/5 border border-white/10 rounded-xl p-3 sm:p-4 focus:outline-none focus:border-[#B026FF] transition-colors text-sm sm:text-base"
+                    required={currentQuestion.required}
+                    pattern={currentQuestion.type === 'email' ? '[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,}$' : undefined}
+                  />
+                )}
+    
+                {Object.entries(formData).map(([key, value]) => (
+                  <input key={key} type="hidden" name={key} value={value} />
+                ))}
+    
+                {step < questions.length - 1 ? (
+                  <button
+                    type="button"
+                    onClick={handleNext}
+                    className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${isButtonDisabled ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    disabled={isButtonDisabled}
+                  >
+                    Continuer
+                    <ArrowRight className="w-5 h-5" />
+                  </button>
+                ) : (
+                  <button
+                    type="submit"
+                    className={`w-full bg-[#B026FF] text-white p-4 rounded-xl hover:bg-[#B026FF]/80 transition flex items-center justify-center gap-2 mt-6 ${
+                      isSubmitDisabled ? 'opacity-50 cursor-not-allowed' : ''
+                    }`}
+                    disabled={isSubmitDisabled}
+                  >
+                    {isSubmitting ? (
+                      <div className="animate-spin rounded-full h-5 w-5 border-2 border-white border-t-transparent" />
+                    ) : (
+                      <>
+                        Envoyer
+                        <Send className="w-5 h-5" />
+                      </>
+                    )}
+                  </button>
+                )}
+              </div>
             </div>
-          </div>
-        </form>
-      </div>
-  
-      {/* Info Section */}
-      <div className="w-full lg:w-96 bg-[#B026FF]/5 p-4 sm:p-6 lg:p-12">
-        <div className="sticky top-20 lg:top-24">
-          <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Votre site web personnalisé</h2>
-          <div className="space-y-6 text-gray-300">
-            <p className="text-sm sm:text-base">
-              Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité et vos valeurs.
-            </p>
-            <ul className="space-y-3 sm:space-y-4">
-              <li className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Rendez-vous découverte gratuit</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Première version en 7 jours</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Paiement uniquement si satisfait</span>
-              </li>
-              <li className="flex items-start gap-3">
-                <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
-                <span className="text-sm sm:text-base">Modifications illimitées</span>
-              </li>
-            </ul>
-  
-            <div className="border-t border-white/10 pt-4 sm:pt-6 mt-6 sm:mt-8">
-              <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Contactez-nous directement</h3>
-              <div className="space-y-3 sm:space-y-4">
-                <a
-                  href="tel:+41228860069"
-                  className="flex items-center gap-3 text-gray-400 hover:text-white transition text-sm sm:text-base"
-                >
-                  <Phone className="w-5 h-5" />
-                  022 886 00 69
-                </a>
-                <a
-                  href="mailto:info@agence-orbit.ch"
-                  className="flex items-center gap-3 text-gray-400 hover:text-white transition"
-                >
-                  <Mail className="w-5 h-5" />
-                  info@agence-orbit.ch
-                </a>
-                <div className="flex items-center gap-3 text-gray-400">
-                  <MapPin className="w-5 h-5" />
-                  Genève
+          </form>
+        </div>
+    
+        {/* Section d'information complémentaire */}
+        <div className="w-full lg:w-96 bg-[#B026FF]/5 p-4 sm:p-6 lg:p-12">
+          <div className="sticky top-20 lg:top-24">
+            <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Votre site web personnalisé</h2>
+            <div className="space-y-6 text-gray-300">
+              <p className="text-sm sm:text-base">
+                Pour seulement 1'999 CHF, obtenez un site web professionnel qui reflète parfaitement votre activité et vos valeurs.
+              </p>
+              <ul className="space-y-3 sm:space-y-4">
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
+                  <span className="text-sm sm:text-base">Rendez-vous découverte gratuit</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
+                  <span className="text-sm sm:text-base">Première version en 7 jours</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
+                  <span className="text-sm sm:text-base">Paiement uniquement si satisfait</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <Check className="w-5 h-5 text-[#B026FF] flex-shrink-0 mt-1" />
+                  <span className="text-sm sm:text-base">Modifications illimitées</span>
+                </li>
+              </ul>
+    
+              <div className="border-t border-white/10 pt-4 sm:pt-6 mt-6 sm:mt-8">
+                <h3 className="font-semibold mb-3 sm:mb-4 text-sm sm:text-base">Contactez-nous directement</h3>
+                <div className="space-y-3 sm:space-y-4">
+                  <a
+                    href="tel:+41228860069"
+                    className="flex items-center gap-3 text-gray-400 hover:text-white transition text-sm sm:text-base"
+                  >
+                    <Phone className="w-5 h-5" />
+                    022 886 00 69
+                  </a>
+                  <a
+                    href="mailto:info@agence-orbit.ch"
+                    className="flex items-center gap-3 text-gray-400 hover:text-white transition"
+                  >
+                    <Mail className="w-5 h-5" />
+                    info@agence-orbit.ch
+                  </a>
+                  <div className="flex items-center gap-3 text-gray-400">
+                    <MapPin className="w-5 h-5" />
+                    Genève
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

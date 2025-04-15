@@ -55,10 +55,10 @@ function StrapiBlog() {
         <title>Destins | Agence Orbit</title>
         <meta
           name="description"
-          content="Chaque histoire est un témoignage
-précieux qui rappelle qu’entreprendre, c’est avant tout croire en
-son projet et oser faire le premier pas."
+          content="Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas."
         />
+        {/* La canonical indique l'URL officielle de la page blog */}
+        <link rel="canonical" href="https://agence-orbit.com/blog" />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -66,12 +66,7 @@ son projet et oser faire le premier pas."
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 gradient-text">Destins - Le Blog des Entrepreneurs</h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Que vous soyez artisan passionné, dirigeant d’une PME ou
-entrepreneur d’envergure, ce blog vous invite à découvrir des
-trajectoires inspirantes, portées par la persévérance, l’audace
-et l’envie de se réaliser. Chaque histoire est un témoignage
-précieux qui rappelle qu’entreprendre, c’est avant tout croire en
-son projet et oser faire le premier pas.
+              Que vous soyez artisan passionné, dirigeant d’une PME ou entrepreneur d’envergure, ce blog vous invite à découvrir des trajectoires inspirantes, portées par la persévérance, l’audace et l’envie de se réaliser. Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas.
             </p>
           </div>
 
