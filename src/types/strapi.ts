@@ -49,7 +49,7 @@ export interface StrapiImage {
 }
 
 // ------------------------------
-// TYPES POUR LES AUTEURS (Blog Destin d'entrepreneur)
+// TYPES POUR LES AUTEURS (BLOG DESTIN D'ENTREPRENEUR)
 // ------------------------------
 export interface StrapiAuthor {
   name: string;
@@ -61,7 +61,7 @@ export interface StrapiAuthor {
 }
 
 // ------------------------------
-// TYPE POUR LES ARTICLES DE BLOG (Destin d'entrepreneur)
+// TYPE POUR LES ARTICLES DE BLOG (DESTIN D'ENTREPRENEUR)
 // ------------------------------
 export interface StrapiArticle {
   title: string;
@@ -79,7 +79,29 @@ export interface StrapiArticle {
 }
 
 // ------------------------------
-// TYPE POUR LE PORTFOLIO – SITE WEB
+// TYPE POUR LES ARTICLES SEO
+// ------------------------------
+export interface StrapiSeoArticle {
+  Titre: string;         // Titre de l'article SEO
+  slug: string;
+  Contenu: string;       // Le contenu complet
+  excerpt: string;       // Un résumé ou extrait
+  image?: StrapiImage[]; // Vous pouvez gérer une ou plusieurs images
+  Auteur: string;        // Auteur de l'article
+  Date?: string;         // Date alternative si nécessaire
+  publishedAt?: string;  // Date de publication (souvent "publishedAt" dans Strapi)
+  createdAt: string;
+  updatedAt: string;
+  Categorie?: string;    // Pour trier ou catégoriser l'article
+
+  // Champs SEO additionnels issus de votre single component (pour méta données)
+  meta_title?: string;           // Titre SEO personnalisé
+  meta_description?: string;     // Description SEO personnalisée
+  meta_image?: StrapiImage[];    // Image SEO (pour Open Graph, etc.)
+}
+
+// ------------------------------
+// TYPES POUR LE PORTFOLIO – SITE WEB
 // ------------------------------
 export interface StrapiPortfolioSiteWeb {
   titre: string;
@@ -93,6 +115,32 @@ export interface StrapiPortfolioSiteWeb {
       };
     }>;
   };
+  client: string;
+  annee: string;
+  lien_projet: string;
+  description?: string;
+}
+
+// ------------------------------
+// TYPES POUR LE PORTFOLIO – APPLICATION
+// ------------------------------
+export interface StrapiPortfolioApp {
+  titre: string;
+  slug: string;
+  image_vedette: StrapiImage;
+  client: string;
+  annee: string;
+  lien_projet: string;
+  description?: string;
+}
+
+// ------------------------------
+// TYPES POUR LE PORTFOLIO – RÉSEAUX SOCIAUX
+// ------------------------------
+export interface StrapiPortfolioSocial {
+  titre: string;
+  slug: string;
+  image_vedette: StrapiImage;
   client: string;
   annee: string;
   lien_projet: string;

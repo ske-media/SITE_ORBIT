@@ -3,7 +3,7 @@ import { Routes, Route, useNavigate, Link, useLocation } from 'react-router-dom'
 import { ChevronDown } from 'lucide-react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-// Import des pages
+// Import des pages existantes
 import Home from './pages/Home';
 import Contact from './pages/Contact';
 import LegalNotice from './pages/LegalNotice';
@@ -13,6 +13,10 @@ import Partnership from './pages/Partnership';
 import StrapiBlog from './pages/StrapiBlog';
 import StrapiArticlePage from './pages/StrapiArticlePage';
 import Footer from './components/Footer';
+
+// Import des pages SEO
+import StrapiSeoBlog from './pages/StrapiSeoBlog';
+import StrapiSeoArticlePage from './pages/StrapiSeoArticlePage';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -50,18 +54,17 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
-        {/* Définition globale des balises pour toutes les pages */}
         <html lang="fr-CH" />
         <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
-        <meta 
-          name="description" 
+        <meta
+          name="description"
           content={
             location.pathname === "/" 
               ? "Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait."
               : location.pathname === "/contact"
               ? "Contactez l'Agence Orbit pour votre projet de site web sur mesure. Devis gratuit et sans engagement."
               : "Agence Orbit - Votre partenaire web à Genève"
-          } 
+          }
         />
         <title>
           {location.pathname === "/" 
@@ -138,6 +141,12 @@ function App() {
                 >
                   Blog
                 </Link>
+                <Link
+                  to="/seo-blog"
+                  className="uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+                >
+                  Blog SEO
+                </Link>
                 <button className="cta-button" onClick={handleStartClick}>
                   <span className="uppercase tracking-wider text-sm font-medium text-white">Décoller</span>
                 </button>
@@ -209,6 +218,12 @@ function App() {
               >
                 Blog
               </Link>
+              <Link
+                to="/seo-blog"
+                className="block px-3 py-2 uppercase tracking-wider text-sm font-medium hover:text-[#B026FF] transition"
+              >
+                Blog SEO
+              </Link>
             </div>
           </div>
         </nav>
@@ -224,6 +239,9 @@ function App() {
             <Route path="/success" element={<Success />} />
             <Route path="/blog" element={<StrapiBlog />} />
             <Route path="/blog/:slug" element={<StrapiArticlePage />} />
+            {/* Routes pour le blog SEO */}
+            <Route path="/seo-blog" element={<StrapiSeoBlog />} />
+            <Route path="/seo-blog/:slug" element={<StrapiSeoArticlePage />} />
             <Route path="*" element={<Home />} />
           </Routes>
         </div>

@@ -48,10 +48,10 @@ function StrapiSeoBlog() {
   return (
     <>
       <Helmet>
-        <title>Articles SEO | Agence Orbit</title>
+        <title>Notre Blog | Agence Orbit</title>
         <meta
           name="description"
-          content="Découvrez nos articles SEO pour booster votre présence digitale."
+          content="Découvrez nos articles de blog pour booster votre présence digitale."
         />
       </Helmet>
 
@@ -60,7 +60,7 @@ function StrapiSeoBlog() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 gradient-text">Articles SEO</h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
-              Découvrez nos articles SEO pour booster votre présence digitale.
+              Découvrez nos articles pour booster votre présence digitale.
             </p>
           </div>
 
@@ -145,7 +145,6 @@ function StrapiSeoBlog() {
         </div>
       </div>
 
-      <Footer />
     </>
   );
 }
