@@ -143,7 +143,7 @@ const Contact: React.FC = () => {
     availability: '',
     websiteStatus: '',
     additionalInfo: '',
-    provenance: 'Suisse',
+    provenance: 'France',
     source: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -216,7 +216,7 @@ const Contact: React.FC = () => {
     <>
       <Helmet>
         <title>Contact | Agence Orbit</title>
-        <link rel="canonical" href="https://agence-orbit.com/contact" />
+        <link rel="canonical" href="https://agence-orbit.fr/contact" />
         <meta
           name="description"
           content="Contactez l'Agence Orbit pour discuter de votre projet web sur mesure. Devis gratuit et sans engagement."

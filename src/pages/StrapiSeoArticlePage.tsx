@@ -84,7 +84,7 @@ function StrapiSeoArticlePage() {
         <meta name="description" content={metaDescription} />
 
         {/* Balise canonical */}
-        <link rel="canonical" href={`https://agence-orbit.com/seo-blog/${article.slug}`} />
+        <link rel="canonical" href={`https://agence-orbit.fr/seo-blog/${article.slug}`} />
 
         {/* Balises OG (optionnel) */}
         <meta property="og:title" content={metaTitle} />

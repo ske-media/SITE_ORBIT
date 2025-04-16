@@ -67,7 +67,7 @@ function StrapiArticlePage() {
         <title>{article.title} | Agence Orbit</title>
         <meta name="description" content={article.excerpt} />
         {/* La canonical utilise le slug pour construire l'URL officielle de l'article */}
-        <link rel="canonical" href={`https://agence-orbit.com/blog/${article.slug}`} />
+        <link rel="canonical" href={`https://agence-orbit.fr/blog/${article.slug}`} />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">

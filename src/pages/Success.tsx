@@ -10,7 +10,7 @@ const Success: React.FC = () => {
     <>
       <Helmet>
         <title>Merci | Agence Orbit</title>
-        <link rel="canonical" href="https://agence-orbit.com/success" />
+        <link rel="canonical" href="https://agence-orbit.fr/success" />
         <meta
           name="description"
           content="Votre demande a bien été envoyée ! Nous vous remercions de votre confiance et vous contacterons sous peu."

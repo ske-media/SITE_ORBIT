@@ -61,7 +61,7 @@ function Home() {
       {/* Ajout du bloc Helmet pour définir les métadonnées de la homepage */}
       <Helmet>
         <title>Agence Orbit | Votre site web sur mesure</title>
-        <link rel="canonical" href="https://agence-orbit.com/" />
+        <link rel="canonical" href="https://agence-orbit.fr/" />
         <meta 
           name="description" 
           content="Agence web à Genève spécialisée dans la création de sites web sur mesure. Paiement uniquement si satisfait. Première version en 7 jours. Devis gratuit." 
@@ -117,7 +117,7 @@ function Home() {
           <div className="max-w-3xl mx-auto bg-white/5 rounded-2xl p-8 mb-8 gradient-border">
             <div className="space-y-6">
               <p className="text-lg text-gray-300 leading-relaxed">
-                Pour 1'999 CHF, offrez-vous un site moderne, qui s’adapte parfaitement à tous les écrans et conçu pour attirer et retenir vos clients.
+                Pour 1'999 EUR, offrez-vous un site moderne, qui s’adapte parfaitement à tous les écrans et conçu pour attirer et retenir vos clients.
                 Recevez une première version en 7 jours, profitez d’ajustements illimités, et ne versez pas un centime tant que vous n’êtes pas pleinement conquis.
               </p>
             </div>
@@ -235,7 +235,7 @@ function Home() {
                 },
                 {
                   title: "4. Validation & Mise en ligne",
-                  description: "Dès que vous validez, votre site est immédiatement publié. Vous ne réglez les 1'999 CHF qu'à ce moment-là.",
+                  description: "Dès que vous validez, votre site est immédiatement publié. Vous ne réglez les 1'999 EUR qu'à ce moment-là.",
                   icon: <Globe2 className="h-8 w-8" />
                 }
               ].map((step, index) => (
@@ -406,7 +406,7 @@ function Home() {
               <h3 className="text-2xl font-bold mb-2 mt-8">Votre Site Vitrine – Clé en Main dans 7j</h3>
               <p className="text-gray-300 mb-6">Un site web sur-mesure qui reflète votre image et attire vos clients, sans tracas ni engagement.</p>
               <div className="flex items-end gap-2 mb-6">
-                <span className="text-4xl font-bold">1'999 CHF</span>
+                <span className="text-4xl font-bold">1'999 EUR</span>
               </div>
               <ul className="space-y-4 mb-8">
                 {[
@@ -442,7 +442,7 @@ function Home() {
 <div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
   <h3 className="text-2xl font-bold mb-4">Pack Essentiel</h3>
   <div className="flex items-end gap-2 mb-6">
-    <span className="text-4xl font-bold">50 CHF</span>
+    <span className="text-4xl font-bold">50 EUR</span>
     <span className="text-gray-400">/mois</span>
   </div>
   <ul className="space-y-4 mb-8">
@@ -489,7 +489,7 @@ function Home() {
 <div className="bg-white/5 rounded-2xl p-8 border border-[#B026FF]/20 hover:border-[#B026FF] transition">
   <h3 className="text-2xl font-bold mb-4">Gestion Premium</h3>
   <div className="flex items-end gap-2 mb-6">
-    <span className="text-4xl font-bold">100 CHF</span>
+    <span className="text-4xl font-bold">100 EUR</span>
     <span className="text-gray-400">/mois</span>
   </div>
   <ul className="space-y-4 mb-8">
@@ -736,8 +736,8 @@ function Home() {
                 answer: "Nous vous présentons une première version et vous avez la possibilité de demander autant d'ajustements que nécessaire avant validation. Si vous n'êtes toujours pas satisfait, nous annulons le projet sans frais."
               },
               {
-                question: "Mon activité est simple, est-ce que l'offre à 1'999 CHF est suffisante pour moi ?",
-                answer: "Dans la plupart des cas, le pack à 1'999 CHF est largement suffisant pour répondre aux besoins des petites entreprises et indépendants. Il offre un site vitrine professionnel, responsive et optimisé, idéal pour présenter vos services et attirer de nouveaux clients."
+                question: "Mon activité est simple, est-ce que l'offre à 1'999 EUR est suffisante pour moi ?",
+                answer: "Dans la plupart des cas, le pack à 1'999 EUR est largement suffisant pour répondre aux besoins des petites entreprises et indépendants. Il offre un site vitrine professionnel, responsive et optimisé, idéal pour présenter vos services et attirer de nouveaux clients."
               },
               {
                 question: "Puis-je utiliser mon propre nom de domaine ?",
@@ -793,7 +793,7 @@ function Home() {
             <h2 className="text-4xl font-bold gradient-text mb-6">Solutions Avancées</h2>
             <p className="text-xl text-gray-300">
               Besoin d'une solution plus complexe ? Nous créons des plateformes web sur-mesure
-              pour répondre à vos besoins spécifiques à partir de <span className="text-[#B026FF] font-bold stats-glow">2'999 CHF</span>.
+              pour répondre à vos besoins spécifiques à partir de <span className="text-[#B026FF] font-bold stats-glow">2'999 EUR</span>.
             </p>
           </div>
 

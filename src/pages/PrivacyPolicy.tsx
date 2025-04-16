@@ -8,7 +8,7 @@ function PrivacyPolicy() {
     <>
       <Helmet>
         <title>Politique de Confidentialité | Agence Orbit</title>
-        <link rel="canonical" href="https://agence-orbit.com/politique-de-confidentialite" />
+        <link rel="canonical" href="https://agence-orbit.fr/politique-de-confidentialite" />
         <meta 
           name="description" 
           content="Découvrez la politique de confidentialité d'Agence Orbit, qui explique comment nous collectons, utilisons et protégeons vos données personnelles." 
@@ -116,7 +116,7 @@ function PrivacyPolicy() {
                 Pour toute question concernant cette politique, vous pouvez nous contacter à :
               </p>
               <p className="mt-4">
-                Email : info@agence-orbit.ch<br />
+                Email : info@agence-orbit.fr<br />
                 Adresse : 420 RTE DE SAINT-JULIEN, 74520 VALLEIRY, France
               </p>
             </section>
