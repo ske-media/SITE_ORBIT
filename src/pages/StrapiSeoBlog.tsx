@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Footer from '../components/Footer';
 
-const StrapiSeoBlog = () => {
+const StrapiSeoBlog: React.FC = () => {
   const [articles, setArticles] = useState<StrapiSeoArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,29 +20,52 @@ const StrapiSeoBlog = () => {
       try {
         setIsLoading(true);
         const response = await getSeoArticles();
-        console.log('✅ SEO Articles response:', response);
+        console.log('🔍 getSeoArticles raw response:', response);
 
-        // On s'assure que response.data est bien un tableau
-        const articlesData = response.data;
-        if (!articlesData || !Array.isArray(articlesData)) {
-          throw new Error("Le format de la réponse API n'est pas celui attendu.");
-        }
+        // 1️⃣ Extraire le tableau source, qu'on attende `response` ou `response.data`
+        const rawItems: any[] = Array.isArray(response)
+          ? response
+          : Array.isArray((response as any).data)
+            ? (response as any).data
+            : [];
+        console.log('➡️ rawItems.length =', rawItems.length);
 
-        // On filtre les items qui possèdent la propriété attributes pour éviter l'erreur
-        const flattenedArticles: StrapiSeoArticle[] = articlesData
-          .filter((item: any) => item && item.attributes)
-          .map((item: any) => ({
-            // On extrait directement les attributs
-            ...item.attributes,
-            // On force l'existence d'un slug ainsi que l'id
-            slug: item.attributes.slug,
-            id: item.id,
-          }));
-          
-        setArticles(flattenedArticles);
+        // 2️⃣ Aplatir chaque item en un StrapiSeoArticle
+        const flattened: StrapiSeoArticle[] = rawItems.map(item => {
+          // Cas StrapiData<T> standard
+          if (item.attributes) {
+            const attrs = item.attributes;
+            // Selon votre backend, image peut être déjà un array d'objets { url }
+            // ou un wrapper StrapiImage { data: [ { attributes: { url } } ] }.
+            const images = Array.isArray(attrs.image)
+              ? // si c'est déjà un array d'images aplaties
+                attrs.image as any
+              : attrs.image?.data
+                ? // si c'est le wrapper StrapiImage[]
+                  attrs.image.data.map((m: any) => ({
+                    url: m.attributes.url,
+                    alternativeText: m.attributes.alternativeText,
+                    width: m.attributes.width,
+                    height: m.attributes.height,
+                  }))
+                : [];
+
+            return {
+              ...attrs,
+              slug: attrs.slug,
+              image: images,
+            } as StrapiSeoArticle;
+          }
+
+          // Cas déjà aplati par getSeoArticles
+          return item as StrapiSeoArticle;
+        });
+
+        console.log('✅ aplatis =>', flattened);
+        setArticles(flattened);
       } catch (err) {
-        console.error("❌ Échec du chargement des articles SEO:", err);
-        setError("Impossible de charger les articles SEO. Veuillez réessayer plus tard.");
+        console.error('❌ Échec du chargement des articles SEO:', err);
+        setError('Impossible de charger les articles SEO. Veuillez réessayer plus tard.');
       } finally {
         setIsLoading(false);
       }
@@ -51,17 +74,15 @@ const StrapiSeoBlog = () => {
     fetchArticles();
   }, []);
 
-  // Filtrage des articles en fonction de la recherche
-  const filteredArticles = articles.filter((article) =>
-    article.Titre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (article.excerpt || '').toLowerCase().includes(searchQuery.toLowerCase())
+  // Filtre de recherche
+  const filteredArticles = articles.filter(article =>
+    (article.Titre ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
+    (article.excerpt ?? '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calcul du temps de lecture basé sur 200 mots/min
   const calculateReadingTime = (contenu: string) => {
-    const wordCount = contenu ? contenu.split(/\s+/).length : 0;
-    const readingTime = Math.ceil(wordCount / 200);
-    return readingTime > 0 ? readingTime : 1;
+    const words = contenu.split(/\s+/).length;
+    return Math.max(1, Math.ceil(words / 200));
   };
 
   return (
@@ -83,21 +104,21 @@ const StrapiSeoBlog = () => {
             </p>
           </div>
 
-          {/* Barre de recherche */}
+          {/* Recherche */}
           <div className="relative flex-1 mb-12">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
               placeholder="Rechercher un article..."
               value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-400"
             />
           </div>
 
           {isLoading ? (
             <div className="flex justify-center items-center py-12">
-              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B026FF]"></div>
+              <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#B026FF]" />
             </div>
           ) : error ? (
             <div className="text-center py-12 text-red-400">
@@ -109,7 +130,7 @@ const StrapiSeoBlog = () => {
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredArticles.map((article) => (
+              {filteredArticles.map(article => (
                 <article
                   key={article.slug}
                   className="bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
@@ -118,13 +139,12 @@ const StrapiSeoBlog = () => {
                     <div className="relative aspect-video overflow-hidden">
                       {article.image && article.image.length > 0 ? (
                         <img
-                          // On s'appuie ici sur la même structure que dans StrapiSeoArticlePage.tsx
-                          src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
+                          src={article.image[0].url}
                           alt={article.Titre || "Image de l’article"}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
                         />
                       ) : (
-                        <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40"></div>
+                        <div className="w-full h-full bg-gradient-to-br from-purple-900/40 to-black/40" />
                       )}
                     </div>
                     <div className="p-6">
@@ -132,7 +152,7 @@ const StrapiSeoBlog = () => {
                         {article.Titre}
                       </h2>
                       <p className="text-gray-400 mb-4 line-clamp-2">
-                        {article.excerpt || ''}
+                        {article.excerpt}
                       </p>
                       <div className="flex items-center justify-between text-sm text-gray-400">
                         <div className="flex items-center gap-4">
@@ -164,6 +184,8 @@ const StrapiSeoBlog = () => {
           )}
         </div>
       </div>
+
+      <Footer />
     </>
   );
 };
