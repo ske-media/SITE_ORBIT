@@ -187,7 +187,6 @@ console.log('🔴 raw Strapi response.data.data:', raw);
         </div>
       </div>
 
-      <Footer />
     </>
   );
 };
