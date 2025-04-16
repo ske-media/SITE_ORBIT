@@ -1,5 +1,6 @@
 User-agent: *
 Allow: /blog/
+Allow: /seo-blog/
 Allow: /contact
 Allow: /mentions-legales
 Allow: /politique-de-confidentialite
