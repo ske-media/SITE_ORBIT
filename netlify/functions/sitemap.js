@@ -12,11 +12,12 @@ exports.handler = async (event, context) => {
       { path: '/mentions-legales', changefreq: 'monthly', priority: '0.8' },
       { path: '/politique-de-confidentialite', changefreq: 'monthly', priority: '0.8' },
       { path: '/blog', changefreq: 'weekly', priority: '0.9' },
+      { path: '/seo-blog', changefreq: 'weekly', priority: '0.9' }, // Ajout de la page SEO
       { path: '/contact', changefreq: 'weekly', priority: '0.9' },
       { path: '/success', changefreq: 'monthly', priority: '0.9' }
     ];
 
-    // Récupération des articles "destin" et des articles SEO en parallèle
+    // Récupération en parallèle des articles "destin" et des articles SEO
     const [blogResponse, seoResponse] = await Promise.all([
       axios.get('https://siteorbit-cms-production.up.railway.app/api/articles?populate=*'),
       axios.get('https://siteorbit-cms-production.up.railway.app/api/seos?populate=*')
@@ -46,7 +47,7 @@ exports.handler = async (event, context) => {
 
     // Ajout des articles destin
     blogArticles.forEach(article => {
-      // Dans votre configuration actuelle, les articles destin renvoient directement le champ 'slug'
+      // On suppose que les articles destin disposent directement de la propriété 'slug'
       if (article.slug) {
         const slug = article.slug;
         xml += `  <url>\n    <loc>${baseUrl}/blog/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
@@ -57,10 +58,10 @@ exports.handler = async (event, context) => {
 
     // Ajout des articles SEO
     seoArticles.forEach(item => {
-      // Supposons que la réponse de Strapi pour les articles SEO est sous forme d'objet avec propriété 'attributes'
-      const article = item.attributes;
-      if (article && article.slug) {
-        const slug = article.slug;
+      // Si vous avez aplatit la structure (slug directement au niveau racine), utilisez item.slug
+      // Sinon, utilisez item.attributes.slug
+      const slug = item.slug || (item.attributes && item.attributes.slug);
+      if (slug) {
         xml += `  <url>\n    <loc>${baseUrl}/seo-blog/${slug}</loc>\n    <changefreq>weekly</changefreq>\n    <priority>0.8</priority>\n  </url>\n`;
       } else {
         console.warn("Article SEO sans slug :", item);
