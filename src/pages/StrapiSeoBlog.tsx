@@ -2,12 +2,17 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { getSeoArticles } from '../lib/strapi';
+import axios from 'axios';
 import { StrapiSeoArticle } from '../types/strapi';
 import { Calendar, User, Clock, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Footer from '../components/Footer';
+
+// URL de base (prise de l'env ou fallback)
+const STRAPI_API_URL =
+  import.meta.env.VITE_STRAPI_API_URL ||
+  'https://siteorbit-cms-production.up.railway.app/api';
 
 const StrapiSeoBlog: React.FC = () => {
   const [articles, setArticles] = useState<StrapiSeoArticle[]>([]);
@@ -19,53 +24,61 @@ const StrapiSeoBlog: React.FC = () => {
     const fetchArticles = async () => {
       try {
         setIsLoading(true);
-        const response = await getSeoArticles();
-        console.log('🔍 getSeoArticles raw response:', response);
+        // Get the raw Strapi response
+        const { data: response } = await axios.get<{
+          data: Array<{ id: number; attributes: any }>;
+          meta: any;
+        }>(`${STRAPI_API_URL}/seos?populate=*&sort=publishedAt:desc`);
 
-        // 1️⃣ Extraire le tableau source, qu'on attende `response` ou `response.data`
-        const rawItems: any[] = Array.isArray(response)
-          ? response
-          : Array.isArray((response as any).data)
-            ? (response as any).data
-            : [];
-        console.log('➡️ rawItems.length =', rawItems.length);
+        console.log('🔥 raw Strapi response for SEO articles:', response);
 
-        // 2️⃣ Aplatir chaque item en un StrapiSeoArticle
-        const flattened: StrapiSeoArticle[] = rawItems.map(item => {
-          // Cas StrapiData<T> standard
-          if (item.attributes) {
-            const attrs = item.attributes;
-            // Selon votre backend, image peut être déjà un array d'objets { url }
-            // ou un wrapper StrapiImage { data: [ { attributes: { url } } ] }.
-            const images = Array.isArray(attrs.image)
-              ? // si c'est déjà un array d'images aplaties
-                attrs.image as any
-              : attrs.image?.data
-                ? // si c'est le wrapper StrapiImage[]
-                  attrs.image.data.map((m: any) => ({
-                    url: m.attributes.url,
-                    alternativeText: m.attributes.alternativeText,
-                    width: m.attributes.width,
-                    height: m.attributes.height,
-                  }))
-                : [];
+        if (!response || !Array.isArray(response.data)) {
+          throw new Error('Format de réponse inattendu');
+        }
 
-            return {
-              ...attrs,
-              slug: attrs.slug,
-              image: images,
-            } as StrapiSeoArticle;
+        // Flatten safely each item
+        const flattened: StrapiSeoArticle[] = response.data.map((item) => {
+          const attrs = item.attributes || {};
+
+          // Gérer la structure de l’image (StrapiImage[] ou wrapper data)
+          let images: any[] = [];
+          if (Array.isArray(attrs.image)) {
+            images = attrs.image;
+          } else if (attrs.image?.data) {
+            images = attrs.image.data.map((m: any) => ({
+              url: m.attributes.url,
+              alternativeText: m.attributes.alternativeText,
+              width: m.attributes.width,
+              height: m.attributes.height,
+            }));
           }
 
-          // Cas déjà aplati par getSeoArticles
-          return item as StrapiSeoArticle;
+          return {
+            // tous les champs SEO que vous avez définis sous attributes
+            Titre: attrs.Titre,
+            slug: attrs.slug,
+            Contenu: attrs.Contenu,
+            excerpt: attrs.excerpt,
+            image: images,
+            Auteur: attrs.Auteur,
+            Date: attrs.Date,
+            publishedAt: attrs.publishedAt,
+            createdAt: attrs.createdAt,
+            updatedAt: attrs.updatedAt,
+            Categorie: attrs.Categorie,
+            meta_title: attrs.meta_title,
+            meta_description: attrs.meta_description,
+            meta_image: attrs.meta_image,
+          };
         });
 
-        console.log('✅ aplatis =>', flattened);
+        console.log('✅ articles aplatis:', flattened);
         setArticles(flattened);
-      } catch (err) {
+      } catch (err: any) {
         console.error('❌ Échec du chargement des articles SEO:', err);
-        setError('Impossible de charger les articles SEO. Veuillez réessayer plus tard.');
+        setError(
+          'Impossible de charger les articles SEO. Vérifiez votre connexion ou réessayez plus tard.'
+        );
       } finally {
         setIsLoading(false);
       }
@@ -74,14 +87,15 @@ const StrapiSeoBlog: React.FC = () => {
     fetchArticles();
   }, []);
 
-  // Filtre de recherche
-  const filteredArticles = articles.filter(article =>
-    (article.Titre ?? '').toLowerCase().includes(searchQuery.toLowerCase()) ||
-    (article.excerpt ?? '').toLowerCase().includes(searchQuery.toLowerCase())
+  // Filtre par recherche
+  const filtered = articles.filter(
+    (art) =>
+      art.Titre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      art.excerpt?.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const calculateReadingTime = (contenu: string) => {
-    const words = contenu.split(/\s+/).length;
+  const readingTime = (text = '') => {
+    const words = text.trim().split(/\s+/).length;
     return Math.max(1, Math.ceil(words / 200));
   };
 
@@ -104,14 +118,14 @@ const StrapiSeoBlog: React.FC = () => {
             </p>
           </div>
 
-          {/* Recherche */}
+          {/* Barre de recherche */}
           <div className="relative flex-1 mb-12">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
             <input
               type="text"
               placeholder="Rechercher un article..."
               value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
+              onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full pl-12 pr-4 py-3 bg-white/5 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#B026FF] text-white placeholder-gray-400"
             />
           </div>
@@ -124,23 +138,23 @@ const StrapiSeoBlog: React.FC = () => {
             <div className="text-center py-12 text-red-400">
               <p>{error}</p>
             </div>
-          ) : filteredArticles.length === 0 ? (
+          ) : filtered.length === 0 ? (
             <div className="text-center py-12">
               <p className="text-gray-400">Aucun article trouvé</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredArticles.map(article => (
+              {filtered.map((art) => (
                 <article
-                  key={article.slug}
+                  key={art.slug}
                   className="bg-white/5 rounded-2xl overflow-hidden hover:bg-white/10 transition group"
                 >
-                  <Link to={`/seo-blog/${article.slug}`}>
+                  <Link to={`/seo-blog/${art.slug}`}>
                     <div className="relative aspect-video overflow-hidden">
-                      {article.image && article.image.length > 0 ? (
+                      {art.image && art.image.length > 0 ? (
                         <img
-                          src={article.image[0].url}
-                          alt={article.Titre || "Image de l’article"}
+                          src={art.image[0].url.startsWith('http') ? art.image[0].url : `${STRAPI_API_URL.replace(/\/api$/, '')}${art.image[0].url}`}
+                          alt={art.Titre || 'Visuel de l’article'}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
                         />
                       ) : (
@@ -149,30 +163,34 @@ const StrapiSeoBlog: React.FC = () => {
                     </div>
                     <div className="p-6">
                       <h2 className="text-xl font-bold mb-3 group-hover:text-[#B026FF] transition">
-                        {article.Titre}
+                        {art.Titre}
                       </h2>
                       <p className="text-gray-400 mb-4 line-clamp-2">
-                        {article.excerpt}
+                        {art.excerpt}
                       </p>
                       <div className="flex items-center justify-between text-sm text-gray-400">
                         <div className="flex items-center gap-4">
                           <span className="flex items-center gap-1">
                             <Clock className="h-4 w-4" />
-                            {calculateReadingTime(article.Contenu)} min
+                            {readingTime(art.Contenu)} min
                           </span>
                           <span className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
-                            {article.publishedAt
-                              ? format(new Date(article.publishedAt), 'dd MMM yyyy', { locale: fr })
-                              : article.Date
-                              ? format(new Date(article.Date), 'dd MMM yyyy', { locale: fr })
+                            {art.publishedAt
+                              ? format(new Date(art.publishedAt), 'dd MMM yyyy', {
+                                  locale: fr,
+                                })
+                              : art.Date
+                              ? format(new Date(art.Date), 'dd MMM yyyy', {
+                                  locale: fr,
+                                })
                               : 'N/A'}
                           </span>
                         </div>
-                        {article.Auteur && (
+                        {art.Auteur && (
                           <span className="flex items-center gap-1">
                             <User className="h-4 w-4" />
-                            {article.Auteur}
+                            {art.Auteur}
                           </span>
                         )}
                       </div>
