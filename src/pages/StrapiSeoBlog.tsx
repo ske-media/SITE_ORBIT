@@ -9,7 +9,7 @@ import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import Footer from '../components/Footer';
 
-function StrapiSeoBlog() {
+const StrapiSeoBlog = () => {
   const [articles, setArticles] = useState<StrapiSeoArticle[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -20,12 +20,29 @@ function StrapiSeoBlog() {
       try {
         setIsLoading(true);
         const response = await getSeoArticles();
-        console.log('✅ Strapi SEO response:', response);
-        // Ici, getSeoArticles retourne directement un tableau d'articles SEO (les attributs)
-        setArticles(response.data);
-      } catch (error) {
-        console.error('❌ Failed to fetch SEO articles:', error);
-        setError('Impossible de charger les articles SEO. Veuillez réessayer plus tard.');
+        console.log('✅ SEO Articles response:', response);
+
+        // On s'assure que response.data est bien un tableau
+        const articlesData = response.data;
+        if (!articlesData || !Array.isArray(articlesData)) {
+          throw new Error("Le format de la réponse API n'est pas celui attendu.");
+        }
+
+        // On filtre les items qui possèdent la propriété attributes pour éviter l'erreur
+        const flattenedArticles: StrapiSeoArticle[] = articlesData
+          .filter((item: any) => item && item.attributes)
+          .map((item: any) => ({
+            // On extrait directement les attributs
+            ...item.attributes,
+            // On force l'existence d'un slug ainsi que l'id
+            slug: item.attributes.slug,
+            id: item.id,
+          }));
+          
+        setArticles(flattenedArticles);
+      } catch (err) {
+        console.error("❌ Échec du chargement des articles SEO:", err);
+        setError("Impossible de charger les articles SEO. Veuillez réessayer plus tard.");
       } finally {
         setIsLoading(false);
       }
@@ -34,13 +51,15 @@ function StrapiSeoBlog() {
     fetchArticles();
   }, []);
 
+  // Filtrage des articles en fonction de la recherche
   const filteredArticles = articles.filter((article) =>
     article.Titre?.toLowerCase().includes(searchQuery.toLowerCase()) ||
     (article.excerpt || '').toLowerCase().includes(searchQuery.toLowerCase())
   );
 
+  // Calcul du temps de lecture basé sur 200 mots/min
   const calculateReadingTime = (contenu: string) => {
-    const wordCount = contenu?.split(/\s+/).length || 0;
+    const wordCount = contenu ? contenu.split(/\s+/).length : 0;
     const readingTime = Math.ceil(wordCount / 200);
     return readingTime > 0 ? readingTime : 1;
   };
@@ -58,7 +77,7 @@ function StrapiSeoBlog() {
       <div className="min-h-screen pt-24 pb-16">
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold mb-4 gradient-text">Articles SEO</h1>
+            <h1 className="text-4xl font-bold mb-4 gradient-text">Articles</h1>
             <p className="text-gray-400 max-w-2xl mx-auto">
               Découvrez nos articles pour booster votre présence digitale.
             </p>
@@ -86,7 +105,7 @@ function StrapiSeoBlog() {
             </div>
           ) : filteredArticles.length === 0 ? (
             <div className="text-center py-12">
-              <p className="text-gray-400">Aucun article SEO trouvé</p>
+              <p className="text-gray-400">Aucun article trouvé</p>
             </div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -99,6 +118,7 @@ function StrapiSeoBlog() {
                     <div className="relative aspect-video overflow-hidden">
                       {article.image && article.image.length > 0 ? (
                         <img
+                          // On s'appuie ici sur la même structure que dans StrapiSeoArticlePage.tsx
                           src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
                           alt={article.Titre || "Image de l’article"}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
@@ -122,9 +142,9 @@ function StrapiSeoBlog() {
                           </span>
                           <span className="flex items-center gap-1">
                             <Calendar className="h-4 w-4" />
-                            {article.published_at 
-                              ? format(new Date(article.published_at), 'dd MMM yyyy', { locale: fr })
-                              : article.Date 
+                            {article.publishedAt
+                              ? format(new Date(article.publishedAt), 'dd MMM yyyy', { locale: fr })
+                              : article.Date
                               ? format(new Date(article.Date), 'dd MMM yyyy', { locale: fr })
                               : 'N/A'}
                           </span>
@@ -144,9 +164,8 @@ function StrapiSeoBlog() {
           )}
         </div>
       </div>
-
     </>
   );
-}
+};
 
 export default StrapiSeoBlog;
