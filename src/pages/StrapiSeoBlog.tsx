@@ -202,8 +202,6 @@ const StrapiSeoBlog: React.FC = () => {
           )}
         </div>
       </div>
-
-      <Footer />
     </>
   );
 };

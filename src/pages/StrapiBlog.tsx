@@ -65,9 +65,9 @@ function StrapiBlog() {
         <div className="max-w-7xl mx-auto px-4">
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 gradient-text">Destins - Le Blog des Entrepreneurs</h1>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              Que vous soyez artisan passionné, dirigeant d’une PME ou entrepreneur d’envergure, ce blog vous invite à découvrir des trajectoires inspirantes, portées par la persévérance, l’audace et l’envie de se réaliser. Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas.
-            </p>
+            <p className="text-gray-400 max-w-2xl mx-auto text-justify">
+  Que vous soyez artisan passionné, dirigeant d’une PME ou entrepreneur d’envergure, ce blog vous invite à découvrir des trajectoires inspirantes, portées par la persévérance, l’audace et l’envie de se réaliser. Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas.
+</p>
           </div>
 
           {/* Barre de recherche */}
