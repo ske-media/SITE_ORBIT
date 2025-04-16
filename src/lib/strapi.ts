@@ -67,11 +67,14 @@ export const getSeoArticles = async () => {
     if (!response.data || !response.data.data || !Array.isArray(response.data.data)) {
       throw new Error("La réponse de l'API n'est pas au format attendu pour les articles SEO");
     }
-    // Transformation pour "aplatir" la structure : ajoute le slug directement à l'objet
-    const flattenedArticles = response.data.data.map(item => ({
-      ...item,
-      slug: item.attributes.slug,
-    }));
+    // Transformation avec vérification pour éviter les erreurs
+    const flattenedArticles = response.data.data
+      .filter((item: any) => item && item.attributes && item.attributes.slug)
+      .map((item: any) => ({
+        ...item.attributes,
+        slug: item.attributes.slug, // le slug est garanti après le filtrage
+        id: item.id,
+      }));
     return { ...response.data, data: flattenedArticles };
   } catch (error) {
     console.error('Error fetching SEO articles from Strapi:', error);
