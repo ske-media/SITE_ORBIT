@@ -1,3 +1,4 @@
+// src/pages/StrapiArticlePage.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
@@ -66,7 +67,6 @@ function StrapiArticlePage() {
       <Helmet>
         <title>{article.title} | Agence Orbit</title>
         <meta name="description" content={article.excerpt} />
-        {/* La canonical utilise le slug pour construire l'URL officielle de l'article */}
         <link rel="canonical" href={`https://agence-orbit.com/blog/${article.slug}`} />
       </Helmet>
 
@@ -78,7 +78,6 @@ function StrapiArticlePage() {
             Retour au blog
           </Link>
 
-          {/* Header de l'article */}
           <header className="mb-12 relative">
             <h1 className="text-4xl font-bold mb-6 gradient-text">{article.title}</h1>
             <div className="flex flex-wrap items-center gap-6 text-sm text-gray-400 mb-8">
@@ -99,16 +98,9 @@ function StrapiArticlePage() {
                 {calculateReadingTime(article.content)} min de lecture
               </div>
             </div>
-            {article.image && article.image.length > 0 && (
-              <img
-                src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
-                alt={article.title}
-                className="w-full aspect-video object-cover rounded-2xl mb-8"
-              />
-            )}
+            {/* Image supprimée */}
           </header>
 
-          {/* Contenu de l'article */}
           <div className="relative">
             <div className="absolute inset-0 bg-white/95 dark:bg-white/98 rounded-2xl shadow-[0_0_50px_rgba(176,38,255,0.1)] backdrop-blur-sm" />
             <div className="relative p-8 md:p-12 rounded-2xl prose max-w-none mb-12 text-gray-800">
@@ -117,6 +109,8 @@ function StrapiArticlePage() {
           </div>
         </article>
       </div>
+
+      <Footer />
     </>
   );
 }
