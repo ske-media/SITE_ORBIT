@@ -3,7 +3,7 @@ const axios = require('axios');
 exports.handler = async (event, context) => {
   try {
     // URL de base du site (domaine principal)
-    const baseUrl = 'https://agence-orbit.fr';
+    const baseUrl = 'https://agence-orbit.com';
 
     // Tableau des pages statiques à inclure dans le sitemap
     const staticPages = [

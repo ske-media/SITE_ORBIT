@@ -54,8 +54,8 @@ function App() {
   return (
     <HelmetProvider>
       <Helmet>
-        <html lang="fr-FR" />
-        <link rel="canonical" href={`https://agence-orbit.fr${location.pathname}`} />
+        <html lang="fr-CH" />
+        <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
         <meta
           name="description"
           content={
@@ -212,7 +212,7 @@ function App() {
               >
                 Blog
               </Link>
-            </div>
+              </div>
           </div>
         </nav>
 

@@ -69,7 +69,7 @@ const Footer: React.FC = () => {
               <li className="text-gray-400 flex items-center">
                 <Mail className="inline-block w-5 h-5 mr-2 text-[#B026FF]" />
                 <a
-                  href="mailto:info@agence-orbit.fr"
+                  href="mailto:info@agence-orbit.ch"
                   className="hover:text-white transition"
                 >
                   info@agence-orbit.ch
