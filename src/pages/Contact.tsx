@@ -215,7 +215,12 @@ const Contact: React.FC = () => {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Contact | Agence Orbit</title>
+        <link rel="canonical" href="https://agence-orbit.com/contact" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/contact" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/contact" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/contact" />
         <link rel="canonical" href="https://agence-orbit.com/contact" />
         <meta
           name="description"

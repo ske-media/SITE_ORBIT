@@ -60,7 +60,12 @@ function Home() {
 
       {/* Ajout du bloc Helmet pour définir les métadonnées de la homepage */}
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Agence Orbit | Votre site web sur mesure</title>
+        <link rel="canonical" href="https://agence-orbit.com/" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/" />
         <link rel="canonical" href="https://agence-orbit.com/" />
         <meta 
           name="description" 

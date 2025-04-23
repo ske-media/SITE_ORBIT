@@ -65,7 +65,12 @@ function StrapiArticlePage() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>{article.title} | Agence Orbit</title>
+        <link rel="canonical" href={`https://agence-orbit.com/blog/${article.slug}`} />
+        <link rel="alternate" hreflang="fr-CH" href={`https://agence-orbit.com/blog/${article.slug}`} />
+        <link rel="alternate" hreflang="fr-FR" href={`https://agence-orbit.fr/blog/${article.slug}`} />
+        <link rel="alternate" hreflang="x-default" href={`https://agence-orbit.com/blog/${article.slug}`} />
         <meta name="description" content={article.excerpt} />
         <link rel="canonical" href={`https://agence-orbit.com/blog/${article.slug}`} />
       </Helmet>

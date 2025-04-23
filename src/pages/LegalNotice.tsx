@@ -7,7 +7,12 @@ function LegalNotice() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Mentions Légales | Agence Orbit</title>
+        <link rel="canonical" href="https://agence-orbit.com/mentions-legales" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/mentions-legales" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/mentions-legales" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/mentions-legales" />
         <link rel="canonical" href="https://agence-orbit.com/mentions-legales" />
         <meta 
           name="description" 

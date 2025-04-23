@@ -79,17 +79,19 @@ function StrapiSeoArticlePage() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         {/* Titre et description pour le SEO */}
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
 
+        <link rel="canonical" href={`https://agence-orbit.com/seo-blog/${article.slug}`} />
         {/* Balise canonical */}
         <link rel="canonical" href={`https://agence-orbit.com/seo-blog/${article.slug}`} />
 
         {/* Balises OG (optionnel) */}
         <meta property="og:title" content={metaTitle} />
         <meta property="og:description" content={metaDescription} />
-        {metaImageUrl && <meta property="og:image" content={metaImageUrl} />}
+        <link rel="alternate" hreflang="x-default" href={`https://agence-orbit.com/seo-blog/${article.slug}`} />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">

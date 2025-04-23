@@ -7,7 +7,12 @@ function PrivacyPolicy() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Politique de Confidentialité | Agence Orbit</title>
+        <link rel="canonical" href="https://agence-orbit.com/politique-de-confidentialite" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/politique-de-confidentialite" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/politique-de-confidentialite" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/politique-de-confidentialite" />
         <link rel="canonical" href="https://agence-orbit.com/politique-de-confidentialite" />
         <meta 
           name="description" 

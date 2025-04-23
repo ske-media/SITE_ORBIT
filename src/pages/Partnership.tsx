@@ -7,7 +7,12 @@ function Partnership() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Devenez Partenaire | Agence Orbit</title>
+        <link rel="canonical" href="https://agence-orbit.com/devenir-partenaire" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/devenir-partenaire" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/devenir-partenaire" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/devenir-partenaire" />
         <link rel="canonical" href="https://agence-orbit.com/devenir-partenaire" />
         <meta
           name="description"

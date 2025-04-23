@@ -67,8 +67,11 @@ useEffect(() => {
   return (
     <HelmetProvider>
       <Helmet>
-        <html lang="fr-CH" />
+        {/* lang="fr-CH" défini dans index.html */}
         <link rel="canonical" href={`https://agence-orbit.com${location.pathname}`} />
+        <link rel="alternate" hreflang="fr-CH" href={`https://agence-orbit.com${location.pathname}`} />
+        <link rel="alternate" hreflang="fr-FR" href={`https://agence-orbit.fr${location.pathname}`} />
+        <link rel="alternate" hreflang="x-default" href={`https://agence-orbit.com${location.pathname}`} />
         <meta
           name="description"
           content={

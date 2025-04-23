@@ -52,13 +52,16 @@ function StrapiBlog() {
   return (
     <>
       <Helmet>
+        {/* lang="fr-CH" défini dans index.html */}
         <title>Destins | Agence Orbit</title>
         <meta
           name="description"
-          content="Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas."
+          content="Chaque histoire est un témoignage précieux qui rappelle qu'entreprendre, c'est avant tout croire en son projet et oser faire le premier pas."
         />
-        {/* La canonical indique l'URL officielle de la page blog */}
         <link rel="canonical" href="https://agence-orbit.com/blog" />
+        <link rel="alternate" hreflang="fr-CH" href="https://agence-orbit.com/blog" />
+        <link rel="alternate" hreflang="fr-FR" href="https://agence-orbit.fr/blog" />
+        <link rel="alternate" hreflang="x-default" href="https://agence-orbit.com/blog" />
       </Helmet>
 
       <div className="min-h-screen pt-24 pb-16">
@@ -66,7 +69,7 @@ function StrapiBlog() {
           <div className="text-center mb-12">
             <h1 className="text-4xl font-bold mb-4 gradient-text">Destins - Le Blog des Entrepreneurs</h1>
             <p className="text-gray-400 max-w-2xl mx-auto text-justify">
-  Que vous soyez artisan passionné, dirigeant d’une PME ou entrepreneur d’envergure, ce blog vous invite à découvrir des trajectoires inspirantes, portées par la persévérance, l’audace et l’envie de se réaliser. Chaque histoire est un témoignage précieux qui rappelle qu’entreprendre, c’est avant tout croire en son projet et oser faire le premier pas.
+  Que vous soyez artisan passionné, dirigeant d'une PME ou entrepreneur d'envergure, ce blog vous invite à découvrir des trajectoires inspirantes, portées par la persévérance, l'audace et l'envie de se réaliser. Chaque histoire est un témoignage précieux qui rappelle qu'entreprendre, c'est avant tout croire en son projet et oser faire le premier pas.
 </p>
           </div>
 
@@ -107,7 +110,7 @@ function StrapiBlog() {
                       {article.image && article.image.length > 0 ? (
                         <img
                           src={`https://siteorbit-cms-production.up.railway.app${article.image[0].url}`}
-                          alt={article.title || "Image de l’article"}
+                          alt={article.title || "Image de l'article"}
                           className="w-full h-full object-cover transform group-hover:scale-105 transition duration-300"
                         />
                       ) : (
