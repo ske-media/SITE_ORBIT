@@ -23,10 +23,23 @@ function App() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Scroll to top on route change
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [location.pathname]);
+ // Scroll to top on route change
+useEffect(() => {
+  window.scrollTo(0, 0);
+}, [location.pathname]);
+
+// Scroll to anchor on initial load if hash is present
+useEffect(() => {
+  if (location.pathname === '/' && location.hash) {
+    const anchor = location.hash.replace('#', '');
+    setTimeout(() => {
+      const element = document.getElementById(anchor);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  }
+}, [location]);
 
   // Fonction pour scroller vers une ancre sur la homepage
   const scrollToAnchor = (anchor: string) => {
