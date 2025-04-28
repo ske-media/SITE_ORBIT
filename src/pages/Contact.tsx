@@ -63,7 +63,6 @@ const questions: Question[] = [
       'Téléphone – Appel',
       'Téléphone – SMS',
       'WhatsApp',
-      'Email',
       'Visio rapide (Google Meet)'
     ],
     required: true,
