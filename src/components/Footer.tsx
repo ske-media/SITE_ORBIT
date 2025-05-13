@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Clock, Rocket } from 'lucide-react';
+import { FaInstagram, FaFacebookF } from 'react-icons/fa';
 
 const Footer: React.FC = () => {
   const navigate = useNavigate();
@@ -28,34 +29,22 @@ const Footer: React.FC = () => {
             <h3 className="text-lg font-semibold mb-6 text-[#B026FF]">Navigation</h3>
             <ul className="space-y-4">
               <li>
-                <a
-                  href="#why-choose-us"
-                  className="text-gray-400 hover:text-white transition"
-                >
+                <a href="#why-choose-us" className="text-gray-400 hover:text-white transition">
                   Pourquoi Nous
                 </a>
               </li>
               <li>
-                <a
-                  href="#process"
-                  className="text-gray-400 hover:text-white transition"
-                >
+                <a href="#process" className="text-gray-400 hover:text-white transition">
                   Processus
                 </a>
               </li>
               <li>
-                <a
-                  href="#services"
-                  className="text-gray-400 hover:text-white transition"
-                >
+                <a href="#services" className="text-gray-400 hover:text-white transition">
                   Notre Offre
                 </a>
               </li>
               <li>
-                <a
-                  href="#pricing"
-                  className="text-gray-400 hover:text-white transition"
-                >
+                <a href="#pricing" className="text-gray-400 hover:text-white transition">
                   Tarifs
                 </a>
               </li>
@@ -68,10 +57,7 @@ const Footer: React.FC = () => {
             <ul className="space-y-4">
               <li className="text-gray-400 flex items-center">
                 <Mail className="inline-block w-5 h-5 mr-2 text-[#B026FF]" />
-                <a
-                  href="mailto:info@agence-orbit.ch"
-                  className="hover:text-white transition"
-                >
+                <a href="mailto:info@agence-orbit.ch" className="hover:text-white transition">
                   info@agence-orbit.ch
                 </a>
               </li>
@@ -108,7 +94,28 @@ const Footer: React.FC = () => {
             <p className="text-gray-400 text-sm">
               © {new Date().getFullYear()} Orbit. Tous droits réservés.
             </p>
-            <div className="flex gap-6 relative z-20">
+            <div className="flex items-center gap-6 relative z-20">
+              {/* Réseaux sociaux */}
+              <a
+                href="https://www.instagram.com/agenceorbit.ch/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition text-lg"
+                aria-label="Instagram"
+              >
+                <FaInstagram />
+              </a>
+              <a
+                href="https://www.facebook.com/profile.php?id=61572616630632"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-400 hover:text-white transition text-lg"
+                aria-label="Facebook"
+              >
+                <FaFacebookF />
+              </a>
+
+              {/* Liens légaux */}
               <Link
                 to="/mentions-legales"
                 className="text-gray-400 hover:text-white text-sm transition"
