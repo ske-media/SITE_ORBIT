@@ -462,7 +462,7 @@ function Home() {
     },
     {
       name: "Sérénité",
-      price: "25",
+      price: "29",
       color: "bg-gradient-to-br from-[#B026FF]/10 to-white/5",
       ribbon: "Best value",
       icon: <Zap className="h-7 w-7 text-[#B026FF]" />,
@@ -476,7 +476,7 @@ function Home() {
     },
     {
       name: "Tranquillité + Flexibilité",
-      price: "50",
+      price: "49",
       color: "bg-gradient-to-br from-[#B026FF]/20 to-white/5",
       ribbon: null,
       icon: <Pencil className="h-7 w-7 text-[#B026FF]" />,
